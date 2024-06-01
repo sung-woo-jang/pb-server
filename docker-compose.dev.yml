@@ -1,0 +1,56 @@
+# 포트 개방만 하고 다른 pc로 테스트 하는 용도
+version: '3.8'
+services:
+  nginx:
+    container_name: nginx
+    build:
+      context: .
+      dockerfile: nginx.Dockerfile
+    ports:
+      - '80:80'
+    restart: always
+    depends_on:
+      - server
+
+  db:
+    container_name: db
+    image: postgres
+    restart: always # 컨테이너가 종료되면 항상 다시 시작
+    ports:
+      - '5432:5432'
+    env_file:
+      - ./.env.development
+    volumes:
+      # 명명된 볼륨으로 바꾸는거 고민해봐야 함. 최소 배포환경에선 명명된 볼륨 사용으로. 이유도 같이
+      - ./db:/var/lib/postgresql/data # 호스트의 ./db 디렉토리를 컨테이너의 /var/lib/postgresql/data에 마운트
+
+  # docker logs -f server
+  server:
+    container_name: server
+    build:
+      context: .
+      dockerfile: Dockerfile.local
+    env_file:
+      - ./.env.local
+    environment:
+      - NODE_ENV=development
+      - PORT=${PORT}
+    ports:
+      - '8000:8000'
+    depends_on:
+      - db
+    volumes:
+      - .:/app
+      - /app/node_modules
+
+  pgadmin:
+    image: dpage/pgadmin4
+    restart: always
+    container_name: nest-pgadmin4
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=seastory624@admin.com
+      - PGADMIN_DEFAULT_PASSWORD=Tjddn062$
+    ports:
+      - '5050:80'
+    depends_on:
+      - db

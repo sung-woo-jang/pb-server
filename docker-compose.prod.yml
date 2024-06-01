@@ -1,0 +1,70 @@
+# 배포용
+version: '3.8'
+services:
+  nginx:
+    container_name: nginx
+    image: nginx:1.15-alpine
+    restart: unless-stopped
+    volumes:
+      - ./prod/data/nginx:/etc/nginx/conf.d
+      - ./prod/data/certbot/conf:/etc/letsencrypt
+      - ./prod/data/certbot/www:/var/www/certbot
+    ports:
+      - "80:80"
+      - "443:443"
+    command: "/bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\"'"
+  
+  db:
+    container_name: db
+    image: postgres
+    restart: always # 컨테이너가 종료되면 항상 다시 시작
+    ports:
+      - '5432:5432'
+    env_file:
+      - ./.env.production
+    volumes: # 명명된 볼륨으로 바꾸는거 고민해봐야 함. 최소 배포환경에선 명명된 볼륨 사용으로. 이유도 같이
+      - ./prod/db:/var/lib/postgresql/data # 호스트의 ./db 디렉토리를 컨테이너의 /var/lib/postgresql/data에 마운트
+ 
+  # docker logs -f server
+  server:
+    container_name: server
+    build:
+      context: .
+      dockerfile: Dockerfile.prod
+    env_file:
+      - ./.env.production
+    environment:
+      - NODE_ENV=production
+      - PORT=8000
+    ports:
+      - '8000:8000'
+    depends_on:
+      - db
+    volumes:
+      - .:/app
+      - /app/node_modules
+
+  
+  pgadmin:
+    image: dpage/pgadmin4
+    restart: always
+    container_name: nest-pgadmin4
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=seastory624@admin.com
+      - PGADMIN_DEFAULT_PASSWORD=Tjddn062$
+    ports:
+      - '5050:80'
+    depends_on:
+      - db
+
+  certbot:  #certbot 컨테이너 추가 
+    image: certbot/certbot
+    restart: unless-stopped
+    container_name: certbot
+    volumes: 
+        - ./prod/data/certbot/conf:/etc/letsencrypt    #nginx컨테이너에 certbot컨테이너 연결
+        - ./prod/data/certbot/www:/var/www/certbot
+    depends_on:
+        - nginx
+    entrypoint : "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
+
