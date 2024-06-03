@@ -21,20 +21,15 @@ export class ResponseInterceptor implements NestInterceptor {
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
     const statusCode = context.switchToHttp().getResponse().statusCode;
     const request = context.switchToHttp().getRequest();
-    const isLogin = this.hasUser(request);
+    
     return next.handle().pipe(
       map((data) => ({
         success: true,
         timestamp: new Date(),
         message: SucessStatusCodeMessage[statusCode],
-        isLogin,
+        isLogin: request.session?.user == null ? false : true,
         data,
       })),
     );
-  }
-
-  // 요청 객체에 user 속성이 존재하는지 확인하는 유틸 함수
-  private hasUser(request: any): boolean {
-    return !!request?.cookies?.Authentication;
   }
 }
