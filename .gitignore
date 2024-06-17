@@ -50,6 +50,7 @@ lerna-debug.log*
 crud_1.db
 
 # DB
+local/db
 db/*
 
 # volume
