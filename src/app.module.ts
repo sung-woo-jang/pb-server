@@ -1,18 +1,16 @@
-import { ClassSerializerInterceptor, Module } from '@nestjs/common';
-import { APP_INTERCEPTOR } from '@nestjs/core';
-import { SseModule } from './sse/sse.module';
+import { Module } from '@nestjs/common';
+import { SeeModule } from './see/see.module';
 import { DatabaseModule } from './database/database.module';
-import { AppConfigModule } from './config/appConfig.module';
+import { AppConfigModule } from './config/app-config.module';
+import { UserModule } from './modules/user/user.module';
 
 @Module({
-  imports: [
-    AppConfigModule,
-    DatabaseModule,
-    SseModule,
-  ],
-  providers:[{
-    provide: APP_INTERCEPTOR,
-    useClass: ClassSerializerInterceptor,
-  },]
+  imports: [AppConfigModule, DatabaseModule, SeeModule, UserModule],
+  // providers: [
+  //   {
+  //     provide: APP_INTERCEPTOR,
+  //     useClass: ClassSerializerInterceptor,
+  //   },
+  // ],
 })
 export class AppModule {}
