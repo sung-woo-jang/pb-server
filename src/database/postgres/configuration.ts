@@ -1,24 +1,21 @@
-import { ConfigService } from '@nestjs/config';
-import {
-  TypeOrmModuleAsyncOptions,
-  TypeOrmModuleOptions,
-} from '@nestjs/typeorm';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { TypeOrmModuleAsyncOptions } from '@nestjs/typeorm';
 import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
 
 export const postgresTypeOrmModuleAsyncOptions: TypeOrmModuleAsyncOptions = {
+  imports: [ConfigModule],
   inject: [ConfigService],
-  useFactory: async (): Promise<TypeOrmModuleOptions> => ({
+  useFactory: async (config: ConfigService) => ({
     namingStrategy: new SnakeNamingStrategy(),
     type: 'postgres',
-    port: 5432,
-    host: process.env.HOST,
-    username: process.env.POSTGRES_USER,
-    password: process.env.POSTGRES_PASSWORD,
-    database: process.env.POSTGRES_DB,
-    logging: process.env.MODE !== 'production',
-    entities: [__dirname + '/../../**/*.entity.{js,ts}'],
-    synchronize: true, //process.env.MODE === 'dev', //! set 'false' in production
+    host: config.get<string>('postgresMain.host'),
+    port: config.get<number>('postgresMain.port'),
+    username: config.get<string>('postgresMain.username'),
+    password: config.get<string>('postgresMain.password'),
+    database: config.get<string>('postgresMain.database'),
+    synchronize: config.get<boolean>('postgresMain.synchronize'),
+    logging: config.get<boolean>('postgresMain.logging'),
+    entities: [__dirname + '/../../**/*.entity{.ts,.js}'],
     // autoLoadEntities: true,
-    
   }),
 };
