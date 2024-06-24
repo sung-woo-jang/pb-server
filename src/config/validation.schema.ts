@@ -12,6 +12,7 @@ const postgresConfigSchema = {
   POSTGRES_PASSWORD: Joi.string().required(),
   POSTGRES_DB: Joi.string().required(),
   POSTGRES_SESSION_SECRET: Joi.string().required(),
+  POSTGRES_SESSION_NAME: Joi.string().required(),
 
   // MODE 값이 있다면 자동등록되어 검사제외
   // synchronize: Joi.boolean().required(),
@@ -21,7 +22,7 @@ const postgresConfigSchema = {
 const naverConfigSchema = {
   NAVER_CLIENT_ID: Joi.string().required(),
   NAVER_CLIENT_SECRET: Joi.string().required(),
-  NAVER_REDIRECT_URI: Joi.string().required(),
+  NAVER_REDIRECT_URL: Joi.string().required(),
   NAVER_TOKEN_URL: Joi.string().required(),
   NAVER_USERINFO_URL: Joi.string().required(),
 };
