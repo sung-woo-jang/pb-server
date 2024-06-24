@@ -16,13 +16,15 @@ const pgPool = new Pool({
 export const sessionConfig = session({
   store: new pgSessionStore({
     pool: pgPool,
+    createTableIfMissing: true, // session 테이블이 없을 경우, 자동으로 생성
   }),
   secret: process.env.POSTGRES_SESSION_SECRET,
+  name: process.env.POSTGRES_SESSION_NAME,
   resave: false,
   saveUninitialized: false,
-  cookie: {
-    maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
-  },
+  // cookie: {
+  //   maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
+  // },
   //   cookie: {
   //     domain: '.example.com', // 메인 도메인 및 서브도메인에서 사용 가능하도록 설정
   //     secure: false, // HTTPS에서만 사용할 것인지 여부
