@@ -1,6 +1,6 @@
-import { Body, Controller, Get, HttpCode, Patch, Post, Query, Req, Res, Session, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, HttpCode, Patch, Post, Query, Res, Session, UseGuards } from '@nestjs/common';
 import { AuthService } from '../auth/auth.service';
-import { Serialize } from '../../common/interceptors/serialize.interceptor';
+import { Serialize } from '@common/interceptors/serialize.interceptor';
 import { UserDto } from './dtos/user.dto';
 import { Response } from 'express';
 import { ConfigService } from '@nestjs/config';
@@ -9,7 +9,7 @@ import { OAuthStateGuard } from './guards/oauth-state.guard';
 import { ApiBody, ApiOperation, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { UpdateNicknameDto } from './dtos/update-nickname.dto';
 import { UserService } from './user.service';
-import { SessionAuthGuard } from '../../common/guards/session-auth.guard';
+import { SessionAuthGuard } from '@common/guards/session-auth.guard';
 
 @ApiTags('auth')
 @Controller('auth')
@@ -22,7 +22,7 @@ export class UserController {
   ) {}
 
   @Get('/login-naver')
-  getSigninNaver(@Res() res: Response, @Session() session: Record<string, any>) {
+  getSignInNaver(@Res() res: Response, @Session() session: Record<string, any>) {
     const state = randomBytes(8).toString('hex');
     session.stateCheck = {
       state,
@@ -60,7 +60,7 @@ export class UserController {
     type: UserDto,
   })
   @UseGuards(OAuthStateGuard)
-  async getSigninNaverCallback(
+  async getSignInNaverCallback(
     @Query('code') code: string,
     @Query('state') state: string,
     @Session() session: Record<string, any>

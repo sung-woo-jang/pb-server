@@ -1,11 +1,4 @@
-import { ApiProperty } from '@nestjs/swagger';
-import { IsString } from 'class-validator';
+import { PickType } from '@nestjs/swagger';
+import { User } from '../entities/user.entity';
 
-export class UpdateNicknameDto {
-  @ApiProperty({
-    example: '장발장',
-    description: '변경할 사용자 닉네임',
-  })
-  @IsString()
-  nickname: string;
-}
+export class UpdateNicknameDto extends PickType(User, ['nickname'] as const) {}
