@@ -9,7 +9,7 @@ export class AuthService {
     private naverOAuthService: NaverOAuthService
   ) {}
 
-  async signinNaver(code: string, state: string) {
+  async loginNaver(code: string, state: string) {
     const { tokenData, naverUserInfo } = await this.naverOAuthService.getNaverUserInfo(code, state);
 
     let user = await this.userService.findById(naverUserInfo.id);
