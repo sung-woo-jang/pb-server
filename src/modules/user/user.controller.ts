@@ -1,16 +1,14 @@
 import { Body, Controller, Get, HttpCode, Patch, Post, Query, Res, Session, UseGuards } from '@nestjs/common';
 import { AuthService } from '../auth/auth.service';
-import { Serialize } from '@common/interceptors/serialize.interceptor';
-import { UserDto } from './dtos/user.dto';
+import { Serialize } from '../../common/interceptors/serialize.interceptor';
 import { Response } from 'express';
 import { ConfigService } from '@nestjs/config';
 import { randomBytes } from 'crypto';
 import { OAuthStateGuard } from './guards/oauth-state.guard';
 import { ApiBody, ApiOperation, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { UpdateNicknameDto } from './dtos/update-nickname.dto';
+import { UserDto, UpdateNicknameDto } from './dtos';
 import { UserService } from './user.service';
-import { SessionAuthGuard } from '@common/guards/session-auth.guard';
-
+import { SessionAuthGuard } from '../../common/guards/session-auth.guard';
 @ApiTags('auth')
 @Controller('auth')
 @Serialize(UserDto)
@@ -22,7 +20,7 @@ export class UserController {
   ) {}
 
   @Get('/login-naver')
-  getSignInNaver(@Res() res: Response, @Session() session: Record<string, any>) {
+  getloginNaver(@Res() res: Response, @Session() session: Record<string, any>) {
     const state = randomBytes(8).toString('hex');
     session.stateCheck = {
       state,
@@ -60,12 +58,12 @@ export class UserController {
     type: UserDto,
   })
   @UseGuards(OAuthStateGuard)
-  async getSignInNaverCallback(
+  async getLoginNaverCallback(
     @Query('code') code: string,
     @Query('state') state: string,
     @Session() session: Record<string, any>
   ) {
-    return await this.authService.signinNaver(code, state).then(({ user, tokenData }) => {
+    return await this.authService.loginNaver(code, state).then(({ user, tokenData }) => {
       session.user = {
         id: user.id,
         // user_id: user.user_id,
@@ -89,7 +87,7 @@ export class UserController {
 
   @Post('/logout')
   @HttpCode(200)
-  postSignOut(@Session() session: Record<string, any>) {
+  postLogOut(@Session() session: Record<string, any>) {
     if (session.hasOwnProperty('user')) {
       delete session['user'];
     }

@@ -1,5 +1,5 @@
 import { PickType } from '@nestjs/swagger';
-import { User } from '../entities/user.entity';
+import { User } from '../entities';
 
 export class UserDto extends PickType(User, [
   'id',
