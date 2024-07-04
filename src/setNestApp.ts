@@ -19,7 +19,16 @@ export const setNestApp = (app: INestApplication) => {
   app.use('/uploads', express.static(path.join(__dirname, '..', 'uploads')));
 
   // class-validation
-  app.useGlobalPipes(new ValidationPipe({ transform: true, forbidUnknownValues: false, whitelist: true }));
+  app.useGlobalPipes(
+    new ValidationPipe({
+      transform: true,
+      forbidUnknownValues: false,
+      whitelist: true,
+      transformOptions: {
+        enableImplicitConversion: true,
+      },
+    })
+  );
 
   // HttpException Filter
   app.useGlobalFilters(new HttpExceptionFilter());
