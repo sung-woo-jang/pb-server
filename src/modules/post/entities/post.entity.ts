@@ -2,7 +2,7 @@ import { Entity, Column, ManyToOne, OneToMany, ManyToMany } from 'typeorm';
 import { BaseEntityIncrement } from '../../../common/entities/base.entity';
 import { ApiProperty } from '@nestjs/swagger';
 import { Expose } from 'class-transformer';
-import { IsDate, IsNumber, IsString, Max, Min } from 'class-validator';
+import { IsDate, IsInt, IsPositive, IsString, Max, Min } from 'class-validator';
 import { User } from '../../user/entities';
 import { Keyword } from '../../keyword/entities';
 
@@ -24,17 +24,22 @@ export class Post extends BaseEntityIncrement {
   visitDate: Date;
 
   @ApiProperty({ example: 2, description: '별점' })
-  @Column({ type: 'numeric', precision: 1, scale: 0 })
+  @Column({ type: 'int' })
   @Min(1)
   @Max(3)
-  @IsNumber()
+  @IsInt()
+  @IsPositive() // 0보다 큰 정수인지 확인
   @Expose()
   rate: number;
 
-  @ManyToOne(() => User, (user) => user.posts)
+  @ManyToOne(() => User, (user) => user.posts, {
+    nullable: false,
+  })
   user: User;
 
-  @OneToMany(() => Keyword, (keyword) => keyword.post)
+  @OneToMany(() => Keyword, (keyword) => keyword.post, {
+    cascade: ['insert', 'update', 'soft-remove', 'remove'],
+  })
   keywords: Keyword[];
 
   @ManyToMany(() => User, (user) => user.likedPosts)

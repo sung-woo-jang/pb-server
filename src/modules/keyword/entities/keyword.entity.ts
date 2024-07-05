@@ -13,6 +13,8 @@ export class Keyword extends BaseEntityIncrementNoTimestamp {
   @Expose()
   keyword: string;
 
-  @ManyToOne(() => Post, (post) => post.keywords)
+  @ManyToOne(() => Post, (post) => post.keywords, {
+    nullable: false,
+  })
   post: Post;
 }

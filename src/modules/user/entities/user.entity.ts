@@ -70,10 +70,10 @@ export class User extends BaseEntityVarchar {
   @Expose()
   profileImage: string;
 
-  @OneToMany(() => Post, (post) => post.user)
+  @OneToMany(() => Post, (post) => post.user, { cascade: ['update', 'soft-remove', 'remove'] })
   posts: Post[];
 
-  @ManyToMany(() => Post)
+  @ManyToMany(() => Post, (post) => post.likedByUsers)
   @JoinTable({ name: 'user_post_like' })
   likedPosts: Post[];
 }
