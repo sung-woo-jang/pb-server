@@ -10,10 +10,10 @@ export class CreatePostDto extends PickType(Post, ['content', 'visitDate', 'rate
   imageList: any[];
 
   @ApiProperty({
-    example: ['1', '5', '7', '4'],
+    example: [{ keyword: '1' }, { keyword: '3' }, { keyword: '5' }, { keyword: '7' }],
     description: '선택한 키워드값 배열',
     isArray: true,
-    type: () => CreateKeywordDto,
+    type: CreateKeywordDto,
   })
   @IsArray()
   @ValidateNested({ each: true })
