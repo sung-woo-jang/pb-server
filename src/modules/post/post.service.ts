@@ -27,7 +27,7 @@ export class PostService {
     return await this.postRepo.findOne({ where: { id }, relations });
   }
 
-  async createPost(attrs: Partial<CreatePostDto>, transactionManager: EntityManager, userId: string): Promise<void> {
+  async createPost(attrs: Partial<CreatePostDto>, userId: string): Promise<void> {
     const { content, visitDate, rate, keywords, imageList } = attrs;
 
     const user = await this.userSerivce.findById(userId);
@@ -35,7 +35,8 @@ export class PostService {
       throw UserException.userNotFound();
     }
 
-    const savedKeywords = await this.keywordSerivce.createKeywords(keywords, transactionManager);
+    // const savedKeywords = await this.keywordSerivce.createKeywords(keywords, transactionManager);
+    const savedKeywords = await this.keywordSerivce.setKeywordEntities(keywords);
 
     // 새 Post 엔티티 생성
     const post = new Post();
@@ -45,19 +46,18 @@ export class PostService {
     post.user = user;
     post.keywords = savedKeywords;
 
-    // Post 엔티티 저장 (Keyword 엔티티도 자동으로 postId 업데이트)
-    await transactionManager.getRepository(Post).save(post);
+    // Post 엔티티 저장 (CASCADE설정으로 Keyword 엔티티도 자동으로 저장)
+    await this.postRepo.save(post);
   }
 
   async createPostLike(postId: number, userId: string): Promise<void> {
-    const post = await this.findById(postId);
     const user = await this.userSerivce.findById(userId);
+    const post = await this.findByIdAndRelation(postId, ['likedByUsers']);
 
-    user.likedPosts = [...user.likedPosts, post];
-    // post.likedByUsers = [...post.likedByUsers, user];
-
-    await this.userRepo.save(user);
-    // await this.postRepo.save(post);
+    if (user && post) {
+      post.likedByUsers.push(user);
+      await this.postRepo.save(post);
+    }
   }
 
   // async updatePost(postId: number, createPostDto: CreatePostDto): Promise<Post> {

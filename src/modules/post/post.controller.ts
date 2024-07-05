@@ -30,29 +30,17 @@ export class PostController {
 
   @Post()
   @HttpCode(201)
-  // @UseGuards(SessionAuthGuard)
-  @UseInterceptors(TransactionInterceptor)
+  @UseGuards(SessionAuthGuard)
   @ApiBody({ type: CreatePostDto })
-  async postCreatePost(
-    @Body() body: CreatePostDto,
-    @TransactionManager() transactionManager: EntityManager,
-    @Session() session: Record<string, any>
-  ): Promise<void> {
-    // return await this.postService.createPost(body, session.user.id);
-    // return await this.postService.createPost(body, session?.user?.id ?? '니 id');
-    await this.postService.createPost(
-      body,
-      transactionManager,
-      session?.user?.id ?? 'dD33km42YaMbaiKgNY01RMEU-0Zu41qKsqa7yLlHvdw'
-    );
+  async postCreatePost(@Body() body: CreatePostDto, @Session() session: Record<string, any>): Promise<void> {
+    await this.postService.createPost(body, session.user.id);
   }
 
   @Post('/like')
   @HttpCode(201)
-  // @UseGuards(SessionAuthGuard)
+  @UseGuards(SessionAuthGuard)
   @ApiBody({ type: CreatePostLikeDto })
   async postCreatePostLike(@Body() body: CreatePostLikeDto, @Session() session: Record<string, any>): Promise<void> {
-    // return await this.postService.createPostLike(body.id, session.user.id);
-    return await this.postService.createPostLike(body.id, session?.user?.id ?? '니 id');
+    await this.postService.createPostLike(body.id, session.user.id);
   }
 }
