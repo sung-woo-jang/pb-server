@@ -15,6 +15,7 @@ export class Keyword extends BaseEntityIncrementNoTimestamp {
 
   @ManyToOne(() => Post, (post) => post.keywords, {
     nullable: false,
+    onDelete: 'CASCADE',
   })
   post: Post;
 }
