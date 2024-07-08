@@ -34,6 +34,7 @@ export class Post extends BaseEntityIncrement {
 
   @ManyToOne(() => User, (user) => user.posts, {
     nullable: false,
+    onDelete: 'CASCADE',
   })
   user: User;
 
