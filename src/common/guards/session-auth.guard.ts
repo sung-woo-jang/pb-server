@@ -7,7 +7,7 @@ export class SessionAuthGuard implements CanActivate {
     const request = context.switchToHttp().getRequest();
     const { session } = request;
     if (!session.user || !session.user.id) {
-      throw UserException.unauthorized();
+      throw UserException.userUnauthorized();
     }
 
     return true;
