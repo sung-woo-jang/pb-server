@@ -3,20 +3,17 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { EntityManager, Repository } from 'typeorm';
 import { UserService } from '../user/user.service';
 import { KeywordService } from '../keyword/keyword.service';
-import { UserException } from 'src/exception';
+import { PostException, UserException } from 'src/exception';
 import { Post } from './entities';
-import { User } from '../user/entities';
-import { CreatePostDto } from './dtos';
-import { Keyword } from '../keyword/entities';
+import { CreatePostDto, UpdatePostDto } from './dtos';
 
 @Injectable()
 export class PostService {
   constructor(
     private userSerivce: UserService,
     private keywordSerivce: KeywordService,
-    @InjectRepository(Post) private postRepo: Repository<Post>,
-    @InjectRepository(Keyword) private keyRepo: Repository<Keyword>,
-    @InjectRepository(User) private userRepo: Repository<User>
+    @InjectRepository(Post) private postRepo: Repository<Post>
+    // private dataSource: DataSource
   ) {}
 
   async findById(id: number): Promise<Post> {
@@ -32,11 +29,10 @@ export class PostService {
 
     const user = await this.userSerivce.findById(userId);
     if (!user) {
-      throw UserException.userNotFound();
+      throw UserException.notFound();
     }
 
-    // const savedKeywords = await this.keywordSerivce.createKeywords(keywords, transactionManager);
-    const savedKeywords = await this.keywordSerivce.setKeywordEntities(keywords);
+    const savedKeywords = this.keywordSerivce.updateOrCreateKeywords(keywords, []);
 
     // 새 Post 엔티티 생성
     const post = new Post();
@@ -50,6 +46,46 @@ export class PostService {
     await this.postRepo.save(post);
   }
 
+  async updatePost(attrs: Partial<UpdatePostDto>, transactionManager: EntityManager): Promise<void> {
+    const { id: postId, content, visitDate, rate, keywords, imageList } = attrs;
+
+    // 기존 Post 조회
+    const post = await this.findByIdAndRelation(postId, ['keywords']);
+    if (!post) {
+      throw PostException.notFound();
+    }
+
+    post.content = content;
+    post.visitDate = visitDate;
+    post.rate = rate;
+
+    // 기존 키워드와 새로운 키워드를 비교하여 추가, 수정, 삭제 작업 수행
+
+    // 삭제된 키워드 처리
+    const keywordsToDelete = this.keywordSerivce.findKeywordsToDelete(keywords, post.keywords);
+
+    // 삭제된 키워드 삭제
+    await this.keywordSerivce.deleteKeywords(keywordsToDelete, transactionManager);
+
+    const newKeywordEntities = this.keywordSerivce.updateOrCreateKeywords(keywords, post.keywords);
+
+    // // 업데이트된 키워드 설정
+    post.keywords = newKeywordEntities;
+
+    // // Post 엔티티 저장 (Keyword 엔티티도 자동으로 저장됩니다)
+    await transactionManager.save(Post, post);
+  }
+
+  async deletePost(postId: number): Promise<void> {
+    const post = await this.findById(postId);
+    if (!post) {
+      throw PostException.notFound();
+    }
+
+    // Post 엔티티 삭제 (CASCADE설정으로 Keyword 엔티티도 자동으로 삭제)
+    await this.postRepo.remove(post);
+  }
+
   async createPostLike(postId: number, userId: string): Promise<void> {
     const user = await this.userSerivce.findById(userId);
     const post = await this.findByIdAndRelation(postId, ['likedByUsers']);
@@ -60,51 +96,25 @@ export class PostService {
     }
   }
 
-  // async updatePost(postId: number, createPostDto: CreatePostDto): Promise<Post> {
-  //   const { content, visitDate, rate, keywords, imageList } = createPostDto;
+  async deletePostLike(postId: number, userId: string): Promise<void> {
+    const post = await this.findByIdAndRelation(postId, ['likedByUsers']);
+    if (post) {
+      post.likedByUsers = post.likedByUsers.filter((user) => user.id !== userId);
 
-  //   // 기존 Post 조회
-  //   const post = await this.findByIdAndRelation(postId, ['keywords']);
-  //   if (!post) {
-  //     // throw new NotFoundException(`Post with ID ${postId} not found`);
-  //   }
+      await this.postRepo.save(post);
+    }
 
-  //   post.content = content;
-  //   post.visitDate = visitDate;
-  //   post.rate = rate;
-
-  //   // 기존 키워드와 새로운 키워드를 비교하여 추가, 수정, 삭제 작업 수행
-  //   const existingKeywords = post.keywords;
-  //   const newKeywordEntities = keywords.map((keywordDto) => {
-  //     const existingKeyword = existingKeywords.find((k) => k.id === keywordDto.id);
-
-  //     if (existingKeyword) {
-  //       existingKeyword.keyword = keywordDto.keyword;
-  //       return existingKeyword;
-  //     } else {
-  //       const keywordEntity = new Keyword();
-  //       keywordEntity.keyword = keywordDto.keyword;
-  //       keywordEntity.post = post;
-  //       return keywordEntity;
-  //     }
-  //   });
-
-  //   // 삭제된 키워드 처리
-  //   const keywordsToDelete = existingKeywords.filter(
-  //     (existingKeyword) => !keywords.some((keywordDto) => keywordDto.id === existingKeyword.id)
-  //   );
-
-  //   // 업데이트된 키워드 설정
-  //   post.keywords = newKeywordEntities;
-
-  //   // Post 엔티티 저장 (Keyword 엔티티도 자동으로 저장됩니다)
-  //   // await this.postRepository.save(post);
-
-  //   // // 삭제된 키워드 삭제
-  //   // if (keywordsToDelete.length > 0) {
-  //   //   await this.keywordRepository.remove(keywordsToDelete);
-  //   // }
-
-  //   return post;
-  // }
+    // try {
+    //   await this.dataSource
+    //     .createQueryBuilder()
+    //     .delete()
+    //     .from('user_post_like')
+    //     .where('userId = :userId', { userId })
+    //     .andWhere('postId = :postId', { postId })
+    //     .execute();
+    // } catch (error) {
+    //   console.error('Error removing like:', error);
+    //   throw error;
+    // }
+  }
 }
