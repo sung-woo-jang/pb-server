@@ -8,7 +8,7 @@ export class OAuthStateGuard implements CanActivate {
     const request = context.switchToHttp().getRequest();
     if (!request.session.hasOwnProperty('stateCheck')) {
       // stateCheck이 없으면 요청 반환
-      throw AuthException.authStateNotFound();
+      throw AuthException.stateNotFound();
     }
 
     const { state: callbackState } = request.query;
@@ -18,7 +18,7 @@ export class OAuthStateGuard implements CanActivate {
       // state값이 다르거나, 5분 이내 요청이 아닐경우 요청 반환
       delete request.session['stateCheck'];
 
-      throw AuthException.authStateNotExist();
+      throw AuthException.stateNotExist();
     }
 
     return true;

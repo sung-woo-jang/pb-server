@@ -55,7 +55,7 @@ export class NaverOAuthService {
       //   throw new InternalServerErrorException('Failed to fetch user info', error.message);
       // }
       // throw new InternalServerErrorException('Unexpected error occurred', error.message);
-      throw AuthException.authNaverLoginError();
+      throw AuthException.naverLoginError();
     }
   }
 }

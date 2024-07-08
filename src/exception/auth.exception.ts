@@ -9,15 +9,15 @@ import {
 } from '@nestjs/common';
 
 export class AuthException {
-  static stateNotFound(): HttpException {
+  static authStateNotFound(): HttpException {
     return new BadRequestException('state가 존재하지 않습니다.');
   }
 
-  static stateNotExist(): HttpException {
+  static authStateNotExist(): HttpException {
     return new ForbiddenException('state가 일치하지 않습니다.');
   }
 
-  static naverLoginError(): HttpException {
+  static authNaverLoginError(): HttpException {
     return new InternalServerErrorException('로그인중 서버에서 에러가 발생하였습니다.');
   }
 }

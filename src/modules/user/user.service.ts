@@ -15,7 +15,7 @@ export class UserService {
   async updateUserInfo(attrs: Partial<User>, id: string): Promise<User> {
     const user = await this.repo.findOneBy({ id });
     if (!user) {
-      throw UserException.userNotFound();
+      throw UserException.notFound();
     }
 
     Object.assign(user, attrs);
