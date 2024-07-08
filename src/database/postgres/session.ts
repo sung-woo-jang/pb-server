@@ -22,9 +22,11 @@ export const sessionConfig = session({
   name: process.env.POSTGRES_SESSION_NAME,
   resave: false,
   saveUninitialized: false,
-  // cookie: {
-  //   maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
-  // },
+  cookie: {
+    // 유효시간이 지나면 세션정보 자동으로 사라짐
+    // 유효시간내에 api 요청을 보내면 기간 자동 연장
+    maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
+  },
   //   cookie: {
   //     domain: '.example.com', // 메인 도메인 및 서브도메인에서 사용 가능하도록 설정
   //     secure: false, // HTTPS에서만 사용할 것인지 여부
