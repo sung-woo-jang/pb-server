@@ -4,7 +4,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import { Expose } from 'class-transformer';
 import { IsEnum, IsInt, IsPositive, IsString } from 'class-validator';
 import { GroupCode } from './group-code.entity';
-import { UseYn } from '../enums';
+import { UseYn } from '../../../common/enums';
 
 @Entity()
 export class Code extends BaseEntityUUID {
