@@ -1,6 +1,6 @@
 import { Body, Controller, Get, HttpCode, Patch, Post, Query, Res, Session, UseGuards } from '@nestjs/common';
 import { AuthService } from '../auth/auth.service';
-import { Serialize } from '../../common/interceptors/serialize.interceptor';
+import { Serialize } from '@common/interceptors/serialize.interceptor';
 import { Response } from 'express';
 import { ConfigService } from '@nestjs/config';
 import { randomBytes } from 'crypto';
@@ -8,7 +8,7 @@ import { OAuthStateGuard } from './guards/oauth-state.guard';
 import { ApiBody, ApiOperation, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { UserDto, UpdateNicknameDto } from './dtos';
 import { UserService } from './user.service';
-import { SessionAuthGuard } from '../../common/guards/session-auth.guard';
+import { SessionAuthGuard } from '@common/guards/session-auth.guard';
 @ApiTags('auth')
 @Controller('auth')
 @Serialize(UserDto)

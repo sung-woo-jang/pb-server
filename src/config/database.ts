@@ -6,8 +6,8 @@ export const postgresConfig = registerAs('postgresMain', () => ({
   username: process.env.POSTGRES_USER,
   password: process.env.POSTGRES_PASSWORD,
   database: process.env.POSTGRES_DB,
-  synchronize: process.env.MODE !== 'production' ? true : false, // 개발 환경에서는 true, 프로덕션 환경에서는 false로 설정
-  logging: process.env.MODE !== 'production' ? true : false,
+  synchronize: process.env.MODE !== 'production', // 개발 환경에서는 true, 프로덕션 환경에서는 false로 설정
+  logging: process.env.MODE !== 'production',
 }));
 
 // export const postgresConfig = () => ({

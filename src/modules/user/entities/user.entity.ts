@@ -1,9 +1,9 @@
 import { Entity, Column, OneToMany, ManyToMany, JoinTable } from 'typeorm';
-import { BaseEntityVarchar } from '../../../common/entities/base.entity';
+import { BaseEntityVarchar } from '@common/entities/base.entity';
 import { ApiProperty } from '@nestjs/swagger';
 import { Expose } from 'class-transformer';
 import { IsEmail, IsString, IsUrl } from 'class-validator';
-import { Post } from '../../../modules/post/entities';
+import { Post } from '../../post/entities';
 
 @Entity()
 export class User extends BaseEntityVarchar {

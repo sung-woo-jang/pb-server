@@ -7,7 +7,7 @@ const pgSessionStore = pgSession(session);
 // PostgreSQL 연결 풀 설정
 const pgPool = new Pool({
   host: process.env.POSTGRES_HOST,
-  port: process.env.POSTGRES_DB_PORT,
+  port: parseInt(process.env.POSTGRES_DB_PORT),
   user: process.env.POSTGRES_USER,
   password: process.env.POSTGRES_PASSWORD,
   database: process.env.POSTGRES_DB,

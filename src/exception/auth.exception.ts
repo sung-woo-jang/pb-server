@@ -1,12 +1,4 @@
-import {
-  BadRequestException,
-  ForbiddenException,
-  HttpException,
-  HttpStatus,
-  InternalServerErrorException,
-  NotFoundException,
-  UnauthorizedException,
-} from '@nestjs/common';
+import { BadRequestException, ForbiddenException, HttpException, InternalServerErrorException } from '@nestjs/common';
 
 export class AuthException {
   static stateNotFound(): HttpException {

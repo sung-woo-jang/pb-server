@@ -1,5 +1,5 @@
 import { Entity, Column, ManyToOne, OneToMany, ManyToMany } from 'typeorm';
-import { BaseEntityIncrement } from '../../../common/entities/base.entity';
+import { BaseEntityIncrement } from '@common/entities/base.entity';
 import { ApiProperty } from '@nestjs/swagger';
 import { Expose } from 'class-transformer';
 import { IsDate, IsInt, IsPositive, IsString, Max, Min } from 'class-validator';

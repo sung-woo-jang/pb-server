@@ -10,8 +10,8 @@ import { CreatePostDto, UpdatePostDto } from './dtos';
 @Injectable()
 export class PostService {
   constructor(
-    private userSerivce: UserService,
-    private keywordSerivce: KeywordService,
+    private userService: UserService,
+    private keywordService: KeywordService,
     @InjectRepository(Post) private postRepo: Repository<Post>
     // private dataSource: DataSource
   ) {}
@@ -25,14 +25,14 @@ export class PostService {
   }
 
   async createPost(attrs: Partial<CreatePostDto>, userId: string): Promise<void> {
-    const { content, visitDate, rate, keywords, imageList } = attrs;
+    const { content, visitDate, rate, keywords } = attrs;
 
-    const user = await this.userSerivce.findById(userId);
+    const user = await this.userService.findById(userId);
     if (!user) {
       throw UserException.notFound();
     }
 
-    const savedKeywords = this.keywordSerivce.updateOrCreateKeywords(keywords, []);
+    const savedKeywords = this.keywordService.updateOrCreateKeywords(keywords, []);
 
     // 새 Post 엔티티 생성
     const post = new Post();
@@ -47,7 +47,7 @@ export class PostService {
   }
 
   async updatePost(attrs: Partial<UpdatePostDto>, transactionManager: EntityManager): Promise<void> {
-    const { id: postId, content, visitDate, rate, keywords, imageList } = attrs;
+    const { id: postId, content, visitDate, rate, keywords } = attrs;
 
     // 기존 Post 조회
     const post = await this.findByIdAndRelation(postId, ['keywords']);
@@ -62,15 +62,13 @@ export class PostService {
     // 기존 키워드와 새로운 키워드를 비교하여 추가, 수정, 삭제 작업 수행
 
     // 삭제된 키워드 처리
-    const keywordsToDelete = this.keywordSerivce.findKeywordsToDelete(keywords, post.keywords);
+    const keywordsToDelete = this.keywordService.findKeywordsToDelete(keywords, post.keywords);
 
     // 삭제된 키워드 삭제
-    await this.keywordSerivce.deleteKeywords(keywordsToDelete, transactionManager);
-
-    const newKeywordEntities = this.keywordSerivce.updateOrCreateKeywords(keywords, post.keywords);
+    await this.keywordService.deleteKeywords(keywordsToDelete, transactionManager);
 
     // // 업데이트된 키워드 설정
-    post.keywords = newKeywordEntities;
+    post.keywords = this.keywordService.updateOrCreateKeywords(keywords, post.keywords);
 
     // // Post 엔티티 저장 (Keyword 엔티티도 자동으로 저장됩니다)
     await transactionManager.save(Post, post);
@@ -87,7 +85,7 @@ export class PostService {
   }
 
   async createPostLike(postId: number, userId: string): Promise<void> {
-    const user = await this.userSerivce.findById(userId);
+    const user = await this.userService.findById(userId);
     const post = await this.findByIdAndRelation(postId, ['likedByUsers']);
 
     if (user && post) {

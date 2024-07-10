@@ -4,7 +4,5 @@ export function convertUTCtoKST(utcDateString): Date {
 
   // UTC 시간대를 한국 시간대로 변환합니다.
   const kstOffset = 9 * 60; // 한국 시간대는 UTC+9
-  const kstTime = new Date(utcDate.getTime() + kstOffset * 60 * 1000);
-
-  return kstTime;
+  return new Date(utcDate.getTime() + kstOffset * 60 * 1000);
 }

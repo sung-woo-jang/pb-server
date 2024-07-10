@@ -7,11 +7,5 @@ import { PostModule } from './modules/post/post.module';
 
 @Module({
   imports: [AppConfigModule, DatabaseModule, SeeModule, UserModule, PostModule],
-  // providers: [
-  //   {
-  //     provide: APP_INTERCEPTOR,
-  //     useClass: ClassSerializerInterceptor,
-  //   },
-  // ],
 })
 export class AppModule {}

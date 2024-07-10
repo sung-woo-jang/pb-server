@@ -1,5 +1,5 @@
 import { Entity, Column, ManyToOne } from 'typeorm';
-import { BaseEntityIncrementNoTimestamp } from '../../../common/entities/base.entity';
+import { BaseEntityIncrementNoTimestamp } from '@common/entities/base.entity';
 import { ApiProperty } from '@nestjs/swagger';
 import { Expose } from 'class-transformer';
 import { IsString } from 'class-validator';

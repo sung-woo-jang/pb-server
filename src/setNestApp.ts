@@ -1,6 +1,6 @@
 import { INestApplication } from '@nestjs/common';
 import { ValidationPipe } from '@nestjs/common';
-import { HttpExceptionFilter } from './common/filters/http-exception.filter';
+import { HttpExceptionFilter } from '@common/filters/http-exception.filter';
 import * as cookieParser from 'cookie-parser';
 import * as express from 'express';
 import * as path from 'path';

@@ -3,7 +3,7 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { plainToClass } from 'class-transformer';
 
-const SucessStatusCodeMessage = {
+const SuccessStatusCodeMessage = {
   200: 'OK',
   201: 'Created',
   202: 'Accepted',
@@ -39,8 +39,8 @@ export class SerializerInterceptor implements NestInterceptor {
         console.log('response DTO 적용');
         return {
           status: statusCode,
-          message: SucessStatusCodeMessage[statusCode],
-          isLogin: request.session?.user == null ? false : true,
+          message: SuccessStatusCodeMessage[statusCode],
+          isLogin: request.session?.user != null,
           data: plainToClass(this.dto, data, {
             // Convert instance to plain object and then back to class to trigger @Expose() decorators
             excludeExtraneousValues: true,

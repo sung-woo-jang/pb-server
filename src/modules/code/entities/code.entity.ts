@@ -1,10 +1,10 @@
 import { Entity, Column, ManyToOne } from 'typeorm';
-import { BaseEntityUUID } from '../../../common/entities/base.entity';
+import { BaseEntityUUID } from '@common/entities/base.entity';
 import { ApiProperty } from '@nestjs/swagger';
 import { Expose } from 'class-transformer';
 import { IsEnum, IsInt, IsPositive, IsString } from 'class-validator';
 import { GroupCode } from './group-code.entity';
-import { UseYn } from '../../../common/enums';
+import { UseYn } from '@common/enums';
 
 @Entity()
 export class Code extends BaseEntityUUID {
