@@ -6,6 +6,7 @@ import { KeywordService } from '../keyword/keyword.service';
 import { PostException, UserException } from 'src/exception';
 import { Post } from './entities';
 import { CreatePostDto, UpdatePostDto } from './dtos';
+import { PostBuilder } from '../../builder/post.builder';
 
 @Injectable()
 export class PostService {
@@ -24,9 +25,7 @@ export class PostService {
     return await this.postRepo.findOne({ where: { id }, relations });
   }
 
-  async createPost(attrs: Partial<CreatePostDto>, userId: string): Promise<void> {
-    const { content, visitDate, rate, keywords } = attrs;
-
+  async createPost({ keywords, rate, visitDate, content }: Partial<CreatePostDto>, userId: string): Promise<void> {
     const user = await this.userService.findById(userId);
     if (!user) {
       throw UserException.notFound();
@@ -35,12 +34,13 @@ export class PostService {
     const savedKeywords = this.keywordService.updateOrCreateKeywords(keywords, []);
 
     // 새 Post 엔티티 생성
-    const post = new Post();
-    post.content = content;
-    post.visitDate = visitDate;
-    post.rate = rate;
-    post.user = user;
-    post.keywords = savedKeywords;
+    const post = new PostBuilder()
+      .setContent(content)
+      .setVisitDate(visitDate)
+      .setRate(rate)
+      .setAuthor(user)
+      .setKeywords(savedKeywords)
+      .build();
 
     // Post 엔티티 저장 (CASCADE설정으로 Keyword 엔티티도 자동으로 저장)
     await this.postRepo.save(post);
