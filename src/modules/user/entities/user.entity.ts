@@ -1,9 +1,10 @@
-import { Entity, Column, OneToMany, ManyToMany, JoinTable } from 'typeorm';
+import { Entity, Column, OneToMany, ManyToMany, JoinTable, ManyToOne } from 'typeorm';
 import { BaseEntityVarchar } from '@common/entities/base.entity';
 import { ApiProperty } from '@nestjs/swagger';
 import { Expose } from 'class-transformer';
 import { IsEmail, IsString, IsUrl } from 'class-validator';
 import { Post } from '../../post/entities';
+import { PlPickCategory } from '../../pl_pick_category/entities/pl_pick_category.entity';
 
 @Entity()
 export class User extends BaseEntityVarchar {
@@ -76,4 +77,7 @@ export class User extends BaseEntityVarchar {
   @ManyToMany(() => Post, (post) => post.likedByUsers)
   @JoinTable({ name: 'user_post_like' })
   likedPosts: Post[];
+
+  @OneToMany(() => PlPickCategory, (plPickCategories) => plPickCategories.user)
+  plPickCategories: PlPickCategory[];
 }

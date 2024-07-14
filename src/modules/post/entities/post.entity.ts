@@ -6,6 +6,7 @@ import { IsDate, IsInt, IsPositive, IsString, Max, Min } from 'class-validator';
 import { User } from '../../user/entities';
 import { Keyword } from '../../keyword/entities';
 import { Comment } from '../../comment/entities/comment.entity';
+import { Place } from '../../place/entities/place.entity';
 
 @Entity()
 export class Post extends BaseEntityIncrement {
@@ -49,4 +50,7 @@ export class Post extends BaseEntityIncrement {
 
   @OneToMany(() => Comment, (comment) => comment.post)
   comments: Comment[];
+
+  @ManyToOne(() => Place, (place) => place.post)
+  place: Place;
 }

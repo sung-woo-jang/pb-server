@@ -3,6 +3,7 @@ import { BaseEntityIncrement } from '@common/entities/base.entity';
 import { IsInt, IsString } from 'class-validator';
 import { PlacePlPickCategoryPivot } from '../../pl_pick_category/entities/place_pl_pick_category_pivot.entity';
 import { PlaceCategory } from './place_category.entity';
+import { Post } from '../../post/entities';
 
 @Entity()
 export class Place extends BaseEntityIncrement {
@@ -39,4 +40,7 @@ export class Place extends BaseEntityIncrement {
 
   @OneToMany(() => PlacePlPickCategoryPivot, (pivot) => pivot.place)
   placePlPickCategoryPivots: PlacePlPickCategoryPivot[];
+
+  @OneToMany(() => Post, (post) => post.place)
+  post: Post[];
 }
