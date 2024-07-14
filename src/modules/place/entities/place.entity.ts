@@ -4,33 +4,41 @@ import { IsInt, IsString } from 'class-validator';
 import { PlacePlPickCategoryPivot } from '../../pl_pick_category/entities/place_pl_pick_category_pivot.entity';
 import { PlaceCategory } from './place_category.entity';
 import { Post } from '../../post/entities';
+import { ApiProperty } from '@nestjs/swagger';
 
 @Entity()
 export class Place extends BaseEntityIncrement {
+  @ApiProperty()
   @Column()
   @IsString()
   title: string;
 
+  @ApiProperty()
   @Column()
   @IsString()
   address: string;
 
+  @ApiProperty()
   @Column()
   @IsString()
   road_address: string;
 
+  @ApiProperty()
   @Column()
   @IsString()
   description: string;
 
+  @ApiProperty()
   @Column()
   @IsString()
   telephone: string;
 
+  @ApiProperty()
   @Column()
   @IsInt()
   mapx: number;
 
+  @ApiProperty()
   @Column()
   @IsInt()
   mapy: number;

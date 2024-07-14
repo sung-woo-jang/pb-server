@@ -5,6 +5,7 @@ import { Expose } from 'class-transformer';
 import { IsEmail, IsString, IsUrl } from 'class-validator';
 import { Post } from '../../post/entities';
 import { PlPickCategory } from '../../pl_pick_category/entities/pl_pick_category.entity';
+import { SearchHistory } from '../../search_history/entities/search_history.entity';
 
 @Entity()
 export class User extends BaseEntityVarchar {
@@ -80,4 +81,7 @@ export class User extends BaseEntityVarchar {
 
   @OneToMany(() => PlPickCategory, (plPickCategories) => plPickCategories.user)
   plPickCategories: PlPickCategory[];
+
+  @OneToMany(() => SearchHistory, (searchHistory) => searchHistory.user)
+  searchHistory: SearchHistory[];
 }
