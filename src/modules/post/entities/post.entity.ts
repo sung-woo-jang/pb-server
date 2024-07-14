@@ -5,6 +5,7 @@ import { Expose } from 'class-transformer';
 import { IsDate, IsInt, IsPositive, IsString, Max, Min } from 'class-validator';
 import { User } from '../../user/entities';
 import { Keyword } from '../../keyword/entities';
+import { Comment } from '../../comment/entities/comment.entity';
 
 @Entity()
 export class Post extends BaseEntityIncrement {
@@ -45,4 +46,7 @@ export class Post extends BaseEntityIncrement {
 
   @ManyToMany(() => User, (user) => user.likedPosts)
   likedByUsers: User[];
+
+  @OneToMany(() => Comment, (comment) => comment.post)
+  comments: Comment[];
 }

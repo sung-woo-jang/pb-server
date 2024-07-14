@@ -8,9 +8,10 @@ import { User } from '../user/entities';
 import { UserModule } from '../user/user.module';
 import { ImageService } from '../image/image.service';
 import { KeywordService } from '../keyword/keyword.service';
+import { Comment } from '../comment/entities/comment.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([User, Post, Keyword]), UserModule],
+  imports: [TypeOrmModule.forFeature([User, Post, Keyword, Comment]), UserModule],
   controllers: [PostController],
   providers: [PostService, ImageService, KeywordService],
 })
