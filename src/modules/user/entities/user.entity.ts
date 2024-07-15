@@ -6,6 +6,7 @@ import { IsEmail, IsString, IsUrl } from 'class-validator';
 import { Post } from '../../post/entities';
 import { PlPickCategory } from '../../pl_pick_category/entities/pl_pick_category.entity';
 import { SearchHistory } from '../../search_history/entities/search_history.entity';
+import { Comment } from '../../comment/entities/comment.entity';
 
 @Entity()
 export class User extends BaseEntityVarchar {
@@ -84,4 +85,7 @@ export class User extends BaseEntityVarchar {
 
   @OneToMany(() => SearchHistory, (searchHistory) => searchHistory.user)
   searchHistory: SearchHistory[];
+
+  @OneToMany(() => Comment, (comment) => comment.user)
+  comments: Comment[];
 }

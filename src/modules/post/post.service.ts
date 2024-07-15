@@ -27,9 +27,7 @@ export class PostService {
 
   async createPost({ keywords, rate, visitDate, content }: Partial<CreatePostDto>, userId: string): Promise<void> {
     const user = await this.userService.findById(userId);
-    if (!user) {
-      throw UserException.notFound();
-    }
+    if (!user) throw UserException.notFound();
 
     const savedKeywords = this.keywordService.updateOrCreateKeywords(keywords, []);
 
