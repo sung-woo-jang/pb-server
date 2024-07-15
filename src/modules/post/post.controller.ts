@@ -20,7 +20,7 @@ export class PostController {
   @HttpCode(201)
   @UseGuards(SessionAuthGuard)
   @ApiBody(PostDocs.createPostBody())
-  async postCreatePost(@Body() body: CreatePostDto, @Session() session: Record<string, any>): Promise<void> {
+  async createPost(@Body() body: CreatePostDto, @Session() session: Record<string, any>): Promise<void> {
     await this.postService.createPost(body, session.user.id);
   }
 
@@ -29,7 +29,7 @@ export class PostController {
   @UseGuards(SessionAuthGuard)
   @UseInterceptors(TransactionInterceptor)
   @ApiBody(PostDocs.patchPostBody())
-  async patchUpdatePost(
+  async updatePost(
     @Body() body: UpdatePostDto,
     @TransactionManager() transactionManager: EntityManager
   ): Promise<void> {
@@ -48,7 +48,7 @@ export class PostController {
   @HttpCode(201)
   @UseGuards(SessionAuthGuard)
   @ApiBody(PostDocs.createPostLikeBody())
-  async postCreatePostLike(@Body() body: PostLikeDto, @Session() session: Record<string, any>): Promise<void> {
+  async createPostLike(@Body() body: PostLikeDto, @Session() session: Record<string, any>): Promise<void> {
     await this.postService.createPostLike(body.id, session.user.id);
   }
 
