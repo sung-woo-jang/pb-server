@@ -8,6 +8,7 @@ import { Post as PostEntity } from './entities';
 import { PostService } from './post.service';
 import { TransactionInterceptor } from '@common/interceptors/transaction.interceptor';
 import { TransactionManager } from '@common/decorators/transaction-manager.decorator';
+import { PostDocs } from './post.docs';
 
 @ApiTags('post')
 @Controller('post')
@@ -18,7 +19,7 @@ export class PostController {
   @Post()
   @HttpCode(201)
   @UseGuards(SessionAuthGuard)
-  @ApiBody({ type: CreatePostDto })
+  @ApiBody(PostDocs.createPostBody())
   async postCreatePost(@Body() body: CreatePostDto, @Session() session: Record<string, any>): Promise<void> {
     await this.postService.createPost(body, session.user.id);
   }
@@ -27,7 +28,7 @@ export class PostController {
   @HttpCode(201)
   @UseGuards(SessionAuthGuard)
   @UseInterceptors(TransactionInterceptor)
-  @ApiBody({ type: CreatePostDto })
+  @ApiBody(PostDocs.patchPostBody())
   async patchUpdatePost(
     @Body() body: UpdatePostDto,
     @TransactionManager() transactionManager: EntityManager
@@ -38,7 +39,7 @@ export class PostController {
   @Delete()
   @HttpCode(201)
   @UseGuards(SessionAuthGuard)
-  @ApiBody({ type: CreatePostDto })
+  @ApiBody(PostDocs.deletePostBody())
   async deletePost(@Body() body: DeletePostDto): Promise<void> {
     await this.postService.deletePost(body.id);
   }
@@ -46,7 +47,7 @@ export class PostController {
   @Post('/like')
   @HttpCode(201)
   @UseGuards(SessionAuthGuard)
-  @ApiBody({ type: PostLikeDto })
+  @ApiBody(PostDocs.createPostLikeBody())
   async postCreatePostLike(@Body() body: PostLikeDto, @Session() session: Record<string, any>): Promise<void> {
     await this.postService.createPostLike(body.id, session.user.id);
   }
@@ -54,7 +55,7 @@ export class PostController {
   @Delete('/like')
   @HttpCode(201)
   @UseGuards(SessionAuthGuard)
-  @ApiBody({ type: PostLikeDto })
+  @ApiBody(PostDocs.deletePostLikeBody())
   async deletePostLike(@Body() body: PostLikeDto, @Session() session: Record<string, any>): Promise<void> {
     await this.postService.deletePostLike(body.id, session.user.id);
   }

@@ -9,6 +9,7 @@ import { ApiBody, ApiOperation, ApiQuery, ApiResponse, ApiTags } from '@nestjs/s
 import { UserDto, UpdateNicknameDto } from './dtos';
 import { UserService } from './user.service';
 import { SessionAuthGuard } from '@common/guards/session-auth.guard';
+import { UserDocs } from './user.docs';
 @ApiTags('auth')
 @Controller('auth')
 @Serialize(UserDto)
@@ -39,24 +40,10 @@ export class UserController {
 
   @Get('/login-naver/callback')
   @HttpCode(200)
-  @ApiOperation({ summary: 'Get users with optional query parameters' })
-  @ApiQuery({
-    name: 'code',
-    required: true,
-    type: String,
-    description: 'Filter users by age',
-  })
-  @ApiQuery({
-    name: 'state',
-    required: true,
-    type: String,
-    description: 'Filter users by name',
-  })
-  @ApiResponse({
-    status: 201,
-    description: 'User created successfully.',
-    type: UserDto,
-  })
+  @ApiOperation(UserDocs.createCommentOperation())
+  @ApiQuery(UserDocs.codeQuery())
+  @ApiQuery(UserDocs.stateQuery())
+  @ApiResponse(UserDocs.createUserResponse())
   @UseGuards(OAuthStateGuard)
   async getLoginNaverCallback(
     @Query('code') code: string,
