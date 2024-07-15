@@ -7,6 +7,7 @@ import { User } from '../../user/entities';
 import { Keyword } from '../../keyword/entities';
 import { Comment } from '../../comment/entities/comment.entity';
 import { Place } from '../../place/entities/place.entity';
+import { Image } from './image.entity';
 
 @Entity()
 export class Post extends BaseEntityIncrement {
@@ -53,4 +54,7 @@ export class Post extends BaseEntityIncrement {
 
   @ManyToOne(() => Place, (place) => place.post)
   place: Place;
+
+  @OneToMany(() => Image, (image) => image.post)
+  image: Image[];
 }
