@@ -2,7 +2,7 @@ import { Body, Controller, Post } from '@nestjs/common';
 import { CommentService } from './comment.service';
 import { ApiOperation } from '@nestjs/swagger';
 import { CommentDocs } from './comment.docs';
-import { CreateCommentDto } from './dto/create-comment.dto';
+import { CreateCommentDto } from './dto/request/create-comment.dto';
 
 @Controller('comment')
 export class CommentController {

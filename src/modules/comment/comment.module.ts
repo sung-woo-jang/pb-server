@@ -7,8 +7,8 @@ import { PostRepository } from '../post/post.repository';
 import { UserRepository } from '../user/user.repository';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([CommentRepository, PostRepository, UserRepository])],
+  imports: [TypeOrmModule.forFeature([])],
   controllers: [CommentController],
-  providers: [CommentService],
+  providers: [CommentService, PostRepository, CommentRepository, UserRepository],
 })
 export class CommentModule {}

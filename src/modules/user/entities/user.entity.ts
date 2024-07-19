@@ -1,4 +1,4 @@
-import { Entity, Column, OneToMany, ManyToMany, JoinTable, ManyToOne } from 'typeorm';
+import { Column, Entity, JoinTable, ManyToMany, OneToMany } from 'typeorm';
 import { BaseEntityVarchar } from '@common/entities/base.entity';
 import { ApiProperty } from '@nestjs/swagger';
 import { Expose } from 'class-transformer';

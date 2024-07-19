@@ -1,10 +1,24 @@
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
 import { BaseEntityIncrement } from '@common/entities/base.entity';
-import { IsNotEmpty } from 'class-validator';
+import { IsEnum, IsNotEmpty } from 'class-validator';
 import { PlacePlPickCategoryPivot } from './place_pl_pick_category_pivot.entity';
 import { User } from '../../user/entities';
 import { ApiProperty } from '@nestjs/swagger';
-
+enum CircleColors {
+  RED = '#FF596D',
+  ORANGE = '#FE8803',
+  YELLOW = '#FEC802',
+  GREEN = '#8EC049',
+  TEAL = '#41A37C',
+  CYAN = '#00C6D8',
+  PINK = '#E255A9',
+  LIGHT_PINK = '#FF98A0',
+  LAVENDER = '#8A94BE',
+  BLUE = '#4496E2',
+  NAVY = '#005188',
+  GRAY = '#767676',
+  LIGHT_GRAY = '#BBC3CF',
+}
 @Entity()
 export class PlPickCategory extends BaseEntityIncrement {
   @Column()
@@ -12,10 +26,11 @@ export class PlPickCategory extends BaseEntityIncrement {
   @IsNotEmpty()
   title: string;
 
-  @Column()
+  @Column({ type: 'enum', enum: CircleColors, default: CircleColors.RED })
   @ApiProperty()
   @IsNotEmpty()
-  picker_color: string;
+  @IsEnum(CircleColors)
+  picker_color: CircleColors;
 
   @Column()
   @ApiProperty()

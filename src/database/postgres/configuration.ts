@@ -15,7 +15,7 @@ export const postgresTypeOrmModuleAsyncOptions: TypeOrmModuleAsyncOptions = {
     database: config.get<string>('postgresMain.database'),
     synchronize: config.get<boolean>('postgresMain.synchronize'),
     logging: config.get<boolean>('postgresMain.logging'),
-    entities: [__dirname + '/../../modules/**/*.entity.js'],
+    entities: [__dirname + '/../../modules/**/*.entity.{js,ts}'],
     // autoLoadEntities: true,
   }),
 };

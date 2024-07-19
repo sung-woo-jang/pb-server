@@ -1,7 +1,7 @@
-import { UseInterceptors, NestInterceptor, ExecutionContext, CallHandler, Injectable } from '@nestjs/common';
+import { CallHandler, ExecutionContext, Injectable, NestInterceptor, UseInterceptors } from '@nestjs/common';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { plainToClass } from 'class-transformer';
+import { plainToInstance } from 'class-transformer';
 
 const SuccessStatusCodeMessage = {
   200: 'OK',
@@ -37,11 +37,12 @@ export class SerializerInterceptor implements NestInterceptor {
     return next.handle().pipe(
       map((data: any) => {
         console.log('response DTO 적용');
+
         return {
           status: statusCode,
           message: SuccessStatusCodeMessage[statusCode],
           isLogin: request.session?.user != null,
-          data: plainToClass(this.dto, data, {
+          data: plainToInstance(this.dto, data, {
             // Convert instance to plain object and then back to class to trigger @Expose() decorators
             excludeExtraneousValues: true,
           }),

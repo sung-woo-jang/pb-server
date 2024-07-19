@@ -1,4 +1,4 @@
-import { Entity, Column, ManyToOne, OneToMany, ManyToMany } from 'typeorm';
+import { Column, Entity, ManyToMany, ManyToOne, OneToMany } from 'typeorm';
 import { BaseEntityIncrement } from '@common/entities/base.entity';
 import { ApiProperty } from '@nestjs/swagger';
 import { Expose } from 'class-transformer';
@@ -39,22 +39,28 @@ export class Post extends BaseEntityIncrement {
     nullable: false,
     onDelete: 'CASCADE',
   })
+  @Expose()
   user: User;
 
   @OneToMany(() => Keyword, (keyword) => keyword.post, {
     cascade: ['insert', 'update', 'soft-remove', 'remove'],
   })
+  @Expose()
   keywords: Keyword[];
 
   @ManyToMany(() => User, (user) => user.likedPosts)
+  @Expose()
   likedByUsers: User[];
 
   @OneToMany(() => Comment, (comment) => comment.post)
+  @Expose()
   comments: Comment[];
 
   @ManyToOne(() => Place, (place) => place.post)
+  @Expose()
   place: Place;
 
   @OneToMany(() => Image, (image) => image.post)
+  @Expose()
   image: Image[];
 }

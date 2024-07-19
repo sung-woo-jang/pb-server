@@ -12,8 +12,8 @@ import { Comment } from '../comment/entities/comment.entity';
 import { PostRepository } from './post.repository';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([User, Post, Keyword, Comment, PostRepository]), UserModule],
+  imports: [TypeOrmModule.forFeature([User, Keyword, Comment, Post]), UserModule],
   controllers: [PostController],
-  providers: [PostService, ImageService, KeywordService],
+  providers: [PostService, ImageService, KeywordService, PostRepository],
 })
 export class PostModule {}

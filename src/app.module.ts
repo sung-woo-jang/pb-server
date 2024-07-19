@@ -10,6 +10,16 @@ import { PlPickCategoryModule } from './modules/pl_pick_category/pl_pick_categor
 import { SearchHistoryModule } from './modules/search_history/search_history.module';
 
 @Module({
-  imports: [AppConfigModule, DatabaseModule, SeeModule, UserModule, PostModule, CommentModule, PlaceModule, PlPickCategoryModule, SearchHistoryModule],
+  imports: [
+    AppConfigModule,
+    DatabaseModule,
+    SeeModule,
+    UserModule,
+    PostModule,
+    CommentModule,
+    PlaceModule,
+    PlPickCategoryModule,
+    SearchHistoryModule,
+  ],
 })
 export class AppModule {}
