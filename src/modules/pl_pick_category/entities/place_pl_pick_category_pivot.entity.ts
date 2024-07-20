@@ -28,12 +28,6 @@ export class PlacePlPickCategoryPivot extends TimestampEntity {
   @PrimaryGeneratedColumn('increment')
   place_id: number;
 
-  @ManyToOne(() => Place, (place) => place.placePlPickCategoryPivots)
-  place: Place;
-
-  @ManyToOne(() => PlPickCategory, (plPickCategory) => plPickCategory.placePlPickCategoryPivots)
-  plPickCategory: PlPickCategory;
-
   @Column({ nullable: true })
   memo: string;
 
@@ -43,4 +37,10 @@ export class PlacePlPickCategoryPivot extends TimestampEntity {
   @Column({ nullable: true })
   @IsUrl()
   link: string;
+
+  @ManyToOne(() => Place, (place) => place.placePlPickCategoryPivots)
+  place: Place;
+
+  @ManyToOne(() => PlPickCategory, (plPickCategory) => plPickCategory.placePlPickCategoryPivots)
+  plPickCategory: PlPickCategory;
 }

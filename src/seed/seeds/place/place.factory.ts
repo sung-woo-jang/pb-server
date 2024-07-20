@@ -2,13 +2,13 @@ import { localeKoSetSeederFactory } from '../utils/localeKoSetSedderFactory';
 import { Place } from '../../../modules/place/entities/place.entity';
 import { PlaceBuilder } from '../../../builder/place.builder';
 
-export default localeKoSetSeederFactory(Place, (faker) =>
+const PlaceFactory = localeKoSetSeederFactory(Place, (faker) =>
   new PlaceBuilder()
     .setTitle(faker.lorem.sentence({ min: 1, max: 2 }))
     .setAddress(faker.location.city())
     .setRoadAddress(faker.location.city())
     .setDescription(faker.lorem.sentence({ min: 3, max: 5 }))
-    .setTelephone(faker.phone.number('010-####-####'))
+    .setTelephone(faker.helpers.fromRegExp(/010-[0-9]{4}-[0-9]{4}/))
     .setMapx(
       faker.location.longitude({
         min: 126.470643,
@@ -25,3 +25,4 @@ export default localeKoSetSeederFactory(Place, (faker) =>
     )
     .build()
 );
+export default PlaceFactory;

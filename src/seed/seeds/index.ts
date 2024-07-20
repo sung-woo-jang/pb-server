@@ -6,26 +6,35 @@ import ImageSeeder from './image/image.seeder';
 import CommentSeeder from './comment/comment.seeder';
 import PlPickCategorySeeder from './pl_pick_category/pl_pick_category.seeder';
 import PlaceSeeder from './place/place.seeder';
-import keywordFactory from './keyword/keyword.factory';
-import postFactory from './post/post.factory';
-import imageFactory from './image/image.factory';
-import commentFactory from './comment/comment.factory';
-import plPickCategoryFactory from './pl_pick_category/pl_pick_category.factory';
-import placeFactory from './place/place.factory';
+import PlaceCategorySeeder from './place_category/place_category.seeder';
+import PlacePlPickCategoryPivotSeeder from './place_pl_pick_category_pivot/place_pl_pick_category_pivot.seeder';
+
+import CommentFactory from './comment/comment.factory';
+import PlPickCategoryFactory from './pl_pick_category/pl_pick_category.factory';
+import PlaceFactory from './place/place.factory';
+import PlacePlPickCategoryPivotFactory from './place_pl_pick_category_pivot/place_pl_pick_category_pivot.factory';
+import PostFactory from './post/post.factory';
+import KeywordFactory from './keyword/keyword.factory';
+import ImageFactory from './image/image.factory';
+import PlaceCategoryFactory from './place_category/place_category.factory';
 
 export const seeds: SeederConstructor[] | string[] = [
   PostSeeder,
-  KeywordSeeder,
   ImageSeeder,
+  KeywordSeeder,
   CommentSeeder,
-  PlPickCategorySeeder,
   PlaceSeeder,
+  PlaceCategorySeeder,
+  PlPickCategorySeeder,
+  PlacePlPickCategoryPivotSeeder,
 ];
 export const factories: SeederFactoryItem[] | string[] = [
-  keywordFactory,
-  postFactory,
-  imageFactory,
-  commentFactory,
-  plPickCategoryFactory,
-  placeFactory,
+  PostFactory,
+  ImageFactory,
+  KeywordFactory,
+  CommentFactory,
+  PlaceFactory,
+  PlaceCategoryFactory,
+  PlPickCategoryFactory,
+  PlacePlPickCategoryPivotFactory,
 ];

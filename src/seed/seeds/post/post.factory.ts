@@ -3,7 +3,7 @@ import { PostBuilder } from '../../../builder/post.builder';
 import { generateRandomInteger } from '@common/utils/generateRandomInteger';
 import { localeKoSetSeederFactory } from '../utils/localeKoSetSedderFactory';
 
-export default localeKoSetSeederFactory(Post, (faker) =>
+const PostFactory = localeKoSetSeederFactory(Post, (faker) =>
   new PostBuilder()
     .setContent(faker.lorem.sentence({ min: 3, max: 5 }))
     .setVisitDate(
@@ -15,3 +15,4 @@ export default localeKoSetSeederFactory(Post, (faker) =>
     .setRate(generateRandomInteger(1, 3))
     .build()
 );
+export default PostFactory;
