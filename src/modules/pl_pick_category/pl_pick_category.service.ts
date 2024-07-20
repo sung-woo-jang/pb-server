@@ -1,10 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { CreatePlPickCategoryDto } from './dto/request/create-pl_pick_category.dto';
-import { UpdatePlPickCategoryDto } from './dto/update-pl_pick_category.dto';
+import { UpdatePlPickCategoryDto } from './dto/request/update-pl_pick_category.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { PlPickCategoryRepository } from './pl_pick_category.repository';
 import { PlPickCategoryBuilder } from '../../builder/pl_pick_category.builder';
 import { User } from '../user/entities';
+import * as _ from 'lodash';
 
 @Injectable()
 export class PlPickCategoryService {
@@ -22,19 +23,24 @@ export class PlPickCategoryService {
     return await this.plPickCategoryRepository.save({ ...plPickCategory, user });
   }
 
-  findAll() {
-    return `This action returns all plPickCategory`;
+  async findAll(user: User) {
+    return await this.plPickCategoryRepository.find({ where: { user } });
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} plPickCategory`;
+  async findOneWithDeleted(id: number) {
+    return await this.plPickCategoryRepository.findOneWithDeleted(id);
   }
 
-  update(id: number, updatePlPickCategoryDto: UpdatePlPickCategoryDto) {
-    return `This action updates a #${id} plPickCategory`;
+  async update(updatePlPickCategoryDto: UpdatePlPickCategoryDto) {
+    return await this.plPickCategoryRepository.updatePlPickCategory(updatePlPickCategoryDto);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} plPickCategory`;
+  async remove(id: number) {
+    const plPickCategory = await this.findOneWithDeleted(id);
+    if (_.isNull(plPickCategory.deletedAt)) {
+      return await this.plPickCategoryRepository.deletePlPickCategory(id);
+    } else {
+      return await this.plPickCategoryRepository.restorePlPickCategory(id);
+    }
   }
 }
