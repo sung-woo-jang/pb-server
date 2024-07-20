@@ -1,15 +1,20 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, Session, UseGuards } from '@nestjs/common';
 import { PlPickCategoryService } from './pl_pick_category.service';
-import { CreatePlPickCategoryDto } from './dto/create-pl_pick_category.dto';
+import { CreatePlPickCategoryDto } from './dto/request/create-pl_pick_category.dto';
 import { UpdatePlPickCategoryDto } from './dto/update-pl_pick_category.dto';
+import { SessionAuthGuard } from '@common/guards/session-auth.guard';
+import { ApiTags } from '@nestjs/swagger';
+import { User } from '../user/entities';
 
+@ApiTags('pl-pick-category')
+@UseGuards(SessionAuthGuard)
 @Controller('pl-pick-category')
 export class PlPickCategoryController {
   constructor(private readonly plPickCategoryService: PlPickCategoryService) {}
 
   @Post()
-  create(@Body() createPlPickCategoryDto: CreatePlPickCategoryDto) {
-    return this.plPickCategoryService.create(createPlPickCategoryDto);
+  create(@Body() createPlPickCategoryDto: CreatePlPickCategoryDto, @Session() session: Record<string, User>) {
+    return this.plPickCategoryService.create(createPlPickCategoryDto, session.user);
   }
 
   @Get()
