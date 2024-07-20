@@ -20,25 +20,26 @@ export enum CircleColors {
   GRAY = '#767676',
   LIGHT_GRAY = '#BBC3CF',
 }
-@Entity()
+@Entity({ comment: '플픽 테이블\n플픽 카테고리에 저장될 플픽 정보' })
 export class PlPickCategory extends BaseEntityIncrement {
-  @Column({ nullable: false })
+  @Column({ nullable: false, comment: '플픽 별명' })
   @ApiProperty()
   @IsNotEmpty()
   title: string;
 
-  @Column({ type: 'enum', enum: CircleColors, default: CircleColors.RED, nullable: false })
+  // TODO: 삭제예정
+  @Column({ type: 'enum', enum: CircleColors, default: CircleColors.RED, nullable: false, comment: 'picker 색깔' })
   @ApiProperty()
   @IsNotEmpty()
   @IsEnum(CircleColors)
   picker_color: CircleColors;
 
-  @Column({ nullable: true })
+  @Column({ nullable: true, comment: '메모' })
   @ApiProperty({ required: false })
   @IsOptional()
   memo: string;
 
-  @Column({ nullable: true })
+  @Column({ nullable: true, comment: '링크' })
   @ApiProperty({ required: false })
   @IsOptional()
   @IsUrl()

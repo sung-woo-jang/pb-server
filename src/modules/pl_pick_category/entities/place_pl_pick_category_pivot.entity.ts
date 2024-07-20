@@ -1,12 +1,12 @@
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { Place } from '../../place/entities/place.entity';
-import { PlPickCategory } from './pl_pick_category.entity';
-import { IsInt, IsPositive, IsUrl } from 'class-validator';
+import { CircleColors, PlPickCategory } from './pl_pick_category.entity';
+import { IsEnum, IsInt, IsNotEmpty, IsPositive, IsUrl } from 'class-validator';
 import { TimestampEntity } from '@common/entities/timestamp.entity';
 import { ApiProperty } from '@nestjs/swagger';
 import { Expose } from 'class-transformer';
 
-@Entity()
+@Entity({ comment: '플픽 카테고리 테이블' })
 export class PlacePlPickCategoryPivot extends TimestampEntity {
   @ApiProperty({
     example: '152',
@@ -37,6 +37,12 @@ export class PlacePlPickCategoryPivot extends TimestampEntity {
   @Column({ nullable: true })
   @IsUrl()
   link: string;
+
+  @Column({ type: 'enum', enum: CircleColors, default: CircleColors.RED, nullable: false, comment: '' })
+  @ApiProperty()
+  @IsNotEmpty()
+  @IsEnum(CircleColors)
+  picker_color: CircleColors;
 
   @ManyToOne(() => Place, (place) => place.placePlPickCategoryPivots)
   place: Place;
