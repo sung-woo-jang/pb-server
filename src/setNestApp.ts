@@ -6,7 +6,7 @@ import * as express from 'express';
 import * as path from 'path';
 import { sessionConfig } from './database/postgres/session';
 import { LoggingInterceptor } from '@common/interceptors/logger.interceptor';
-// import { SeeService } from './see/see.service';
+// import { SeedService } from './seed/seed.service';
 
 export const setNestApp = (app: INestApplication) => {
   app.use(cookieParser());
@@ -38,6 +38,6 @@ export const setNestApp = (app: INestApplication) => {
 
   app.use(sessionConfig);
 
-  // const seeService = app.get(SeeService);
+  // const seeService = app.get(SeedService);
   // await seeService.seed();
 };

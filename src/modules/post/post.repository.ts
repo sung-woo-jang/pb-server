@@ -16,7 +16,7 @@ export class PostRepository extends Repository<Post> {
         user: true,
         likedByUsers: true,
         comments: true,
-        image: true,
+        images: true,
       },
     });
   }

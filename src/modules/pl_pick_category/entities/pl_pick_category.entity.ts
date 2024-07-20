@@ -4,7 +4,7 @@ import { IsEnum, IsNotEmpty } from 'class-validator';
 import { PlacePlPickCategoryPivot } from './place_pl_pick_category_pivot.entity';
 import { User } from '../../user/entities';
 import { ApiProperty } from '@nestjs/swagger';
-enum CircleColors {
+export enum CircleColors {
   RED = '#FF596D',
   ORANGE = '#FE8803',
   YELLOW = '#FEC802',

@@ -2,7 +2,7 @@ import { PrimaryColumn, PrimaryGeneratedColumn } from 'typeorm';
 import { TimestampEntity } from './timestamp.entity';
 import { ApiProperty } from '@nestjs/swagger';
 import { Expose } from 'class-transformer';
-import { IsInt, IsString, IsPositive, IsUUID } from 'class-validator';
+import { IsInt, IsPositive, IsString, IsUUID } from 'class-validator';
 
 export abstract class BaseEntityIncrement extends TimestampEntity {
   @ApiProperty({

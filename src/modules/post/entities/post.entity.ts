@@ -62,5 +62,5 @@ export class Post extends BaseEntityIncrement {
 
   @OneToMany(() => Image, (image) => image.post)
   @Expose()
-  image: Image[];
+  images: Image[];
 }

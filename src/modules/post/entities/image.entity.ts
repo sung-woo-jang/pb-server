@@ -9,6 +9,6 @@ export class Image extends BaseEntityIncrement {
   @ApiProperty()
   image_path: string;
 
-  @ManyToOne(() => Post, (post) => post.image)
+  @ManyToOne(() => Post, (post) => post.images)
   post: Post;
 }

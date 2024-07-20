@@ -1,10 +1,10 @@
 import { Module } from '@nestjs/common';
-import { SeeService } from './see.service';
+import { SeedService } from './seed.service';
 import { UserModule } from '../modules/user/user.module';
 
 @Module({
   imports: [UserModule],
-  providers: [SeeService],
-  exports: [SeeService],
+  providers: [SeedService],
+  exports: [SeedService],
 })
-export class SeeModule {}
+export class SeedModule {}

@@ -4,7 +4,7 @@ import { AuthService } from '../modules/auth/auth.service';
 import { UserService } from '../modules/user/user.service';
 
 @Injectable()
-export class SeeService {
+export class SeedService {
   constructor(
     private readonly userService: UserService,
     private readonly authService: AuthService,

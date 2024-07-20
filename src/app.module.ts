@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { SeeModule } from './see/see.module';
+import { SeedModule } from './seed/seed.module';
 import { DatabaseModule } from './database/database.module';
 import { AppConfigModule } from './config/app-config.module';
 import { UserModule } from './modules/user/user.module';
@@ -13,7 +13,7 @@ import { SearchHistoryModule } from './modules/search_history/search_history.mod
   imports: [
     AppConfigModule,
     DatabaseModule,
-    SeeModule,
+    SeedModule,
     UserModule,
     PostModule,
     CommentModule,

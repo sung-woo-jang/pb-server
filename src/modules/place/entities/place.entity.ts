@@ -34,12 +34,12 @@ export class Place extends BaseEntityIncrement {
   telephone: string;
 
   @ApiProperty()
-  @Column()
+  @Column({ type: 'double precision', comment: '126.654075' })
   @IsInt()
   mapx: number;
 
   @ApiProperty()
-  @Column()
+  @Column({ type: 'double precision', comment: '37.4665220' })
   @IsInt()
   mapy: number;
 
