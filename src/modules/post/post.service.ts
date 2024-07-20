@@ -7,15 +7,21 @@ import { PostException, UserException } from 'src/exception';
 import { Post } from './entities';
 import { CreatePostDto, UpdatePostDto } from './dtos';
 import { PostBuilder } from '../../builder/post.builder';
+import { PostRepository } from './post.repository';
+import { NewsfeedDto } from './dtos/response/newsfeed.dto';
 
 @Injectable()
 export class PostService {
   constructor(
     private userService: UserService,
     private keywordService: KeywordService,
-    @InjectRepository(Post) private postRepo: Repository<Post>
-    // private dataSource: DataSource
+    @InjectRepository(Post) private postRepo: Repository<Post>,
+    private readonly postRepository: PostRepository
   ) {}
+
+  async getNewsFeeds(): Promise<NewsfeedDto[]> {
+    return await this.postRepository.getNewsFeeds();
+  }
 
   async findById(id: number): Promise<Post> {
     return await this.postRepo.findOneBy({ id });
