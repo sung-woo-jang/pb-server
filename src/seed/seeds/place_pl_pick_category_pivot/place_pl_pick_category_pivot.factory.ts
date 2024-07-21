@@ -1,7 +1,7 @@
-import { PlacePlPickCategoryPivot } from '../../../modules/pl_pick_category/entities/place_pl_pick_category_pivot.entity';
+import { PlacePlPickCategoryPivot } from '../../../modules/place_pick/entities/place_pl_pick_category_pivot.entity';
 import { PlacePlPickCategoryPivotBuilder } from '../../../builder/place_pl_pick_category_pivot.builder';
 import { Place } from '../../../modules/place/entities/place.entity';
-import { CircleColors, PlPickCategory } from '../../../modules/pl_pick_category/entities/pl_pick_category.entity';
+import { PlPickCategory } from '../../../modules/pl_pick_category/entities/pl_pick_category.entity';
 import { setSeederFactory } from 'typeorm-extension';
 import { Faker, ko } from '@faker-js/faker';
 import { DataSource } from 'typeorm';
@@ -30,7 +30,6 @@ const PlacePlPickCategoryPivotFactory = setSeederFactory(PlacePlPickCategoryPivo
   return new PlacePlPickCategoryPivotBuilder()
     .setAlias(faker.lorem.sentence({ min: 1, max: 1 }))
     .setMemo(faker.lorem.sentence({ min: 2, max: 4 }))
-    .setPickerColor(faker.helpers.arrayElement(Object.values(CircleColors)))
     .setLink(faker.internet.url())
     .setPlPickCategoryId(place.id)
     .setPlaceId(plPickCategory.id)

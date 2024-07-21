@@ -23,7 +23,7 @@ export const setNestApp = (app: INestApplication) => {
     new ValidationPipe({
       transform: true,
       forbidUnknownValues: false,
-      whitelist: true,
+      whitelist: false,
       transformOptions: {
         enableImplicitConversion: true,
       },

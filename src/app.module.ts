@@ -8,6 +8,7 @@ import { CommentModule } from './modules/comment/comment.module';
 import { PlaceModule } from './modules/place/place.module';
 import { PlPickCategoryModule } from './modules/pl_pick_category/pl_pick_category.module';
 import { SearchHistoryModule } from './modules/search_history/search_history.module';
+import { PlacePickModule } from './modules/place_pick/place_pick.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { SearchHistoryModule } from './modules/search_history/search_history.mod
     PlaceModule,
     PlPickCategoryModule,
     SearchHistoryModule,
+    PlacePickModule,
   ],
 })
 export class AppModule {}

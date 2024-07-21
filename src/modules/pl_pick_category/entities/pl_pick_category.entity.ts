@@ -1,9 +1,10 @@
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
 import { BaseEntityIncrement } from '@common/entities/base.entity';
 import { IsEnum, IsNotEmpty, IsOptional, IsUrl } from 'class-validator';
-import { PlacePlPickCategoryPivot } from './place_pl_pick_category_pivot.entity';
+import { PlacePlPickCategoryPivot } from '../../place_pick/entities/place_pl_pick_category_pivot.entity';
 import { User } from '../../user/entities';
 import { ApiProperty } from '@nestjs/swagger';
+import { Expose } from 'class-transformer';
 
 export enum CircleColors {
   RED = '#FF596D',
@@ -20,29 +21,32 @@ export enum CircleColors {
   GRAY = '#767676',
   LIGHT_GRAY = '#BBC3CF',
 }
-@Entity({ comment: '플픽 테이블\n플픽 카테고리에 저장될 플픽 정보' })
+@Entity({ comment: '플픽 카테고리 테이블' })
 export class PlPickCategory extends BaseEntityIncrement {
   @Column({ nullable: false, comment: '플픽 별명' })
   @ApiProperty()
   @IsNotEmpty()
+  @Expose()
   title: string;
 
-  // TODO: 삭제예정
   @Column({ type: 'enum', enum: CircleColors, default: CircleColors.RED, nullable: false, comment: 'picker 색깔' })
   @ApiProperty()
   @IsNotEmpty()
   @IsEnum(CircleColors)
+  @Expose()
   picker_color: CircleColors;
 
   @Column({ nullable: true, comment: '메모' })
   @ApiProperty({ required: false })
   @IsOptional()
+  @Expose()
   memo: string;
 
   @Column({ nullable: true, comment: '링크' })
   @ApiProperty({ required: false })
   @IsOptional()
   @IsUrl()
+  @Expose()
   link: string;
 
   @OneToMany(() => PlacePlPickCategoryPivot, (pivot) => pivot.plPickCategory)
