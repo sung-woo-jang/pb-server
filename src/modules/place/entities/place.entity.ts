@@ -1,6 +1,6 @@
 import { Column, Entity, ManyToOne, OneToMany } from 'typeorm';
 import { BaseEntityIncrement } from '@common/entities/base.entity';
-import { IsInt, IsString } from 'class-validator';
+import { IsNumber, IsString } from 'class-validator';
 import { PlacePlPickCategoryPivot } from '../../place_pick/entities/place_pl_pick_category_pivot.entity';
 import { PlaceCategory } from './place_category.entity';
 import { Post } from '../../post/entities';
@@ -43,13 +43,13 @@ export class Place extends BaseEntityIncrement {
 
   @ApiProperty()
   @Column({ type: 'double precision', comment: '126.654075' })
-  @IsInt()
+  @IsNumber()
   @Expose()
   mapx: number;
 
   @ApiProperty()
   @Column({ type: 'double precision', comment: '37.4665220' })
-  @IsInt()
+  @IsNumber()
   @Expose()
   mapy: number;
 

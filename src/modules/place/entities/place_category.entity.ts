@@ -17,6 +17,7 @@ export class PlaceCategory extends BaseEntityIncrement {
 
   @Column({ comment: '카페' })
   @ApiProperty()
+  @IsNotEmpty()
   @Expose()
   place_category_name_detail: string;
 

@@ -1,7 +1,7 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, ManyToOne, PrimaryColumn } from 'typeorm';
 import { Place } from '../../place/entities/place.entity';
 import { PlPickCategory } from '../../pl_pick_category/entities/pl_pick_category.entity';
-import { IsInt, IsPositive, IsUrl } from 'class-validator';
+import { IsInt, IsPositive, IsString, IsUrl } from 'class-validator';
 import { TimestampEntity } from '@common/entities/timestamp.entity';
 import { ApiProperty } from '@nestjs/swagger';
 import { Expose } from 'class-transformer';
@@ -15,7 +15,7 @@ export class PlacePlPickCategoryPivot extends TimestampEntity {
   @IsInt()
   @IsPositive()
   @Expose()
-  @PrimaryGeneratedColumn('increment')
+  @PrimaryColumn()
   pl_pick_category_id: number;
 
   @ApiProperty({
@@ -25,14 +25,16 @@ export class PlacePlPickCategoryPivot extends TimestampEntity {
   @IsInt()
   @IsPositive()
   @Expose()
-  @PrimaryGeneratedColumn('increment')
+  @PrimaryColumn()
   place_id: number;
 
   @Column({ nullable: true })
+  @IsString()
   @Expose()
   memo: string;
 
   @Column({ nullable: true })
+  @IsString()
   @Expose()
   alias: string;
 
