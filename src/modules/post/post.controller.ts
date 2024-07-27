@@ -4,6 +4,7 @@ import {
   Delete,
   Get,
   HttpCode,
+  Param,
   Patch,
   Post,
   Session,
@@ -14,13 +15,14 @@ import { ApiBody, ApiTags } from '@nestjs/swagger';
 import { EntityManager } from 'typeorm';
 import { SessionAuthGuard } from '@common/guards/session-auth.guard';
 import { Serialize } from '@common/interceptors/serialize.interceptor';
-import { CreatePostDto, DeletePostDto, PostLikeDto, UpdatePostDto } from './dtos';
+import { CreatePostDto, DeletePostDto, PostDto, PostLikeDto, UpdatePostDto } from './dtos';
 import { Post as PostEntity } from './entities';
 import { PostService } from './post.service';
 import { TransactionInterceptor } from '@common/interceptors/transaction.interceptor';
 import { TransactionManager } from '@common/decorators/transaction-manager.decorator';
 import { PostDocs } from './post.docs';
 import { NewsfeedDto } from './dtos/response/newsfeed.dto';
+import { FindPostDto } from './dtos/find-post.dto';
 
 @ApiTags('post')
 @Controller('post')
@@ -31,6 +33,18 @@ export class PostController {
   @Get('newsfeed')
   async getNewsFeeds(): Promise<NewsfeedDto[]> {
     return await this.postService.getNewsFeeds();
+  }
+
+  @Get()
+  @HttpCode(200)
+  async findAll(@Session() session: Record<string, any>): Promise<PostDto[]> {
+    return await this.postService.findAll(session.user.id);
+  }
+
+  @Get('/:id')
+  @HttpCode(200)
+  async findPost(@Param() params: FindPostDto, @Session() session: Record<string, any>): Promise<PostDto> {
+    return await this.postService.findPost(params.id, session.user.id);
   }
 
   @Post()

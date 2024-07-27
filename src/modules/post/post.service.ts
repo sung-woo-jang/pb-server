@@ -31,6 +31,14 @@ export class PostService {
     return await this.postRepo.findOne({ where: { id }, relations });
   }
 
+  async findAll(userId: string): Promise<Post[]> {
+    return this.postRepository.findAll(userId);
+  }
+
+  async findPost(postId: number, userId: string): Promise<Post> {
+    return this.postRepository.findPost(postId, userId);
+  }
+
   async createPost({ keywords, rate, visitDate, content }: Partial<CreatePostDto>, userId: string): Promise<void> {
     const user = await this.userService.findById(userId);
     if (!user) throw UserException.notFound();
@@ -90,21 +98,29 @@ export class PostService {
 
   async createPostLike(postId: number, userId: string): Promise<void> {
     const user = await this.userService.findById(userId);
-    const post = await this.findByIdAndRelation(postId, ['likedByUsers']);
+    const post = await this.findById(postId);
 
-    if (user && post) {
-      post.likedByUsers.push(user);
-      await this.postRepo.save(post);
-    }
+    await this.postRepository.createPostLike(post, user);
+    // const user = await this.userService.findById(userId);
+    // const post = await this.findByIdAndRelation(postId, ['likedByUsers']);
+
+    // if (user && post) {
+    //   post.likedByUsers.push(user);
+    //   await this.postRepo.save(post);
+    // }
   }
 
   async deletePostLike(postId: number, userId: string): Promise<void> {
-    const post = await this.findByIdAndRelation(postId, ['likedByUsers']);
-    if (post) {
-      post.likedByUsers = post.likedByUsers.filter((user) => user.id !== userId);
+    const user = await this.userService.findById(userId);
+    const post = await this.findById(postId);
 
-      await this.postRepo.save(post);
-    }
+    await this.postRepository.deletePostLike(post, user);
+    // const post = await this.findByIdAndRelation(postId, ['likedByUsers']);
+    // if (post) {
+    //   post.likedByUsers = post.likedByUsers.filter((user) => user.id !== userId);
+
+    //   await this.postRepo.save(post);
+    // }
 
     // try {
     //   await this.dataSource
