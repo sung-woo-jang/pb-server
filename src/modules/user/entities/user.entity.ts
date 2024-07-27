@@ -3,7 +3,7 @@ import { BaseEntityVarchar } from '@common/entities/base.entity';
 import { ApiProperty } from '@nestjs/swagger';
 import { Expose } from 'class-transformer';
 import { IsEmail, IsString, IsUrl } from 'class-validator';
-import { Post } from '../../post/entities';
+import { Post, UserPostLike } from '../../post/entities';
 import { PlPickCategory } from '../../pl_pick_category/entities/pl_pick_category.entity';
 import { SearchHistory } from '../../search_history/entities/search_history.entity';
 import { Comment } from '../../comment/entities/comment.entity';
@@ -76,16 +76,19 @@ export class User extends BaseEntityVarchar {
   @OneToMany(() => Post, (post) => post.user, { cascade: ['soft-remove', 'remove'] })
   posts: Post[];
 
-  @ManyToMany(() => Post, (post) => post.likedByUsers)
-  @JoinTable({ name: 'user_post_like' })
-  likedPosts: Post[];
+  @OneToMany(() => UserPostLike, (userPostLike) => userPostLike.user, { cascade: ['soft-remove', 'remove'] })
+  likedPosts: UserPostLike[];
 
-  @OneToMany(() => PlPickCategory, (plPickCategories) => plPickCategories.user)
+  // @ManyToMany(() => Post, (post) => post.likedByUsers)
+  // @JoinTable({ name: 'user_post_like' })
+  // likedPosts: Post[];
+
+  @OneToMany(() => PlPickCategory, (plPickCategories) => plPickCategories.user, { cascade: ['soft-remove', 'remove'] })
   plPickCategories: PlPickCategory[];
 
-  @OneToMany(() => SearchHistory, (searchHistory) => searchHistory.user)
+  @OneToMany(() => SearchHistory, (searchHistory) => searchHistory.user, { cascade: ['soft-remove', 'remove'] })
   searchHistory: SearchHistory[];
 
-  @OneToMany(() => Comment, (comment) => comment.user)
+  @OneToMany(() => Comment, (comment) => comment.user, { cascade: ['soft-remove', 'remove'] })
   comments: Comment[];
 }

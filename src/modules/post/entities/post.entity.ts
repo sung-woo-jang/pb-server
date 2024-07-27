@@ -8,6 +8,7 @@ import { Keyword } from '../../keyword/entities';
 import { Comment } from '../../comment/entities/comment.entity';
 import { Place } from '../../place/entities/place.entity';
 import { Image } from './image.entity';
+import { UserPostLike } from './user-post-like.entity';
 
 @Entity()
 export class Post extends BaseEntityIncrement {
@@ -42,15 +43,19 @@ export class Post extends BaseEntityIncrement {
   @Expose()
   user: User;
 
+  @OneToMany(() => UserPostLike, (userPostLike) => userPostLike.post, { cascade: ['soft-remove', 'remove'] })
+  @Expose()
+  likedByUsers: UserPostLike[];
+
+  @Expose()
   @OneToMany(() => Keyword, (keyword) => keyword.post, {
     cascade: ['insert', 'update', 'soft-remove', 'remove'],
   })
-  @Expose()
   keywords: Keyword[];
 
-  @ManyToMany(() => User, (user) => user.likedPosts)
-  @Expose()
-  likedByUsers: User[];
+  // @Expose()
+  // @ManyToMany(() => User, (user) => user.likedPosts)
+  // likedByUsers: User[];
 
   @OneToMany(() => Comment, (comment) => comment.post)
   @Expose()
