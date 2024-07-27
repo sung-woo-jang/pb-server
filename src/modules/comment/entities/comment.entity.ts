@@ -12,9 +12,9 @@ export class Comment extends BaseEntityIncrement {
   @ApiProperty()
   comment: string;
 
-  @ManyToOne(() => Post, (post) => post.comments, { onDelete: 'CASCADE' })
+  @ManyToOne(() => Post, (post) => post.comments, { nullable: false, onDelete: 'CASCADE' })
   post: Post;
 
-  @ManyToOne(() => User, (user) => user.comments)
+  @ManyToOne(() => User, (user) => user.comments, { nullable: false, onDelete: 'CASCADE' })
   user: User;
 }
