@@ -1,4 +1,16 @@
 import { PickType } from '@nestjs/swagger';
 import { Post } from '../entities';
 
-export class PostDto extends PickType(Post, ['id', 'content', 'visitDate', 'rate'] as const) {}
+export class PostDto extends PickType(Post, [
+  'id',
+  'content',
+  'visitDate',
+  'rate',
+  'user',
+  'images',
+  'place',
+  'keywords',
+  'comments',
+  'likedByUsers',
+  'createdAt',
+] as const) {}
