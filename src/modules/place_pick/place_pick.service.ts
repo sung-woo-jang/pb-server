@@ -66,17 +66,41 @@ export class PlacePickService {
     });
   }
 
-  async findAll() {
-    return await this.placePickRepository
+  async findPlacePickList(id: number) {
+    const results = await this.placePickRepository
       .createQueryBuilder('placePick')
       .leftJoinAndSelect('placePick.place', 'place')
       .leftJoinAndSelect('placePick.plPickCategory', 'plPickCategory')
       .leftJoinAndSelect('place.placeCategory', 'placeCategory')
+      .where('plPickCategory.id = :id', { id })
       .getMany();
-  }
 
-  findOne(id: number) {
-    return `This action returns a #${id} placePick`;
+    return results.map(({ place: { placeCategory, ...place }, plPickCategory, ...placePick }) => ({
+      plPickCategory: {
+        id: plPickCategory.id,
+        title: plPickCategory.title,
+        memo: plPickCategory.memo,
+      },
+      place: {
+        title: place.title,
+        address: place.address,
+        road_address: place.road_address,
+        description: place.description,
+        telephone: place.telephone,
+        mapx: place.mapx,
+        mapy: place.mapy,
+      },
+      placeCategory: {
+        place_category_name: placeCategory.place_category_name,
+        place_category_name_detail: placeCategory.place_category_name_detail,
+      },
+      placePick: {
+        id: place.id,
+        memo: placePick.memo,
+        link: placePick.link,
+        alias: placePick.alias,
+      },
+    }));
   }
 
   update(id: number, updatePlacePickDto: UpdatePlacePickDto) {

@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post } from '@nestjs/common';
 import { PlacePickService } from './place_pick.service';
 import { CreatePlacePickDto } from './dto/create-place_pick.dto';
 import { UpdatePlacePickDto } from './dto/update-place_pick.dto';
@@ -16,14 +16,9 @@ export class PlacePickController {
     return this.placePickService.create(createPlacePickDto);
   }
 
-  @Get()
-  findAll() {
-    return this.placePickService.findAll();
-  }
-
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.placePickService.findOne(+id);
+  @Get('/:id')
+  findPlacePickList(@Param('id', ParseIntPipe) id: number) {
+    return this.placePickService.findPlacePickList(id);
   }
 
   @Patch(':id')
