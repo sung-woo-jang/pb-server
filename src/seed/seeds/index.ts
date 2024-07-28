@@ -23,8 +23,8 @@ export const seeds: SeederConstructor[] | string[] = [
   ImageSeeder,
   KeywordSeeder,
   CommentSeeder,
-  PlaceSeeder,
   PlaceCategorySeeder,
+  PlaceSeeder,
   PlPickCategorySeeder,
   PlacePickSeeder,
 ];
@@ -33,8 +33,8 @@ export const factories: SeederFactoryItem[] | string[] = [
   ImageFactory,
   KeywordFactory,
   CommentFactory,
-  PlaceFactory,
   PlaceCategoryFactory,
+  PlaceFactory,
   PlPickCategoryFactory,
   PlacePickFactory,
 ];

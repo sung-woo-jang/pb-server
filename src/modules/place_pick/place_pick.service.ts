@@ -72,7 +72,6 @@ export class PlacePickService {
       .leftJoinAndSelect('placePick.place', 'place')
       .leftJoinAndSelect('placePick.plPickCategory', 'plPickCategory')
       .leftJoinAndSelect('place.placeCategory', 'placeCategory')
-      .where('plPickCategory.id = :id', { id: 2 })
       .getMany();
   }
 
