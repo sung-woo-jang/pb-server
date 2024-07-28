@@ -7,12 +7,12 @@ import CommentSeeder from './comment/comment.seeder';
 import PlPickCategorySeeder from './pl_pick_category/pl_pick_category.seeder';
 import PlaceSeeder from './place/place.seeder';
 import PlaceCategorySeeder from './place_category/place_category.seeder';
-import PlacePlPickCategoryPivotSeeder from './place_pl_pick_category_pivot/place_pl_pick_category_pivot.seeder';
+import PlacePickSeeder from './place_pick/place_pick.seeder';
 
 import CommentFactory from './comment/comment.factory';
 import PlPickCategoryFactory from './pl_pick_category/pl_pick_category.factory';
 import PlaceFactory from './place/place.factory';
-import PlacePlPickCategoryPivotFactory from './place_pl_pick_category_pivot/place_pl_pick_category_pivot.factory';
+import PlacePickFactory from './place_pick/place_pick.factory';
 import PostFactory from './post/post.factory';
 import KeywordFactory from './keyword/keyword.factory';
 import ImageFactory from './image/image.factory';
@@ -26,7 +26,7 @@ export const seeds: SeederConstructor[] | string[] = [
   PlaceSeeder,
   PlaceCategorySeeder,
   PlPickCategorySeeder,
-  PlacePlPickCategoryPivotSeeder,
+  PlacePickSeeder,
 ];
 export const factories: SeederFactoryItem[] | string[] = [
   PostFactory,
@@ -36,5 +36,5 @@ export const factories: SeederFactoryItem[] | string[] = [
   PlaceFactory,
   PlaceCategoryFactory,
   PlPickCategoryFactory,
-  PlacePlPickCategoryPivotFactory,
+  PlacePickFactory,
 ];

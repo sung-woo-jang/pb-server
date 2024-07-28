@@ -1,7 +1,7 @@
 import { Column, Entity, ManyToOne, OneToMany } from 'typeorm';
 import { BaseEntityIncrement } from '@common/entities/base.entity';
 import { IsNumber, IsString } from 'class-validator';
-import { PlacePlPickCategoryPivot } from '../../place_pick/entities/place_pl_pick_category_pivot.entity';
+import { PlacePick } from '../../place_pick/entities/place_pick.entity';
 import { PlaceCategory } from './place_category.entity';
 import { Post } from '../../post/entities';
 import { ApiProperty } from '@nestjs/swagger';
@@ -56,8 +56,8 @@ export class Place extends BaseEntityIncrement {
   @ManyToOne(() => PlaceCategory, (placeCategory) => placeCategory.places)
   placeCategory: PlaceCategory;
 
-  @OneToMany(() => PlacePlPickCategoryPivot, (pivot) => pivot.place)
-  placePlPickCategoryPivots: PlacePlPickCategoryPivot[];
+  @OneToMany(() => PlacePick, (placePick) => placePick.place)
+  placePicks: PlacePick[];
 
   @OneToMany(() => Post, (post) => post.place)
   post: Post[];

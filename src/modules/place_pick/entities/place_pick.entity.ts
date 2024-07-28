@@ -7,7 +7,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import { Expose } from 'class-transformer';
 
 @Entity({ comment: '플픽 카테고리에 종속된 플픽 정보 테이블' })
-export class PlacePlPickCategoryPivot extends TimestampEntity {
+export class PlacePick extends TimestampEntity {
   @ApiProperty({
     example: '152',
     description: 'ID',
@@ -43,9 +43,9 @@ export class PlacePlPickCategoryPivot extends TimestampEntity {
   @Expose()
   link: string;
 
-  @ManyToOne(() => Place, (place) => place.placePlPickCategoryPivots)
+  @ManyToOne(() => Place, (place) => place.placePicks)
   place: Place;
 
-  @ManyToOne(() => PlPickCategory, (plPickCategory) => plPickCategory.placePlPickCategoryPivots)
+  @ManyToOne(() => PlPickCategory, (plPickCategory) => plPickCategory.placePicks)
   plPickCategory: PlPickCategory;
 }

@@ -1,7 +1,7 @@
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
 import { BaseEntityIncrement } from '@common/entities/base.entity';
 import { IsEnum, IsNotEmpty, IsOptional, IsUrl } from 'class-validator';
-import { PlacePlPickCategoryPivot } from '../../place_pick/entities/place_pl_pick_category_pivot.entity';
+import { PlacePick } from '../../place_pick/entities/place_pick.entity';
 import { User } from '../../user/entities';
 import { ApiProperty } from '@nestjs/swagger';
 import { Expose } from 'class-transformer';
@@ -49,8 +49,8 @@ export class PlPickCategory extends BaseEntityIncrement {
   @Expose()
   link: string;
 
-  @OneToMany(() => PlacePlPickCategoryPivot, (pivot) => pivot.plPickCategory)
-  placePlPickCategoryPivots: PlacePlPickCategoryPivot[];
+  @OneToMany(() => PlacePick, (placePick) => placePick.plPickCategory)
+  placePicks: PlacePick[];
 
   @ManyToOne(() => User, (user) => user.plPickCategories)
   @JoinColumn({ name: 'account' })

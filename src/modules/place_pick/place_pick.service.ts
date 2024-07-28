@@ -2,11 +2,11 @@ import { Injectable } from '@nestjs/common';
 import { CreatePlacePickDto } from './dto/create-place_pick.dto';
 import { UpdatePlacePickDto } from './dto/update-place_pick.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { PlacePlPickCategoryPivotBuilder } from '../../builder/place_pl_pick_category_pivot.builder';
+import { PlacePickBuilder } from '../../builder/place_pick.builder';
 import { PlaceCategoryBuilder } from '../../builder/place_category.builder';
 import { PlaceBuilder } from '../../builder/place.builder';
 import { DataSource, Repository } from 'typeorm';
-import { PlacePlPickCategoryPivot } from './entities/place_pl_pick_category_pivot.entity';
+import { PlacePick } from './entities/place_pick.entity';
 import { PlPickCategory } from '../pl_pick_category/entities/pl_pick_category.entity';
 import { Place } from '../place/entities/place.entity';
 import { PlaceCategory } from '../place/entities/place_category.entity';
@@ -16,13 +16,13 @@ export class PlacePickService {
   constructor(
     private readonly dataSource: DataSource,
     @InjectRepository(PlPickCategory) private plPickCategoryRepository: Repository<PlPickCategory>,
-    @InjectRepository(PlacePlPickCategoryPivot) private placePickRepository: Repository<PlacePlPickCategoryPivot>,
+    @InjectRepository(PlacePick) private placePickRepository: Repository<PlacePick>,
     @InjectRepository(Place) private placeRepository: Repository<Place>,
     @InjectRepository(PlaceCategory) private placeCategoryRepository: Repository<PlaceCategory>
   ) {}
   async create(createPlacePickDto: CreatePlacePickDto) {
     const {
-      placePlPickCategoryPivot: placePlPickCategoryPivotDto,
+      placePick: placePickDto,
       plPickCategory: plPickCategoryDto,
       placeCategory: placeCategoryDto,
       place: placeDto,
@@ -53,12 +53,12 @@ export class PlacePickService {
       // pl_pick_category
       const plPickCategory = await this.plPickCategoryRepository.findOne({ where: { id: plPickCategoryDto.id } });
 
-      // place_pl_pick_category_pivot
+      // place_pick
       return await manager.withRepository(this.placePickRepository).save({
-        ...new PlacePlPickCategoryPivotBuilder()
-          .setMemo(placePlPickCategoryPivotDto.memo)
-          .setLink(placePlPickCategoryPivotDto.link)
-          .setAlias(placePlPickCategoryPivotDto.alias)
+        ...new PlacePickBuilder()
+          .setMemo(placePickDto.memo)
+          .setLink(placePickDto.link)
+          .setAlias(placePickDto.alias)
           .build(),
         place,
         plPickCategory,
