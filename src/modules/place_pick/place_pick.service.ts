@@ -66,8 +66,14 @@ export class PlacePickService {
     });
   }
 
-  findAll() {
-    return `This action returns all placePick`;
+  async findAll() {
+    return await this.placePickRepository
+      .createQueryBuilder('placePick')
+      .leftJoinAndSelect('placePick.place', 'place')
+      .leftJoinAndSelect('placePick.plPickCategory', 'plPickCategory')
+      .leftJoinAndSelect('place.placeCategory', 'placeCategory')
+      .where('plPickCategory.id = :id', { id: 2 })
+      .getMany();
   }
 
   findOne(id: number) {
