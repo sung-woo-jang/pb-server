@@ -1,22 +1,25 @@
 import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { EntityManager, Repository } from 'typeorm';
+import { DataSource, EntityManager } from 'typeorm';
 import { UserService } from '../user/user.service';
 import { KeywordService } from '../keyword/keyword.service';
 import { PostException, UserException } from 'src/exception';
 import { Post } from './entities';
 import { CreatePostDto, UpdatePostDto } from './dtos';
-import { PostBuilder } from '../../builder/post.builder';
 import { PostRepository } from './post.repository';
 import { NewsfeedDto } from './dtos/response/newsfeed.dto';
+import { UploadedFilesDto } from './dtos/uploaded-files.dto';
+import { PlaceRepository } from '../place/place.repository';
+import { Image } from './entities/image.entity';
+import { Keyword } from '../keyword/entities';
 
 @Injectable()
 export class PostService {
   constructor(
+    private readonly dataSource: DataSource,
     private userService: UserService,
     private keywordService: KeywordService,
-    @InjectRepository(Post) private postRepo: Repository<Post>,
-    private readonly postRepository: PostRepository
+    private readonly postRepository: PostRepository,
+    private readonly placeRepository: PlaceRepository
   ) {}
 
   async getNewsFeeds(): Promise<NewsfeedDto[]> {
@@ -24,11 +27,11 @@ export class PostService {
   }
 
   async findById(id: number): Promise<Post> {
-    return await this.postRepo.findOneBy({ id });
+    return await this.postRepository.findOneBy({ id });
   }
 
   async findByIdAndRelation(id: number, relations: string[]): Promise<Post> {
-    return await this.postRepo.findOne({ where: { id }, relations });
+    return await this.postRepository.findOne({ where: { id }, relations });
   }
 
   async findAll(userId: string): Promise<Post[]> {
@@ -39,23 +42,22 @@ export class PostService {
     return this.postRepository.findPost(postId, userId);
   }
 
-  async createPost({ keywords, rate, visitDate, content }: Partial<CreatePostDto>, userId: string): Promise<void> {
-    const user = await this.userService.findById(userId);
-    if (!user) throw UserException.notFound();
+  async createPost(imageList: UploadedFilesDto, createPostDto: CreatePostDto, userId: string) {
+    return await this.dataSource.transaction(async (manager) => {
+      const user = await this.userService.findById(userId);
+      if (!user) throw UserException.notFound();
 
-    const savedKeywords = this.keywordService.updateOrCreateKeywords(keywords, []);
+      const place = await this.placeRepository.createPlace(createPostDto.place, manager);
+      const post = await this.postRepository.createPost(createPostDto, user, place, manager);
 
-    // 새 Post 엔티티 생성
-    const post = new PostBuilder()
-      .setContent(content)
-      .setVisitDate(visitDate)
-      .setRate(rate)
-      .setAuthor(user)
-      .setKeywords(savedKeywords)
-      .build();
+      for await (const placeImage of imageList.placeImages)
+        await manager.save(Image, { image_path: placeImage.filename, post });
 
-    // Post 엔티티 저장 (CASCADE설정으로 Keyword 엔티티도 자동으로 저장)
-    await this.postRepo.save(post);
+      for await (const keyword of createPostDto.keywords)
+        await manager.save(Keyword, { keyword: keyword.keyword, post });
+
+      return post;
+    });
   }
 
   async updatePost(attrs: Partial<UpdatePostDto>, transactionManager: EntityManager): Promise<void> {
@@ -93,7 +95,7 @@ export class PostService {
     }
 
     // Post 엔티티 삭제 (CASCADE설정으로 Keyword 엔티티도 자동으로 삭제)
-    await this.postRepo.remove(post);
+    await this.postRepository.remove(post);
   }
 
   async createPostLike(postId: number, userId: string): Promise<void> {
@@ -106,7 +108,7 @@ export class PostService {
 
     // if (user && post) {
     //   post.likedByUsers.push(user);
-    //   await this.postRepo.save(post);
+    //   await this.postRepository.save(post);
     // }
   }
 
@@ -119,7 +121,7 @@ export class PostService {
     // if (post) {
     //   post.likedByUsers = post.likedByUsers.filter((user) => user.id !== userId);
 
-    //   await this.postRepo.save(post);
+    //   await this.postRepository.save(post);
     // }
 
     // try {

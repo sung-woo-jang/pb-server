@@ -1,13 +1,16 @@
 import { ApiProperty, PickType } from '@nestjs/swagger';
-import { IsArray, ValidateNested } from 'class-validator';
-import { Type } from 'class-transformer';
+import { IsArray, IsNotEmpty, ValidateNested } from 'class-validator';
+import { Expose, Type } from 'class-transformer';
 import { Post } from '../entities';
 import { CreateKeywordDto } from '../../keyword/dtos';
+import { CreatePlaceDto } from '../../place/dto/create-place.dto';
 
 export class CreatePostDto extends PickType(Post, ['content', 'visitDate', 'rate'] as const) {
-  @ApiProperty({ example: ['이미지'], description: '업로드 이미지 배열', isArray: true })
-  @IsArray()
-  imageList: any[];
+  @Expose()
+  @ValidateNested()
+  @IsNotEmpty()
+  @Type(() => CreatePlaceDto)
+  place: CreatePlaceDto;
 
   @ApiProperty({
     example: [{ keyword: '1' }, { keyword: '3' }, { keyword: '5' }, { keyword: '7' }],

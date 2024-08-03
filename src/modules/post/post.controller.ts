@@ -8,6 +8,7 @@ import {
   Patch,
   Post,
   Session,
+  UploadedFiles,
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
@@ -23,6 +24,10 @@ import { TransactionManager } from '@common/decorators/transaction-manager.decor
 import { PostDocs } from './post.docs';
 import { NewsfeedDto } from './dtos/response/newsfeed.dto';
 import { FindPostDto } from './dtos/find-post.dto';
+import { FileFieldsInterceptor } from '@nestjs/platform-express';
+import { multerDiskOptions } from '../../config/multer.option';
+import { ImageSharpPipe } from './pipe/imageSharp.pipe';
+import { UploadedFilesDto } from './dtos/uploaded-files.dto';
 
 @ApiTags('post')
 @Controller('post')
@@ -50,9 +55,16 @@ export class PostController {
   @Post()
   @HttpCode(201)
   @UseGuards(SessionAuthGuard)
+  @UseInterceptors(FileFieldsInterceptor([{ name: 'placeImages', maxCount: 10 }], multerDiskOptions))
   @ApiBody(PostDocs.createPostBody())
-  async createPost(@Body() body: CreatePostDto, @Session() session: Record<string, any>): Promise<void> {
-    await this.postService.createPost(body, session.user.id);
+  async createPost(
+    @UploadedFiles(ImageSharpPipe)
+    imageList: UploadedFilesDto,
+    @Body()
+    body: CreatePostDto,
+    @Session() session: Record<string, any>
+  ) {
+    return await this.postService.createPost(imageList, body, session.user.id);
   }
 
   @Patch()

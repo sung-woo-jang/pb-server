@@ -1,15 +1,17 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
 import { PlaceService } from './place.service';
 import { CreatePlaceDto } from './dto/create-place.dto';
 import { UpdatePlaceDto } from './dto/update-place.dto';
+import { TransactionManager } from '@common/decorators/transaction-manager.decorator';
+import { EntityManager } from 'typeorm';
 
 @Controller('place')
 export class PlaceController {
   constructor(private readonly placeService: PlaceService) {}
 
   @Post()
-  create(@Body() createPlaceDto: CreatePlaceDto) {
-    return this.placeService.create(createPlaceDto);
+  create(@Body() createPlaceDto: CreatePlaceDto, @TransactionManager() transactionManager: EntityManager) {
+    return this.placeService.createPlace(createPlaceDto, transactionManager);
   }
 
   @Get()
