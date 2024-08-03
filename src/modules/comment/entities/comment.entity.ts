@@ -7,9 +7,13 @@ import { User } from '../../user/entities';
 
 @Entity()
 export class Comment extends BaseEntityIncrement {
-  @Column()
+  @Column({ nullable: false })
   @IsString()
-  @ApiProperty()
+  @ApiProperty({
+    required: true,
+    description: '댓글 내용',
+    example: '나도 가보고 싶네요.',
+  })
   comment: string;
 
   @ManyToOne(() => Post, (post) => post.comments, { nullable: false, onDelete: 'CASCADE' })
