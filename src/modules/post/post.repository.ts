@@ -78,8 +78,6 @@ export class PostRepository extends Repository<Post> {
     }
 
     const userPostLike = this.dataSource.getRepository(UserPostLike).create({ post, user });
-    // userPostLike.post = post;
-    // userPostLike.user = user;
     return await this.dataSource.getRepository(UserPostLike).save(userPostLike);
   }
 

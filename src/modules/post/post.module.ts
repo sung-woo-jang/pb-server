@@ -10,5 +10,6 @@ import { PlaceModule } from '../place/place.module';
   imports: [UserModule, KeywordModule, PlaceModule],
   controllers: [PostController],
   providers: [PostService, PostRepository],
+  exports: [PostRepository],
 })
 export class PostModule {}
