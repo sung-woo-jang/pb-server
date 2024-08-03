@@ -1,8 +1,10 @@
 import { Injectable } from '@nestjs/common';
-import { User } from '../user/entities';
+import { UserRepository } from '../user/user.repository';
 
 @Injectable()
 export class TimelineService {
-  getTimelineList() {}
-  getTimeLineDetail(postId: number, user: User) {}
+  constructor(private readonly userRepository: UserRepository) {}
+  async getTimelineList(userId: string) {
+    return await this.userRepository.getTimelineList(userId);
+  }
 }

@@ -13,12 +13,12 @@ export class FollowController {
     return this.followService.following(createFollowDto, session.user);
   }
 
-  @ApiProperty({ description: '팔로우 / 팔로잉 정보' })
+  @ApiProperty({ description: '팔로우/팔로잉 정보' })
   @Get()
   async getFollowList(@Session() session: Record<string, User>) {
     return await this.followService.getFollowList(session.user);
   }
-  @ApiProperty({ description: '팔로우 / 팔로잉 정보' })
+  @ApiProperty({ description: '팔로우/팔로잉 숫자만' })
   @Get('count')
   async getFollowCount(@Session() session: Record<string, User>) {
     return await this.followService.getFollowCount(session.user);
