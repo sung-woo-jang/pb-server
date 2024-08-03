@@ -9,6 +9,8 @@ import { PlaceModule } from './modules/place/place.module';
 import { PlPickCategoryModule } from './modules/pl_pick_category/pl_pick_category.module';
 import { SearchHistoryModule } from './modules/search_history/search_history.module';
 import { PlacePickModule } from './modules/place_pick/place_pick.module';
+import { TimelineModule } from './modules/timeline/timeline.module';
+import { FollowModule } from './modules/follow/follow.module';
 
 @Module({
   imports: [
@@ -22,6 +24,8 @@ import { PlacePickModule } from './modules/place_pick/place_pick.module';
     PlPickCategoryModule,
     SearchHistoryModule,
     PlacePickModule,
+    TimelineModule,
+    FollowModule,
   ],
 })
 export class AppModule {}
