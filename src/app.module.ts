@@ -11,6 +11,8 @@ import { SearchHistoryModule } from './modules/search_history/search_history.mod
 import { PlacePickModule } from './modules/place_pick/place_pick.module';
 import { TimelineModule } from './modules/timeline/timeline.module';
 import { FollowModule } from './modules/follow/follow.module';
+import { KeywordModule } from './modules/keyword/keyword.module';
+import { LikeModule } from './modules/like/like.module';
 
 @Module({
   imports: [
@@ -26,6 +28,8 @@ import { FollowModule } from './modules/follow/follow.module';
     PlacePickModule,
     TimelineModule,
     FollowModule,
+    KeywordModule,
+    LikeModule,
   ],
 })
 export class AppModule {}

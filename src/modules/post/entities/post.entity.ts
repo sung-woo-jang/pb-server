@@ -1,4 +1,4 @@
-import { Column, Entity, ManyToMany, ManyToOne, OneToMany } from 'typeorm';
+import { Column, Entity, ManyToOne, OneToMany } from 'typeorm';
 import { BaseEntityIncrement } from '@common/entities/base.entity';
 import { ApiProperty } from '@nestjs/swagger';
 import { Expose } from 'class-transformer';
@@ -9,6 +9,7 @@ import { Comment } from '../../comment/entities/comment.entity';
 import { Place } from '../../place/entities/place.entity';
 import { Image } from './image.entity';
 import { UserPostLike } from './user-post-like.entity';
+import { Like } from '../../like/entities/like.entity';
 
 @Entity()
 export class Post extends BaseEntityIncrement {
@@ -47,15 +48,15 @@ export class Post extends BaseEntityIncrement {
   @Expose()
   likedByUsers: UserPostLike[];
 
+  @OneToMany(() => Like, (like) => like.post, { cascade: ['soft-remove', 'remove'] })
+  @Expose()
+  likes: Like[];
+
   @Expose()
   @OneToMany(() => Keyword, (keyword) => keyword.post, {
     cascade: ['insert', 'update', 'soft-remove', 'remove'],
   })
   keywords: Keyword[];
-
-  // @Expose()
-  // @ManyToMany(() => User, (user) => user.likedPosts)
-  // likedByUsers: User[];
 
   @OneToMany(() => Comment, (comment) => comment.post)
   @Expose()

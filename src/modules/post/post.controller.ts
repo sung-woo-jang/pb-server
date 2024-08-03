@@ -91,15 +91,15 @@ export class PostController {
   @HttpCode(201)
   @UseGuards(SessionAuthGuard)
   @ApiBody(PostDocs.createPostLikeBody())
-  async createPostLike(@Body() body: PostLikeDto, @Session() session: Record<string, any>): Promise<void> {
-    await this.postService.createPostLike(body.id, session.user.id);
+  async createPostLike(@Body() { id }: PostLikeDto, @Session() session: Record<string, any>): Promise<void> {
+    await this.postService.createPostLike(id, session.user.id);
   }
 
   @Delete('/like')
   @HttpCode(201)
   @UseGuards(SessionAuthGuard)
   @ApiBody(PostDocs.deletePostLikeBody())
-  async deletePostLike(@Body() body: PostLikeDto, @Session() session: Record<string, any>): Promise<void> {
-    await this.postService.deletePostLike(body.id, session.user.id);
+  async deletePostLike(@Body() { id }: PostLikeDto, @Session() session: Record<string, any>): Promise<void> {
+    await this.postService.deletePostLike(id, session.user.id);
   }
 }

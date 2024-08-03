@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import { DataSource, EntityManager } from 'typeorm';
-import { UserService } from '../user/user.service';
 import { KeywordService } from '../keyword/keyword.service';
 import { PostException, UserException } from 'src/exception';
 import { Post } from './entities';
@@ -11,12 +10,13 @@ import { UploadedFilesDto } from './dtos/uploaded-files.dto';
 import { PlaceRepository } from '../place/place.repository';
 import { Image } from './entities/image.entity';
 import { Keyword } from '../keyword/entities';
+import { UserRepository } from '../user/user.repository';
 
 @Injectable()
 export class PostService {
   constructor(
     private readonly dataSource: DataSource,
-    private userService: UserService,
+    private userRepository: UserRepository,
     private keywordService: KeywordService,
     private readonly postRepository: PostRepository,
     private readonly placeRepository: PlaceRepository
@@ -44,7 +44,7 @@ export class PostService {
 
   async createPost(imageList: UploadedFilesDto, createPostDto: CreatePostDto, userId: string) {
     return await this.dataSource.transaction(async (manager) => {
-      const user = await this.userService.findById(userId);
+      const user = await this.userRepository.findById(userId);
       if (!user) throw UserException.notFound();
 
       const place = await this.placeRepository.createPlace(createPostDto.place, manager);
@@ -99,42 +99,16 @@ export class PostService {
   }
 
   async createPostLike(postId: number, userId: string): Promise<void> {
-    const user = await this.userService.findById(userId);
+    const user = await this.userRepository.findById(userId);
     const post = await this.findById(postId);
 
     await this.postRepository.createPostLike(post, user);
-    // const user = await this.userService.findById(userId);
-    // const post = await this.findByIdAndRelation(postId, ['likedByUsers']);
-
-    // if (user && post) {
-    //   post.likedByUsers.push(user);
-    //   await this.postRepository.save(post);
-    // }
   }
 
   async deletePostLike(postId: number, userId: string): Promise<void> {
-    const user = await this.userService.findById(userId);
+    const user = await this.userRepository.findById(userId);
     const post = await this.findById(postId);
 
     await this.postRepository.deletePostLike(post, user);
-    // const post = await this.findByIdAndRelation(postId, ['likedByUsers']);
-    // if (post) {
-    //   post.likedByUsers = post.likedByUsers.filter((user) => user.id !== userId);
-
-    //   await this.postRepository.save(post);
-    // }
-
-    // try {
-    //   await this.dataSource
-    //     .createQueryBuilder()
-    //     .delete()
-    //     .from('user_post_like')
-    //     .where('userId = :userId', { userId })
-    //     .andWhere('postId = :postId', { postId })
-    //     .execute();
-    // } catch (error) {
-    //   console.error('Error removing like:', error);
-    //   throw error;
-    // }
   }
 }

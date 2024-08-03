@@ -2,15 +2,13 @@ import { Module } from '@nestjs/common';
 import { PostController } from './post.controller';
 import { PostService } from './post.service';
 import { UserModule } from '../user/user.module';
-import { KeywordService } from '../keyword/keyword.service';
 import { PostRepository } from './post.repository';
-import { PlaceService } from '../place/place.service';
-import { PlaceRepository } from '../place/place.repository';
-import { KeywordRepository } from '../keyword/keyword.repository';
+import { KeywordModule } from '../keyword/keyword.module';
+import { PlaceModule } from '../place/place.module';
 
 @Module({
-  imports: [UserModule],
+  imports: [UserModule, KeywordModule, PlaceModule],
   controllers: [PostController],
-  providers: [PostService, PlaceService, KeywordService, PostRepository, PlaceRepository, KeywordRepository],
+  providers: [PostService, PostRepository],
 })
 export class PostModule {}

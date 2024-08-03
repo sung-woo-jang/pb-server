@@ -28,4 +28,8 @@ export class UserRepository extends Repository<User> {
       .where('user.id = :userId', { userId })
       .getOne();
   }
+
+  async findById(id: string): Promise<User> {
+    return await this.findOneBy({ id });
+  }
 }
