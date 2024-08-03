@@ -30,4 +30,15 @@ export class FollowService {
     await this.followRepository.softDeleteFollow({ follower_account, following_account });
     return { message: '언팔로우 되었습니다.' };
   }
+
+  async getFollowList(user: User) {
+    const followings = await this.followRepository.getFollowingList(user.id);
+    const followers = await this.followRepository.getFollowersList(user.id);
+    return { followings, followers };
+  }
+  async getFollowCount(user: User) {
+    const followings = await this.followRepository.getFollowingCount(user.id);
+    const followers = await this.followRepository.getFollowersCount(user.id);
+    return { followings, followers };
+  }
 }
