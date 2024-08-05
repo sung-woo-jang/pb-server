@@ -1,4 +1,4 @@
-import { Column, Entity, ManyToOne, OneToMany } from 'typeorm';
+import { Column, Entity, ManyToOne, OneToMany, Unique } from 'typeorm';
 import { BaseEntityIncrement } from '@common/entities/base.entity';
 import { IsNumber, IsString } from 'class-validator';
 import { PlacePick } from '../../place_pick/entities/place_pick.entity';
@@ -10,6 +10,7 @@ import { Expose } from 'class-transformer';
 @Entity({
   comment: `장소(자동입력)\n장소 검색 했을 때 그 정보를 저장하는 용도`,
 })
+@Unique(['title', 'road_address'])
 export class Place extends BaseEntityIncrement {
   @ApiProperty()
   @Column({ comment: '가게이름\n스타벅스 제물포역 DT점' })
