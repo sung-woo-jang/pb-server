@@ -15,6 +15,7 @@ export class PlaceController {
   ) {}
 
   @Post()
+  @UseInterceptors(TransactionInterceptor)
   create(@Body() createPlaceDto: CreatePlaceDto, @TransactionManager() transactionManager: EntityManager) {
     return this.placeService.createPlace(createPlaceDto, transactionManager);
   }

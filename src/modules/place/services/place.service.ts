@@ -21,6 +21,10 @@ export class PlaceService {
   }
   async createPlace(createPlaceDto: CreatePlaceDto, transactionManager: EntityManager) {
     const { title, telephone, address, road_address, mapy, mapx, description } = createPlaceDto;
+
+    const place = await this.placeRepository.findOne({ where: { title, road_address } });
+    if (place) return place;
+
     const { data: embeddingData } = await this.createEmbedding(removeHtmlTags(title));
 
     // title & road_address로 검색 시 있으면
@@ -62,7 +66,7 @@ export class PlaceService {
     return data;
   }
 
-  async getPlaceById(id: number) {
+  async findPlaceById(id: number) {
     return await this.placeRepository.findOne({ where: { id } });
   }
 }

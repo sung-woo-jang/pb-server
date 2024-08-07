@@ -1,12 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { DataSource, EntityManager, Repository } from 'typeorm';
-import { Post } from './entities';
-import { NewsfeedDto } from '../newsfeed/dto/response/newsfeed.dto';
-import { PostException } from 'src/exception';
-import { User } from '../user/entities';
-import { CreatePostDto } from './dtos';
-import { PostBuilder } from '../../builder/post.builder';
-import { Place } from '../place/entities/place.entity';
+import { Post } from '../entities';
+import { NewsfeedDto } from '../../newsfeed/dto/response/newsfeed.dto';
+import { PostException } from '../../../exception';
+import { User } from '../../user/entities';
+import { CreatePostDto } from '../dtos';
+import { PostBuilder } from '../../../builder/post.builder';
+import { Place } from '../../place/entities/place.entity';
 
 @Injectable()
 export class PostRepository extends Repository<Post> {

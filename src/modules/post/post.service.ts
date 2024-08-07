@@ -4,13 +4,14 @@ import { KeywordService } from '../keyword/keyword.service';
 import { PostException, UserException } from 'src/exception';
 import { Post } from './entities';
 import { CreatePostDto, UpdatePostDto } from './dtos';
-import { PostRepository } from './post.repository';
+import { PostRepository } from './repository/post.repository';
 import { UploadedFilesDto } from './dtos/uploaded-files.dto';
 import { Image } from './entities/image.entity';
 import { Keyword } from '../keyword/entities';
 import { UserRepository } from '../user/user.repository';
-import { PlaceService } from '../place/place.service';
+import { PlaceService } from '../place/services/place.service';
 import { Place } from '../place/entities/place.entity';
+import { PlaceCategoryService } from '../place/services/place-category.service';
 
 @Injectable()
 export class PostService {
@@ -19,7 +20,8 @@ export class PostService {
     private userRepository: UserRepository,
     private keywordService: KeywordService,
     private readonly postRepository: PostRepository,
-    private readonly placeService: PlaceService
+    private readonly placeService: PlaceService,
+    private readonly placeCategoryService: PlaceCategoryService
   ) {}
 
   async findById(id: number): Promise<Post> {
@@ -42,14 +44,16 @@ export class PostService {
     return await this.dataSource.transaction(async (manager) => {
       const user = await this.userRepository.findById(userId);
       if (!user) throw UserException.notFound();
-      const placeId = createPostDto.placeId;
 
-      let place: Place;
-      if (placeId) {
-        place = await this.placeService.getPlaceById(placeId);
+      let place = {} as Place;
+
+      if (createPostDto.placeId) {
+        place = await this.placeService.findPlaceById(createPostDto.placeId);
       } else {
         place = await this.placeService.createPlace(createPostDto.place, manager);
+        place.placeCategory = await this.placeCategoryService.createPlaceCategory(createPostDto.placeCategory, manager);
       }
+
       const post = await this.postRepository.createPost(createPostDto, user, place, manager);
 
       for await (const placeImage of imageList.placeImages)
@@ -67,9 +71,7 @@ export class PostService {
 
     // 기존 Post 조회
     const post = await this.findByIdAndRelation(postId, ['keywords']);
-    if (!post) {
-      throw PostException.notFound();
-    }
+    if (!post) throw PostException.notFound();
 
     post.content = content;
     post.visitDate = visitDate;
@@ -92,9 +94,7 @@ export class PostService {
 
   async deletePost(postId: number): Promise<void> {
     const post = await this.findById(postId);
-    if (!post) {
-      throw PostException.notFound();
-    }
+    if (!post) throw PostException.notFound();
 
     // Post 엔티티 삭제 (CASCADE설정으로 Keyword 엔티티도 자동으로 삭제)
     await this.postRepository.remove(post);

@@ -15,7 +15,6 @@ export class CreatePostDto extends PickType(Post, ['content', 'visitDate', 'rate
   place: CreatePlaceDto;
 
   @Expose()
-  @IsOptional()
   @ValidateNested()
   @IsNotEmpty()
   @Type(() => CreatePlaceCategoryDto)
