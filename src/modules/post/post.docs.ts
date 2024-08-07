@@ -1,6 +1,5 @@
 import { ApiBodyOptions } from '@nestjs/swagger/dist/decorators/api-body.decorator';
-import { CreatePostDto, PostLikeDto } from './dtos';
-import { ApiOperationOptions } from '@nestjs/swagger/dist/decorators/api-operation.decorator';
+import { CreatePostDto } from './dtos';
 
 export class PostDocs {
   static createPostBody(): ApiBodyOptions {
@@ -13,13 +12,5 @@ export class PostDocs {
 
   static deletePostBody(): ApiBodyOptions {
     return { type: CreatePostDto };
-  }
-
-  static createPostLikeBody(): ApiBodyOptions {
-    return { type: PostLikeDto };
-  }
-
-  static deletePostLikeBody(): ApiBodyOptions {
-    return { type: PostLikeDto };
   }
 }

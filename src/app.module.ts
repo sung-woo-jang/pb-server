@@ -14,6 +14,7 @@ import { FollowModule } from './modules/follow/follow.module';
 import { KeywordModule } from './modules/keyword/keyword.module';
 import { LikeModule } from './modules/like/like.module';
 import { BatchModule } from './modules/batch/batch.module';
+import { NewsfeedModule } from './modules/newsfeed/newsfeed.module';
 
 @Module({
   imports: [
@@ -32,6 +33,7 @@ import { BatchModule } from './modules/batch/batch.module';
     KeywordModule,
     LikeModule,
     BatchModule,
+    NewsfeedModule,
   ],
 })
 export class AppModule {}

@@ -5,7 +5,6 @@ import { PostException, UserException } from 'src/exception';
 import { Post } from './entities';
 import { CreatePostDto, UpdatePostDto } from './dtos';
 import { PostRepository } from './post.repository';
-import { NewsfeedDto } from './dtos/response/newsfeed.dto';
 import { UploadedFilesDto } from './dtos/uploaded-files.dto';
 import { Image } from './entities/image.entity';
 import { Keyword } from '../keyword/entities';
@@ -23,10 +22,6 @@ export class PostService {
     private readonly placeService: PlaceService
   ) {}
 
-  async getNewsFeeds(): Promise<NewsfeedDto[]> {
-    return await this.postRepository.getNewsFeeds();
-  }
-
   async findById(id: number): Promise<Post> {
     return await this.postRepository.findOneBy({ id });
   }
@@ -40,7 +35,7 @@ export class PostService {
   }
 
   async findPost(postId: number, userId: string): Promise<Post> {
-    return this.postRepository.findPost(postId, userId);
+    return await this.postRepository.findPost(postId, userId);
   }
 
   async createPost(imageList: UploadedFilesDto, createPostDto: CreatePostDto, userId: string) {
@@ -103,19 +98,5 @@ export class PostService {
 
     // Post 엔티티 삭제 (CASCADE설정으로 Keyword 엔티티도 자동으로 삭제)
     await this.postRepository.remove(post);
-  }
-
-  async createPostLike(postId: number, userId: string): Promise<void> {
-    const user = await this.userRepository.findById(userId);
-    const post = await this.findById(postId);
-
-    await this.postRepository.createPostLike(post, user);
-  }
-
-  async deletePostLike(postId: number, userId: string): Promise<void> {
-    const user = await this.userRepository.findById(userId);
-    const post = await this.findById(postId);
-
-    await this.postRepository.deletePostLike(post, user);
   }
 }

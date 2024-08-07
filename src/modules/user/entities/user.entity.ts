@@ -3,7 +3,7 @@ import { BaseEntityVarchar } from '@common/entities/base.entity';
 import { ApiProperty } from '@nestjs/swagger';
 import { Expose } from 'class-transformer';
 import { IsEmail, IsString, IsUrl } from 'class-validator';
-import { Post, UserPostLike } from '../../post/entities';
+import { Post } from '../../post/entities';
 import { PlPickCategory } from '../../pl_pick_category/entities/pl_pick_category.entity';
 import { SearchHistory } from '../../search_history/entities/search_history.entity';
 import { Comment } from '../../comment/entities/comment.entity';
@@ -76,9 +76,6 @@ export class User extends BaseEntityVarchar {
 
   @OneToMany(() => Post, (post) => post.user, { cascade: ['soft-remove', 'remove'] })
   posts: Post[];
-
-  @OneToMany(() => UserPostLike, (userPostLike) => userPostLike.user, { cascade: ['soft-remove', 'remove'] })
-  likedPosts: UserPostLike[];
 
   @OneToMany(() => Like, (like) => like.user, { cascade: ['soft-remove', 'remove'] })
   likes: Like[];

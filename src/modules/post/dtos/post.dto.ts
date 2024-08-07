@@ -11,6 +11,6 @@ export class PostDto extends PickType(Post, [
   'place',
   'keywords',
   'comments',
-  'likedByUsers',
+  'likes',
   'createdAt',
 ] as const) {}
