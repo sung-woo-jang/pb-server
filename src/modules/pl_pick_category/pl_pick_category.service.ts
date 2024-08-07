@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { CreatePlPickCategoryDto } from './dto/request/create-pl_pick_category.dto';
 import { UpdatePlPickCategoryDto } from './dto/request/update-pl_pick_category.dto';
-import { InjectRepository } from '@nestjs/typeorm';
 import { PlPickCategoryRepository } from './pl_pick_category.repository';
 import { PlPickCategoryBuilder } from '../../builder/pl_pick_category.builder';
 import { User } from '../user/entities';
@@ -9,9 +8,7 @@ import * as _ from 'lodash';
 
 @Injectable()
 export class PlPickCategoryService {
-  constructor(
-    @InjectRepository(PlPickCategoryRepository) private readonly plPickCategoryRepository: PlPickCategoryRepository
-  ) {}
+  constructor(private readonly plPickCategoryRepository: PlPickCategoryRepository) {}
   async create({ link, memo, title, picker_color }: CreatePlPickCategoryDto, user: User) {
     const plPickCategory = new PlPickCategoryBuilder()
       .setTitle(title)

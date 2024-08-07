@@ -1,15 +1,13 @@
 import { Module } from '@nestjs/common';
 import { PlacePickService } from './place_pick.service';
 import { PlacePickController } from './place_pick.controller';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { PlPickCategory } from '../pl_pick_category/entities/pl_pick_category.entity';
-import { PlacePick } from './entities/place_pick.entity';
-import { Place } from '../place/entities/place.entity';
-import { PlaceCategory } from '../place/entities/place_category.entity';
+import { PlacePickRepository } from './place_pick.repository';
+import { PlaceModule } from '../place/place.module';
+import { PlPickCategoryModule } from '../pl_pick_category/pl_pick_category.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([PlPickCategory, PlacePick, Place, PlaceCategory])],
+  imports: [PlaceModule, PlPickCategoryModule],
   controllers: [PlacePickController],
-  providers: [PlacePickService],
+  providers: [PlacePickService, PlacePickRepository],
 })
 export class PlacePickModule {}

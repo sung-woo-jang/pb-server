@@ -27,9 +27,6 @@ export class PlaceService {
 
     const { data: embeddingData } = await this.createEmbedding(removeHtmlTags(title));
 
-    // title & road_address로 검색 시 있으면
-    // 없으면
-
     return await this.placeRepository.createPlace(
       new PlaceBuilder()
         .setEmbedding(embeddingData[0].embedding)

@@ -21,7 +21,6 @@ export default class UserSeeder implements Seeder {
         profileImage: 'https://ssl.pstatic.net/static/pwe/address/img_profile.png',
       });
     }
-
     await factoryManager.get(User).saveMany(generateRandomInteger(2, 5));
   }
 }

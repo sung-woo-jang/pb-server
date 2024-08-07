@@ -1,12 +1,10 @@
-import { INestApplication } from '@nestjs/common';
-import { ValidationPipe } from '@nestjs/common';
+import { INestApplication, ValidationPipe } from '@nestjs/common';
 import { HttpExceptionFilter } from '@common/filters/http-exception.filter';
 import * as cookieParser from 'cookie-parser';
 import * as express from 'express';
 import * as path from 'path';
 import { sessionConfig } from './database/postgres/session';
 import { LoggingInterceptor } from '@common/interceptors/logger.interceptor';
-// import { SeedService } from './seed/seed.service';
 
 export const setNestApp = (app: INestApplication) => {
   app.use(cookieParser());
@@ -37,7 +35,4 @@ export const setNestApp = (app: INestApplication) => {
   app.useGlobalInterceptors(new LoggingInterceptor());
 
   app.use(sessionConfig);
-
-  // const seeService = app.get(SeedService);
-  // await seeService.seed();
 };

@@ -6,5 +6,6 @@ import { PlPickCategoryRepository } from './pl_pick_category.repository';
 @Module({
   controllers: [PlPickCategoryController],
   providers: [PlPickCategoryService, PlPickCategoryRepository],
+  exports: [PlPickCategoryService, PlPickCategoryRepository],
 })
 export class PlPickCategoryModule {}

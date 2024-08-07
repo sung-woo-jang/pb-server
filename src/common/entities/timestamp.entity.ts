@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Expose } from 'class-transformer';
+import { Exclude, Expose } from 'class-transformer';
 import { IsDate, IsOptional } from 'class-validator';
-import { CreateDateColumn, UpdateDateColumn, DeleteDateColumn } from 'typeorm';
+import { CreateDateColumn, DeleteDateColumn, UpdateDateColumn } from 'typeorm';
 
 export abstract class TimestampEntity {
   @ApiProperty({
@@ -19,6 +19,7 @@ export abstract class TimestampEntity {
   })
   @IsDate()
   @Expose()
+  @Exclude()
   @UpdateDateColumn({ type: 'timestamptz', precision: 6 })
   updatedAt: Date;
 
@@ -29,6 +30,7 @@ export abstract class TimestampEntity {
   @IsDate()
   @IsOptional()
   @Expose()
+  @Exclude()
   @DeleteDateColumn({ type: 'timestamptz', precision: 6 })
   deletedAt: Date | null;
 }

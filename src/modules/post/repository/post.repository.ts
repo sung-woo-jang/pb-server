@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { DataSource, EntityManager, Repository } from 'typeorm';
 import { Post } from '../entities';
-import { NewsfeedDto } from '../../newsfeed/dto/response/newsfeed.dto';
 import { PostException } from '../../../exception';
 import { User } from '../../user/entities';
 import { CreatePostDto } from '../dtos';
@@ -25,7 +24,7 @@ export class PostRepository extends Repository<Post> {
       place,
     });
   }
-  async getNewsFeeds(): Promise<NewsfeedDto[]> {
+  async getNewsFeeds() {
     return await this.createQueryBuilder('post')
       .leftJoinAndSelect('post.user', 'user') // 게시글 작성자와의 관계 조인
       .leftJoinAndSelect('post.likes', 'likes') // 게시글 좋아요와의 관계 조인
