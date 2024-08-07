@@ -2,9 +2,15 @@ import { localeKoSetSeederFactory } from '../utils/localeKoSetSedderFactory';
 import { Place } from '../../../modules/place/entities/place.entity';
 import { PlaceBuilder } from '../../../builder/place.builder';
 
-const PlaceFactory = localeKoSetSeederFactory(Place, (faker) =>
-  new PlaceBuilder()
-    .setTitle(faker.lorem.sentence({ min: 1, max: 2 }))
+const PlaceFactory = localeKoSetSeederFactory(Place, (faker) => {
+  const generateDummyEmbedding = (dimension: number = 1536): number[] => {
+    return Array.from({ length: dimension }, () => faker.number.float({ min: -1, max: 1 }));
+  };
+
+  const title = faker.lorem.sentence({ min: 1, max: 2 });
+
+  return new PlaceBuilder()
+    .setTitle(title)
     .setAddress(faker.location.city())
     .setRoadAddress(faker.location.city())
     .setDescription(faker.lorem.sentence({ min: 3, max: 5 }))
@@ -23,6 +29,7 @@ const PlaceFactory = localeKoSetSeederFactory(Place, (faker) =>
         precision: 6,
       })
     )
-    .build()
-);
+    .setEmbedding(generateDummyEmbedding())
+    .build();
+});
 export default PlaceFactory;

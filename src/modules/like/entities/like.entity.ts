@@ -3,10 +3,11 @@ import { Expose } from 'class-transformer';
 import { User } from '../../user/entities';
 import { Post } from '../../post/entities';
 import { IsNumber, IsString } from 'class-validator';
+import { TimestampEntity } from '@common/entities/timestamp.entity';
 
 @Entity()
 @Unique(['user', 'post'])
-export class Like {
+export class Like extends TimestampEntity {
   @PrimaryColumn()
   @IsString()
   @Expose()
