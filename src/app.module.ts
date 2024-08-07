@@ -13,6 +13,7 @@ import { TimelineModule } from './modules/timeline/timeline.module';
 import { FollowModule } from './modules/follow/follow.module';
 import { KeywordModule } from './modules/keyword/keyword.module';
 import { LikeModule } from './modules/like/like.module';
+import { BatchModule } from './modules/batch/batch.module';
 
 @Module({
   imports: [
@@ -30,6 +31,7 @@ import { LikeModule } from './modules/like/like.module';
     FollowModule,
     KeywordModule,
     LikeModule,
+    BatchModule,
   ],
 })
 export class AppModule {}
