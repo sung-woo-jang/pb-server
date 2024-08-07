@@ -1,7 +1,6 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
+import { Body, Controller, Post } from '@nestjs/common';
 import { PlaceService } from './place.service';
 import { CreatePlaceDto } from './dto/create-place.dto';
-import { UpdatePlaceDto } from './dto/update-place.dto';
 import { TransactionManager } from '@common/decorators/transaction-manager.decorator';
 import { EntityManager } from 'typeorm';
 
@@ -14,23 +13,8 @@ export class PlaceController {
     return this.placeService.createPlace(createPlaceDto, transactionManager);
   }
 
-  @Get()
-  findAll() {
-    return this.placeService.findAll();
-  }
-
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.placeService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updatePlaceDto: UpdatePlaceDto) {
-    return this.placeService.update(+id, updatePlaceDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.placeService.remove(+id);
+  @Post('embedding')
+  createEmbedding(@Body('text') text: string) {
+    return this.placeService.createEmbedding(text);
   }
 }

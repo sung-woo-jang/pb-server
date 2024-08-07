@@ -1,5 +1,5 @@
 import { ApiProperty, PickType } from '@nestjs/swagger';
-import { IsArray, IsNotEmpty, ValidateNested } from 'class-validator';
+import { IsArray, IsNotEmpty, IsNumber, IsOptional, ValidateNested } from 'class-validator';
 import { Expose, Type } from 'class-transformer';
 import { Post } from '../entities';
 import { CreateKeywordDto } from '../../keyword/dtos';
@@ -11,6 +11,11 @@ export class CreatePostDto extends PickType(Post, ['content', 'visitDate', 'rate
   @IsNotEmpty()
   @Type(() => CreatePlaceDto)
   place: CreatePlaceDto;
+
+  @Expose()
+  @IsOptional()
+  @IsNumber()
+  placeId: number;
 
   @ApiProperty({
     example: [{ keyword: '1' }, { keyword: '3' }, { keyword: '5' }, { keyword: '7' }],

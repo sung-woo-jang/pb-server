@@ -15,7 +15,6 @@ export class PostRepository extends Repository<Post> {
   }
 
   async createPost(createPostDto: CreatePostDto, user: User, place: Place, transactionManager: EntityManager) {
-    const {} = createPostDto;
     return await transactionManager.save(Post, {
       ...new PostBuilder()
         .setContent(createPostDto.content)

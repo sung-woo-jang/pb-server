@@ -7,10 +7,11 @@ import { CreatePostDto, UpdatePostDto } from './dtos';
 import { PostRepository } from './post.repository';
 import { NewsfeedDto } from './dtos/response/newsfeed.dto';
 import { UploadedFilesDto } from './dtos/uploaded-files.dto';
-import { PlaceRepository } from '../place/place.repository';
 import { Image } from './entities/image.entity';
 import { Keyword } from '../keyword/entities';
 import { UserRepository } from '../user/user.repository';
+import { PlaceService } from '../place/place.service';
+import { Place } from '../place/entities/place.entity';
 
 @Injectable()
 export class PostService {
@@ -19,7 +20,7 @@ export class PostService {
     private userRepository: UserRepository,
     private keywordService: KeywordService,
     private readonly postRepository: PostRepository,
-    private readonly placeRepository: PlaceRepository
+    private readonly placeService: PlaceService
   ) {}
 
   async getNewsFeeds(): Promise<NewsfeedDto[]> {
@@ -46,8 +47,14 @@ export class PostService {
     return await this.dataSource.transaction(async (manager) => {
       const user = await this.userRepository.findById(userId);
       if (!user) throw UserException.notFound();
+      const placeId = createPostDto.placeId;
 
-      const place = await this.placeRepository.createPlace(createPostDto.place, manager);
+      let place: Place;
+      if (placeId) {
+        place = await this.placeService.getPlaceById(placeId);
+      } else {
+        place = await this.placeService.createPlace(createPostDto.place, manager);
+      }
       const post = await this.postRepository.createPost(createPostDto, user, place, manager);
 
       for await (const placeImage of imageList.placeImages)

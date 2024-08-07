@@ -54,6 +54,9 @@ export class Place extends BaseEntityIncrement {
   @Expose()
   mapy: number;
 
+  @Column('float', { array: true })
+  embedding: number[];
+
   @ManyToOne(() => PlaceCategory, (placeCategory) => placeCategory.places)
   placeCategory: PlaceCategory;
 
