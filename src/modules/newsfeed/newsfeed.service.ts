@@ -1,8 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { CreateNewsfeedDto } from './dto/create-newsfeed.dto';
-import { UpdateNewsfeedDto } from './dto/update-newsfeed.dto';
 import { NewsfeedDto } from './dto/response/newsfeed.dto';
-import { PostRepository } from '../post/post.repository';
+import { PostRepository } from '../post/repository/post.repository';
 
 @Injectable()
 export class NewsfeedService {

@@ -1,8 +1,10 @@
 import { Module } from '@nestjs/common';
-import { PlaceService } from './place.service';
+import { PlaceService } from './services/place.service';
 import { PlaceController } from './place.controller';
-import { PlaceRepository } from './place.repository';
+import { PlaceRepository } from './repositories/place.repository';
 import { HttpModule } from '@nestjs/axios';
+import { PlaceCategoryService } from './services/place-category.service';
+import { PlaceCategoryRepository } from './repositories/place-category.repository';
 
 @Module({
   imports: [
@@ -14,7 +16,7 @@ import { HttpModule } from '@nestjs/axios';
     }),
   ],
   controllers: [PlaceController],
-  providers: [PlaceService, PlaceRepository],
-  exports: [PlaceService, PlaceRepository],
+  providers: [PlaceService, PlaceRepository, PlaceCategoryService, PlaceCategoryRepository],
+  exports: [PlaceService, PlaceRepository, PlaceCategoryService, PlaceCategoryRepository],
 })
 export class PlaceModule {}

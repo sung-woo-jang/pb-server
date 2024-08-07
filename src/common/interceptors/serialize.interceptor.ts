@@ -31,13 +31,8 @@ export class SerializerInterceptor implements NestInterceptor {
     const statusCode = context.switchToHttp().getResponse().statusCode;
     const request = context.switchToHttp().getRequest();
 
-    console.log('body', request.body);
-    console.log('session', request.session);
-
     return next.handle().pipe(
       map((data: any) => {
-        console.log('response DTO 적용');
-
         return {
           status: statusCode,
           message: SuccessStatusCodeMessage[statusCode],

@@ -1,12 +1,12 @@
 import { Injectable } from '@nestjs/common';
-import { CreatePlaceDto } from './dto/create-place.dto';
-import { PlaceRepository } from './place.repository';
+import { CreatePlaceDto } from '../dto/create-place.dto';
+import { PlaceRepository } from '../repositories/place.repository';
 import { EntityManager } from 'typeorm';
 import { HttpService } from '@nestjs/axios';
 import { ConfigService } from '@nestjs/config';
 import { lastValueFrom } from 'rxjs';
-import { EmbeddingResponse } from './interfaces/embedding-response.interface';
-import { PlaceBuilder } from '../../builder/place.builder';
+import { EmbeddingResponse } from '../interfaces/embedding-response.interface';
+import { PlaceBuilder } from '../../../builder/place.builder';
 import { removeHtmlTags } from '@common/utils/removeHtmlTags';
 
 @Injectable()

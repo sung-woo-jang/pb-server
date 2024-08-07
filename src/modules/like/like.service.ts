@@ -3,7 +3,7 @@ import { CreateLikeDto } from './dto/create-like.dto';
 import { LikeRepository } from './like.repository';
 import * as _ from 'lodash';
 import { User } from '../user/entities';
-import { PostRepository } from '../post/post.repository';
+import { PostRepository } from '../post/repository/post.repository';
 
 @Injectable()
 export class LikeService {

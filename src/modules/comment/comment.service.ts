@@ -1,18 +1,15 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
 import { CreateCommentDto } from './dto/create-comment.dto';
-import { PostRepository } from '../post/post.repository';
+import { PostRepository } from '../post/repository/post.repository';
 import { UserRepository } from '../user/user.repository';
-import { CommentBuilder } from '../../builder';
-import { Repository } from 'typeorm';
-import { Comment } from './entities/comment.entity';
+import { CommentRepository } from './comment.repository';
 
 @Injectable()
 export class CommentService {
   constructor(
-    @InjectRepository(Comment) private commentRepository: Repository<Comment>,
-    @InjectRepository(PostRepository) private readonly postRepository: PostRepository,
-    @InjectRepository(UserRepository) private readonly userRepository: UserRepository
+    private readonly commentRepository: CommentRepository,
+    private readonly postRepository: PostRepository,
+    private readonly userRepository: UserRepository
   ) {}
 
   async createComment({ comment, post_id, author_account }: CreateCommentDto) {
@@ -22,8 +19,6 @@ export class CommentService {
     const user = await this.userRepository.findOne({ where: { id: author_account } });
     if (!user) throw new NotFoundException('사용자 없음');
 
-    const newComment = new CommentBuilder().setComment(comment).setPost(post).setAuthor(user).build();
-
-    return await this.commentRepository.save(newComment);
+    return await this.commentRepository.save({ comment, post, user });
   }
 }

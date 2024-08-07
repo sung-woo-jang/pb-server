@@ -4,13 +4,22 @@ import { Expose, Type } from 'class-transformer';
 import { Post } from '../entities';
 import { CreateKeywordDto } from '../../keyword/dtos';
 import { CreatePlaceDto } from '../../place/dto/create-place.dto';
+import { CreatePlaceCategoryDto } from '../../place/dto/create-place_category.dto';
 
 export class CreatePostDto extends PickType(Post, ['content', 'visitDate', 'rate'] as const) {
   @Expose()
+  @IsOptional()
   @ValidateNested()
   @IsNotEmpty()
   @Type(() => CreatePlaceDto)
   place: CreatePlaceDto;
+
+  @Expose()
+  @IsOptional()
+  @ValidateNested()
+  @IsNotEmpty()
+  @Type(() => CreatePlaceCategoryDto)
+  placeCategory: CreatePlaceCategoryDto;
 
   @Expose()
   @IsOptional()
