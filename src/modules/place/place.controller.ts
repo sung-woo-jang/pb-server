@@ -6,7 +6,9 @@ import { EntityManager } from 'typeorm';
 import { PlaceCategoryService } from './services/place-category.service';
 import { CreatePlaceCategoryDto } from './dto/create-place_category.dto';
 import { TransactionInterceptor } from '@common/interceptors/transaction.interceptor';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('place(장소)')
 @Controller('place')
 export class PlaceController {
   constructor(
@@ -16,7 +18,7 @@ export class PlaceController {
 
   @Post()
   @UseInterceptors(TransactionInterceptor)
-  create(@Body() createPlaceDto: CreatePlaceDto, @TransactionManager() transactionManager: EntityManager) {
+  createPlace(@Body() createPlaceDto: CreatePlaceDto, @TransactionManager() transactionManager: EntityManager) {
     return this.placeService.createPlace(createPlaceDto, transactionManager);
   }
 
@@ -27,7 +29,7 @@ export class PlaceController {
 
   @Post('category')
   @UseInterceptors(TransactionInterceptor)
-  addPlaceCategory(
+  createPlaceCategory(
     @Body() createPlaceCategoryDto: CreatePlaceCategoryDto,
     @TransactionManager() transactionManager: EntityManager
   ) {

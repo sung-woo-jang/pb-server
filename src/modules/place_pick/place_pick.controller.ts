@@ -4,7 +4,7 @@ import { CreatePlacePickDto } from './dto/create-place_pick.dto';
 import { ApiTags } from '@nestjs/swagger';
 import { Serialize } from '@common/interceptors/serialize.interceptor';
 
-@ApiTags('place-pick')
+@ApiTags('place-pick(플픽)')
 @Controller('place-pick')
 export class PlacePickController {
   constructor(private readonly placePickService: PlacePickService) {}

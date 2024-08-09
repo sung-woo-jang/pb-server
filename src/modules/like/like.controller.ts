@@ -7,7 +7,9 @@ import { GetLikesForUserDecorator } from './docs/getLikesForUser.decorator';
 import { User } from '../user/entities';
 import { Serialize } from '@common/interceptors/serialize.interceptor';
 import { Like } from './entities/like.entity';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('like(좋아요)')
 @Controller('like')
 @Serialize(Like)
 export class LikeController {

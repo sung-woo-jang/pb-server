@@ -6,11 +6,12 @@ import { ConfigService } from '@nestjs/config';
 import { randomBytes } from 'crypto';
 import { OAuthStateGuard } from './guards/oauth-state.guard';
 import { ApiBody, ApiOperation, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { UserDto, UpdateNicknameDto } from './dtos';
+import { UpdateNicknameDto, UserDto } from './dtos';
 import { UserService } from './user.service';
 import { SessionAuthGuard } from '@common/guards/session-auth.guard';
 import { UserDocs } from './user.docs';
-@ApiTags('auth')
+
+@ApiTags('auth(권한, 유저)')
 @Controller('auth')
 @Serialize(UserDto)
 export class UserController {
@@ -19,6 +20,11 @@ export class UserController {
     private userService: UserService,
     private config: ConfigService
   ) {}
+
+  @Get('my-info')
+  async getMyInfo(@Session() session: Record<string, any>) {
+    return await session.user;
+  }
 
   @Get('/login-naver')
   getloginNaver(@Res() res: Response, @Session() session: Record<string, any>) {

@@ -28,7 +28,7 @@ import { multerDiskOptions } from '../../config/multer.option';
 import { ImageSharpPipe } from './pipe/imageSharp.pipe';
 import { UploadedFilesDto } from './dtos/uploaded-files.dto';
 
-@ApiTags('post')
+@ApiTags('post(게시글)')
 @Controller('post')
 @Serialize(PostEntity)
 export class PostController {

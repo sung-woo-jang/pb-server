@@ -4,8 +4,8 @@ import { CreateCommentDto } from './dto/create-comment.dto';
 import { CreateCommentSwaggerDecorator } from './docs/createComment.decorator';
 import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('comment(댓글)')
 @Controller('comment')
-@ApiTags('댓글')
 export class CommentController {
   constructor(private readonly commentService: CommentService) {}
 

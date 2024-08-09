@@ -1,10 +1,11 @@
 import { Module } from '@nestjs/common';
 import { TimelineController } from './timeline.controller';
 import { TimelineService } from './timeline.service';
-import { UserRepository } from '../user/user.repository';
+import { UserModule } from '../user/user.module';
 
 @Module({
+  imports: [UserModule],
   controllers: [TimelineController],
-  providers: [TimelineService, UserRepository],
+  providers: [TimelineService],
 })
 export class TimelineModule {}

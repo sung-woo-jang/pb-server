@@ -10,7 +10,7 @@ export const setNestApp = (app: INestApplication) => {
   app.use(cookieParser());
   app.setGlobalPrefix('api');
   app.enableCors({
-    origin: '*',
+    origin: ['http://localhost:3000'],
     credentials: true,
   });
 

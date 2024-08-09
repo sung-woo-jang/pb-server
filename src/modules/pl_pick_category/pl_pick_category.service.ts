@@ -9,7 +9,7 @@ import * as _ from 'lodash';
 @Injectable()
 export class PlPickCategoryService {
   constructor(private readonly plPickCategoryRepository: PlPickCategoryRepository) {}
-  async create({ link, memo, title, picker_color }: CreatePlPickCategoryDto, user: User) {
+  async createPlPickCategory({ link, memo, title, picker_color }: CreatePlPickCategoryDto, user: User) {
     const plPickCategory = new PlPickCategoryBuilder()
       .setTitle(title)
       .setMemo(memo)
@@ -20,10 +20,13 @@ export class PlPickCategoryService {
     return await this.plPickCategoryRepository.save({ ...plPickCategory, user });
   }
 
-  async findAll(user: User) {
-    return await this.plPickCategoryRepository.find({ where: { user } });
+  async findUserCategories(user: User) {
+    return await this.plPickCategoryRepository.findUserCategories(user);
   }
 
+  async getCategoryWithPlacePicks(id: number) {
+    return await this.plPickCategoryRepository.getCategoryWithPlacePicks(id);
+  }
   async findOneWithDeleted(id: number) {
     return await this.plPickCategoryRepository.findOneWithDeleted(id);
   }
@@ -32,7 +35,7 @@ export class PlPickCategoryService {
     return await this.plPickCategoryRepository.updatePlPickCategory(updatePlPickCategoryDto);
   }
 
-  async remove(id: number) {
+  async deleteOrRestoreCategory(id: number) {
     const plPickCategory = await this.findOneWithDeleted(id);
     if (_.isNull(plPickCategory.deletedAt)) {
       return await this.plPickCategoryRepository.deletePlPickCategory(id);
