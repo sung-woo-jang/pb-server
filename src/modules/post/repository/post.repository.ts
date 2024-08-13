@@ -24,14 +24,27 @@ export class PostRepository extends Repository<Post> {
       place,
     });
   }
-  async getNewsFeeds() {
+  async getNewsFeeds(user: User) {
     return await this.createQueryBuilder('post')
-      .leftJoinAndSelect('post.user', 'user') // 게시글 작성자와의 관계 조인
-      .leftJoinAndSelect('post.likes', 'likes') // 게시글 좋아요와의 관계 조인
-      .leftJoinAndSelect('post.keywords', 'keywords') // 게시글 키워드와의 관계 조인
-      .leftJoinAndSelect('post.comments', 'comments') // 게시글 댓글과의 관계 조인
-      .leftJoinAndSelect('post.place', 'place') // 게시글과 장소와의 관계 조인
-      .leftJoinAndSelect('post.images', 'images') // 게시글 이미지와의 관계 조인
+      .leftJoinAndSelect('post.user', 'user')
+      .where('user.id = :userId', { userId: user.id })
+      .leftJoinAndSelect('post.likes', 'likes')
+      .leftJoinAndSelect('post.keywords', 'keywords')
+      .leftJoinAndSelect('post.comments', 'comments')
+      .leftJoin('post.place', 'place')
+      .addSelect([
+        'place.id',
+        'place.createdAt',
+        'place.updatedAt',
+        'place.title',
+        'place.address',
+        'place.road_address',
+        'place.description',
+        'place.telephone',
+        'place.mapx',
+        'place.mapy',
+      ])
+      .leftJoinAndSelect('post.images', 'images')
       .getMany();
   }
 

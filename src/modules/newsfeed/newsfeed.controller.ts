@@ -1,18 +1,19 @@
 import { Controller, Get } from '@nestjs/common';
 import { NewsfeedService } from './newsfeed.service';
-import { NewsfeedDto } from './dto/response/newsfeed.dto';
+import { NewsfeedResponseDto } from './dto/response/newsfeed-response.dto';
 import { Serialize } from '@common/interceptors/serialize.interceptor';
-import { Post as PostEntity } from '../post/entities';
 import { ApiTags } from '@nestjs/swagger';
+import { CurrentUser } from '@common/decorators/current-user.decorator';
+import { User } from '../user/entities';
 
 @ApiTags('newsfeed(뉴스피드)')
 @Controller('newsfeed')
-@Serialize(PostEntity)
 export class NewsfeedController {
   constructor(private readonly newsfeedService: NewsfeedService) {}
 
   @Get()
-  async getNewsFeeds(): Promise<NewsfeedDto[]> {
-    return await this.newsfeedService.getNewsFeeds();
+  @Serialize(NewsfeedResponseDto)
+  async getNewsFeeds(@CurrentUser() user: User): Promise<NewsfeedResponseDto[]> {
+    return await this.newsfeedService.getNewsFeeds(user);
   }
 }

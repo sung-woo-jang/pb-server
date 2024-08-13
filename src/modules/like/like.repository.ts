@@ -37,7 +37,7 @@ export class LikeRepository extends Repository<Like> {
 
   async getLikesForPost(post_id: number) {
     return await this.createQueryBuilder('like')
-      .select('COUNT(like.user_id)', 'likeCount') // 'like.id'가 아닌 'like.user_id'로 변경
+      .select('COUNT(like.user_id)', 'likeCount')
       .where('like.post_id = :post_id', { post_id })
       .getRawOne();
   }

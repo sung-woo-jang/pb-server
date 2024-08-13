@@ -55,6 +55,7 @@ export class Place extends BaseEntityIncrement {
   mapy: number;
 
   @Column('float', { array: true })
+  @Expose()
   @Exclude()
   embedding: number[];
 

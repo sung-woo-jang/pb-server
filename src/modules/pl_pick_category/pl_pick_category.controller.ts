@@ -5,6 +5,10 @@ import { UpdatePlPickCategoryDto } from './dto/request/update-pl_pick_category.d
 import { SessionAuthGuard } from '@common/guards/session-auth.guard';
 import { ApiTags } from '@nestjs/swagger';
 import { User } from '../user/entities';
+import { CurrentUser } from '@common/decorators/current-user.decorator';
+import { Serialize } from '@common/interceptors/serialize.interceptor';
+import { UserCategoriesResponseDto } from './dto/response/user-categories-response.dto';
+import { PlPickCategoryWithPlacePickDto } from './dto/response/category-with-place-picks-response.dto';
 
 @ApiTags('pl-pick-category(플픽 카테고리)')
 @UseGuards(SessionAuthGuard)
@@ -21,17 +25,14 @@ export class PlPickCategoryController {
   }
 
   @Get()
-  async findUserCategories(@Session() session: Record<string, User>) {
-    return await this.plPickCategoryService.findUserCategories(session.user);
+  @Serialize(UserCategoriesResponseDto)
+  async findUserCategories(@CurrentUser() user: User): Promise<UserCategoriesResponseDto[]> {
+    return await this.plPickCategoryService.findUserCategories(user);
   }
   @Get(':id')
-  getCategoryWithPlacePicks(@Param('id', ParseIntPipe) id: number) {
+  @Serialize(PlPickCategoryWithPlacePickDto)
+  getCategoryWithPlacePicks(@Param('id', ParseIntPipe) id: number): Promise<PlPickCategoryWithPlacePickDto> {
     return this.plPickCategoryService.getCategoryWithPlacePicks(id);
-  }
-
-  @Get(':id/with-deleted')
-  findOneWithDeleted(@Param('id', ParseIntPipe) id: number) {
-    return this.plPickCategoryService.findOneWithDeleted(id);
   }
 
   @Patch()
@@ -42,5 +43,11 @@ export class PlPickCategoryController {
   @Delete(':id')
   deleteOrRestoreCategory(@Param('id', ParseIntPipe) id: number) {
     return this.plPickCategoryService.deleteOrRestoreCategory(id);
+  }
+
+  // 일단 안 씀
+  @Get(':id/with-deleted')
+  findOneWithDeleted(@Param('id', ParseIntPipe) id: number) {
+    return this.plPickCategoryService.findOneWithDeleted(id);
   }
 }

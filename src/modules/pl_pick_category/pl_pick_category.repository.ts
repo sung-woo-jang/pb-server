@@ -15,7 +15,6 @@ export class PlPickCategoryRepository extends Repository<PlPickCategory> {
   }
   async findUserCategories(user: User) {
     return await this.createQueryBuilder('plPickCategory')
-      .leftJoinAndSelect('plPickCategory.placePicks', 'placePick')
       .where('plPickCategory.user = :userId', { userId: user.id })
       .getMany();
   }
