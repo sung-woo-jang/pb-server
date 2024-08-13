@@ -3,6 +3,7 @@ import { PlacePickService } from './place_pick.service';
 import { CreatePlacePickDto } from './dto/create-place_pick.dto';
 import { ApiTags } from '@nestjs/swagger';
 import { Serialize } from '@common/interceptors/serialize.interceptor';
+import { PlacePickListResponseDto } from './dto/response/place-pick-list-response.dto';
 
 @ApiTags('place-pick(플픽)')
 @Controller('place-pick')
@@ -16,6 +17,7 @@ export class PlacePickController {
   }
 
   @Get('/:id')
+  @Serialize(PlacePickListResponseDto)
   findPlacePickList(@Param('id', ParseIntPipe) id: number) {
     return this.placePickService.findPlacePickList(id);
   }

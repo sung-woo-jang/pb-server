@@ -9,6 +9,7 @@ export class UserRepository extends Repository<User> {
   }
 
   async getTimelineList(userId: string) {
+    // TODO 1: 대표사진 한 장만 가져오도록 수정
     return await this.createQueryBuilder('user')
       .leftJoinAndSelect('user.posts', 'post')
       .leftJoinAndSelect('post.images', 'image')
@@ -19,9 +20,9 @@ export class UserRepository extends Repository<User> {
         'user.nickname',
         'user.profileImage',
         'post.id',
-        'post.content',
-        'post.visitDate',
-        'post.rate',
+        // 'post.content',
+        // 'post.visitDate',
+        // 'post.rate',
         'image.id',
         'image.image_path',
       ])

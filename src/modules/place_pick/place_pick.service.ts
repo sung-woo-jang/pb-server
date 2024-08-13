@@ -44,33 +44,6 @@ export class PlacePickService {
   }
 
   async findPlacePickList(id: number) {
-    const results = await this.placePickRepository.findPlacePickList(id);
-
-    return results.map(({ place: { placeCategory, ...place }, plPickCategory, ...placePick }) => ({
-      plPickCategory: {
-        id: plPickCategory.id,
-        title: plPickCategory.title,
-        memo: plPickCategory.memo,
-      },
-      place: {
-        title: place.title,
-        address: place.address,
-        road_address: place.road_address,
-        description: place.description,
-        telephone: place.telephone,
-        mapx: place.mapx,
-        mapy: place.mapy,
-      },
-      placeCategory: {
-        place_category_name: placeCategory.place_category_name,
-        place_category_name_detail: placeCategory.place_category_name_detail,
-      },
-      placePick: {
-        id: place.id,
-        memo: placePick.memo,
-        link: placePick.link,
-        alias: placePick.alias,
-      },
-    }));
+    return await this.placePickRepository.findPlacePickList(id);
   }
 }

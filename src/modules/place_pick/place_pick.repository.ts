@@ -9,9 +9,21 @@ export class PlacePickRepository extends Repository<PlacePick> {
   }
   async findPlacePickList(id: number) {
     return await this.createQueryBuilder('placePick')
-      .leftJoinAndSelect('placePick.place', 'place')
-      .leftJoinAndSelect('placePick.plPickCategory', 'plPickCategory')
+      .select(['placePick.place_id', 'placePick.memo', 'placePick.link', 'placePick.alias', 'placePick.createdAt'])
+      .leftJoin('placePick.place', 'place')
+      .addSelect([
+        'place.title',
+        'place.address',
+        'place.road_address',
+        'place.description',
+        'place.telephone',
+        'place.mapx',
+        'place.mapy',
+      ])
+      .leftJoin('placePick.plPickCategory', 'plPickCategory')
+      .addSelect(['plPickCategory.id', 'plPickCategory.title', 'plPickCategory.memo'])
       .leftJoinAndSelect('place.placeCategory', 'placeCategory')
+      .addSelect(['placeCategory.place_category_name', 'placeCategory.place_category_name_detail'])
       .where('plPickCategory.id = :id', { id })
       .getMany();
   }
