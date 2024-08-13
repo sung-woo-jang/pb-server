@@ -29,7 +29,7 @@ export class LikeService {
   }
 
   async getLikesForPost(post_id: number) {
-    return await this.likeRepository.count({ where: { post_id } });
+    return await this.likeRepository.getLikesForPost(post_id);
   }
 
   async getLikesForUser(user_id: string) {
