@@ -6,10 +6,12 @@ import { generateRandomInteger } from '@common/utils/generateRandomInteger';
 
 export default class ImageSeeder implements Seeder {
   async run(dataSource: DataSource, factoryManager: SeederFactoryManager): Promise<any> {
-    const post = await dataSource.getRepository(Post).createQueryBuilder('post').orderBy('RANDOM()').getOne();
+    const posts = await dataSource.getRepository(Post).createQueryBuilder('post').limit(10).getMany();
 
-    await factoryManager.get(Image).saveMany(generateRandomInteger(4), {
-      post,
-    });
+    for (const post of posts) {
+      await factoryManager.get(Image).saveMany(generateRandomInteger(2, 10), {
+        post,
+      });
+    }
   }
 }

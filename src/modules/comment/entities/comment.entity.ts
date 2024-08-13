@@ -4,11 +4,13 @@ import { IsString } from 'class-validator';
 import { Post } from '../../post/entities';
 import { ApiProperty } from '@nestjs/swagger';
 import { User } from '../../user/entities';
+import { Expose } from 'class-transformer';
 
 @Entity()
 export class Comment extends BaseEntityIncrement {
   @Column({ nullable: false })
   @IsString()
+  @Expose()
   @ApiProperty({
     required: true,
     description: '댓글 내용',

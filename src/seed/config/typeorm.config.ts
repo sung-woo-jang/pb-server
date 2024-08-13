@@ -19,5 +19,4 @@ const options: DataSourceOptions & SeederOptions = {
   entities: [__dirname + '/../../modules/**/*.entity.{js,ts}'],
   seeds: [InitSeeder],
 };
-
 export const source = new DataSource(options);

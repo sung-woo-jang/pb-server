@@ -10,6 +10,7 @@ import PlPickCategorySeeder from './pl_pick_category/pl_pick_category.seeder';
 import PlaceSeeder from './place/place.seeder';
 import PlaceCategorySeeder from './place_category/place_category.seeder';
 import PlacePickSeeder from './place_pick/place_pick.seeder';
+import LikeSeeder from './like/like.seeder';
 
 import CommentFactory from './comment/comment.factory';
 import PlPickCategoryFactory from './pl_pick_category/pl_pick_category.factory';
@@ -21,28 +22,31 @@ import KeywordFactory from './keyword/keyword.factory';
 import ImageFactory from './image/image.factory';
 import PlaceCategoryFactory from './place_category/place_category.factory';
 import UserFactory from './user/user.factory';
+import LikeFactory from './like/like.factory';
 
 export const seeds: SeederConstructor[] | string[] = [
   UserSeeder,
   FollowSeeder,
-  PostSeeder,
-  ImageSeeder,
-  KeywordSeeder,
-  CommentSeeder,
   PlaceCategorySeeder,
   PlaceSeeder,
   PlPickCategorySeeder,
   PlacePickSeeder,
+  PostSeeder,
+  ImageSeeder,
+  KeywordSeeder,
+  CommentSeeder,
+  LikeSeeder,
 ];
 export const factories: SeederFactoryItem[] | string[] = [
   UserFactory,
   FollowFactory,
-  PostFactory,
-  ImageFactory,
-  KeywordFactory,
-  CommentFactory,
   PlaceCategoryFactory,
   PlaceFactory,
   PlPickCategoryFactory,
   PlacePickFactory,
+  PostFactory,
+  ImageFactory,
+  KeywordFactory,
+  CommentFactory,
+  LikeFactory,
 ];

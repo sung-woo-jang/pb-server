@@ -6,12 +6,14 @@ import { generateRandomInteger } from '@common/utils/generateRandomInteger';
 
 export default class PlaceSeeder implements Seeder {
   async run(dataSource: DataSource, factoryManager: SeederFactoryManager): Promise<any> {
-    const placeCategory = await dataSource
+    const placeCategories = await dataSource
       .getRepository(PlaceCategory)
       .createQueryBuilder('placeCategory')
       .orderBy('RANDOM()')
-      .getOne();
+      .limit(10)
+      .getMany();
 
-    await factoryManager.get(Place).saveMany(generateRandomInteger(4), { placeCategory });
+    for (const placeCategory of placeCategories)
+      await factoryManager.get(Place).saveMany(generateRandomInteger(4), { placeCategory });
   }
 }
