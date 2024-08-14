@@ -21,4 +21,8 @@ export class CommentService {
 
     return await this.commentRepository.save({ comment, post, user });
   }
+
+  async getComments(postId: number) {
+    return await this.commentRepository.getComments(postId);
+  }
 }
