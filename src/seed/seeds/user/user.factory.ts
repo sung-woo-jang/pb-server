@@ -2,9 +2,12 @@ import { localeKoSetSeederFactory } from '../utils/localeKoSetSedderFactory';
 import { User } from '../../../modules/user/entities';
 import { UserBuilder } from '../../../builder/user.builder';
 import { Gender } from '../../../modules/user/entities/user.entity';
+import * as fs from 'fs';
+import { join } from 'path';
 
-const UserFactory = localeKoSetSeederFactory(User, (faker) => {
-  return new UserBuilder()
+const fileNames = fs.readdirSync(join(__dirname, '..', '..', '..', '..', 'dummy', 'profile_Image'));
+const UserFactory = localeKoSetSeederFactory(User, (faker) =>
+  new UserBuilder()
     .setId(faker.string.uuid())
     .setAgeRange(faker.helpers.arrayElement(['10-19', '20-29', '30-39', '40-49', '50-59']))
     .setBirthday(
@@ -21,8 +24,8 @@ const UserFactory = localeKoSetSeederFactory(User, (faker) => {
     .setMobile(faker.helpers.fromRegExp(/010-[0-9]{4}-[0-9]{4}/))
     .setName(faker.person.fullName())
     .setNickname(faker.internet.userName().substring(0, 19))
-    .setProfileImage(faker.image.avatar())
-    .build();
-});
+    .setProfileImage(faker.helpers.arrayElement(fileNames))
+    .build()
+);
 
 export default UserFactory;

@@ -15,6 +15,7 @@ export const setNestApp = (app: INestApplication) => {
   });
 
   app.use('/uploads', express.static(path.join(__dirname, '..', 'uploads')));
+  app.use('/dummy', express.static(path.join(__dirname, '..', 'dummy')));
 
   // class-validation
   app.useGlobalPipes(
