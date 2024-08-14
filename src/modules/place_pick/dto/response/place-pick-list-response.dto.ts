@@ -8,7 +8,7 @@ import { IsNotEmpty, IsObject, ValidateNested } from 'class-validator';
 
 class PlPickCategoryDto extends PickType(PlPickCategory, ['id', 'title', 'memo'] as const) {}
 
-class PlaceCategoryDto extends PickType(PlaceCategory, [
+export class PlaceCategoryDto extends PickType(PlaceCategory, [
   'id',
   'createdAt',
   'place_category_name',

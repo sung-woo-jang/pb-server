@@ -2,9 +2,7 @@ import {
   Body,
   Controller,
   Delete,
-  Get,
   HttpCode,
-  Param,
   Patch,
   Post,
   Session,
@@ -16,13 +14,12 @@ import { ApiBody, ApiTags } from '@nestjs/swagger';
 import { EntityManager } from 'typeorm';
 import { SessionAuthGuard } from '@common/guards/session-auth.guard';
 import { Serialize } from '@common/interceptors/serialize.interceptor';
-import { CreatePostDto, DeletePostDto, PostDto, UpdatePostDto } from './dtos';
+import { CreatePostDto, DeletePostDto, UpdatePostDto } from './dtos';
 import { Post as PostEntity } from './entities';
 import { PostService } from './post.service';
 import { TransactionInterceptor } from '@common/interceptors/transaction.interceptor';
 import { TransactionManager } from '@common/decorators/transaction-manager.decorator';
 import { PostDocs } from './post.docs';
-import { FindPostDto } from './dtos/find-post.dto';
 import { FileFieldsInterceptor } from '@nestjs/platform-express';
 import { multerDiskOptions } from '../../config/multer.option';
 import { ImageSharpPipe } from './pipe/imageSharp.pipe';
@@ -33,18 +30,6 @@ import { UploadedFilesDto } from './dtos/uploaded-files.dto';
 @Serialize(PostEntity)
 export class PostController {
   constructor(private postService: PostService) {}
-
-  @Get()
-  @HttpCode(200)
-  async findAll(@Session() session: Record<string, any>): Promise<PostDto[]> {
-    return await this.postService.findAll(session.user.id);
-  }
-
-  @Get('/:id')
-  @HttpCode(200)
-  async findPost(@Param() params: FindPostDto, @Session() session: Record<string, any>): Promise<PostDto> {
-    return await this.postService.findPost(params.id, session.user.id);
-  }
 
   @Post()
   @HttpCode(201)

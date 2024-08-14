@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { DataSource, EntityManager, Repository } from 'typeorm';
 import { Post } from '../entities';
-import { PostException } from '../../../exception';
 import { User } from '../../user/entities';
 import { CreatePostDto } from '../dtos';
 import { PostBuilder } from '../../../builder/post.builder';
@@ -44,42 +43,8 @@ export class PostRepository extends Repository<Post> {
         'place.mapx',
         'place.mapy',
       ])
+      .leftJoinAndSelect('place.placeCategory', 'placeCategory')
       .leftJoinAndSelect('post.images', 'images')
       .getMany();
-  }
-
-  async findAll(userId: string): Promise<Post[]> {
-    return await this.dataSource
-      .createQueryBuilder(Post, 'post')
-      .leftJoinAndSelect('post.user', 'user')
-      .leftJoinAndSelect('post.keywords', 'keyword')
-      .leftJoinAndSelect('post.comments', 'comment')
-      // .leftJoinAndSelect('post.likes', 'user_post_like')
-      .leftJoinAndSelect('post.likes', 'user_post_like', 'user_post_like.user_id = :userId', {
-        userId,
-      })
-      .orderBy('post.id', 'DESC')
-      .getMany();
-  }
-
-  async findPost(postId: number, userId: string): Promise<Post> {
-    const post = await this.dataSource
-      .createQueryBuilder(Post, 'post')
-      .leftJoinAndSelect('post.user', 'user')
-      .leftJoinAndSelect('post.keywords', 'keyword')
-      .leftJoinAndSelect('post.comments', 'comment')
-      // .leftJoinAndSelect('post.likes', 'user_post_like')
-      .leftJoinAndSelect('post.likes', 'user_post_like', 'user_post_like.user_id = :userId', {
-        userId,
-      })
-      .where('post.id = :postId', { postId })
-      .orderBy('post.id', 'DESC')
-      .getOne();
-
-    if (!post) {
-      throw PostException.notFound();
-    }
-
-    return post;
   }
 }

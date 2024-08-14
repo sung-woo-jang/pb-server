@@ -20,9 +20,6 @@ export class UserRepository extends Repository<User> {
         'user.nickname',
         'user.profileImage',
         'post.id',
-        // 'post.content',
-        // 'post.visitDate',
-        // 'post.rate',
         'image.id',
         'image.image_path',
       ])
@@ -32,5 +29,9 @@ export class UserRepository extends Repository<User> {
 
   async findById(id: string): Promise<User> {
     return await this.findOneBy({ id });
+  }
+
+  async newsFeed() {
+    return await this.createQueryBuilder('user').leftJoinAndSelect('user.post', 'post').getMany();
   }
 }

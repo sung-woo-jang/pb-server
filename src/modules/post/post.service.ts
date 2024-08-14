@@ -32,14 +32,6 @@ export class PostService {
     return await this.postRepository.findOne({ where: { id }, relations });
   }
 
-  async findAll(userId: string): Promise<Post[]> {
-    return this.postRepository.findAll(userId);
-  }
-
-  async findPost(postId: number, userId: string): Promise<Post> {
-    return await this.postRepository.findPost(postId, userId);
-  }
-
   async createPost(imageList: UploadedFilesDto, createPostDto: CreatePostDto, userId: string) {
     return await this.dataSource.transaction(async (manager) => {
       const user = await this.userRepository.findById(userId);
