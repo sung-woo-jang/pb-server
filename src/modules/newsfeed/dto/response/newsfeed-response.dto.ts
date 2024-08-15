@@ -1,16 +1,12 @@
-// 없을 수 있음
 import { PickType } from '@nestjs/swagger';
-import { Like } from '../../../like/entities/like.entity';
 import { Keyword } from '../../../keyword/entities';
 import { Place } from '../../../place/entities/place.entity';
 import { Image } from '../../../post/entities/image.entity';
 import { Post } from '../../../post/entities';
-import { IsArray, IsNotEmpty, IsObject, IsOptional, ValidateNested } from 'class-validator';
+import { IsArray, IsNotEmpty, IsObject, ValidateNested } from 'class-validator';
 import { UserDto } from '../../../user/dtos';
 import { Expose, Type } from 'class-transformer';
 import { PlaceCategoryDto } from '../../../place_pick/dto/response/place-pick-list-response.dto';
-
-class LikeDto extends PickType(Like, ['post_id', 'user_id', 'createdAt'] as const) {}
 
 class KeywordDto extends PickType(Keyword, ['id', 'keyword'] as const) {}
 
@@ -39,13 +35,6 @@ export class NewsfeedResponseDto extends PickType(Post, ['createdAt', 'id', 'con
   @ValidateNested()
   @Type(() => UserDto)
   user: UserDto;
-
-  @Expose()
-  @IsArray()
-  @IsOptional()
-  @ValidateNested({ each: true })
-  @Type(() => LikeDto)
-  likes: LikeDto[];
 
   @Expose()
   @IsArray()

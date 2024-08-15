@@ -6,5 +6,6 @@ import { FollowRepository } from './follow.repository';
 @Module({
   controllers: [FollowController],
   providers: [FollowService, FollowRepository],
+  exports: [FollowService, FollowRepository],
 })
 export class FollowModule {}

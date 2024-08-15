@@ -23,11 +23,11 @@ export class PostRepository extends Repository<Post> {
       place,
     });
   }
-  async getNewsFeeds(user: User) {
+  async getNewsFeeds(userIds: string[]) {
     return await this.createQueryBuilder('post')
+      .select(['post.content', 'post.visitDate', 'post.rate', 'post.id', 'post.createdAt'])
       .leftJoinAndSelect('post.user', 'user')
-      .where('user.id = :userId', { userId: user.id })
-      .leftJoinAndSelect('post.likes', 'likes')
+      .where('post.user.id IN (:...userIds)', { userIds })
       .leftJoinAndSelect('post.keywords', 'keywords')
       .leftJoinAndSelect('post.comments', 'comments')
       .leftJoin('post.place', 'place')
@@ -45,6 +45,7 @@ export class PostRepository extends Repository<Post> {
       ])
       .leftJoinAndSelect('place.placeCategory', 'placeCategory')
       .leftJoinAndSelect('post.images', 'images')
+      .orderBy('post.createdAt', 'DESC')
       .getMany();
   }
 }

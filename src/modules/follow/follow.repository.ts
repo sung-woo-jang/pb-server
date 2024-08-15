@@ -55,14 +55,16 @@ export class FollowRepository extends Repository<Follow> {
   }
   // 나를 팔로우 한 사람 목록
   async getFollowersList(following_account: string) {
-    return await this.createQueryBuilder()
+    return await this.createQueryBuilder('follow')
+      .select(['follow.follower_account', 'follow.following_account', 'follow.status', 'follow.createdAt'])
       .where('following_account = :following_account', { following_account })
       .getMany();
   }
 
   // 내가 팔로우 한 사람들의 수
   async getFollowingCount(follower_account: string) {
-    return await this.createQueryBuilder()
+    return await this.createQueryBuilder('follow')
+      .select(['follow.follower_account', 'follow.following_account', 'follow.status', 'follow.createdAt'])
       .where('follower_account = :follower_account', { follower_account })
       .getCount();
   }
