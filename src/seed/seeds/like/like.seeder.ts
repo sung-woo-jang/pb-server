@@ -3,6 +3,7 @@ import { DataSource } from 'typeorm';
 import { Post } from '../../../modules/post/entities';
 import { User } from '../../../modules/user/entities';
 import { Like } from '../../../modules/like/entities/like.entity';
+import { LikeBuilder } from '../../../builder/like.builder';
 
 export default class LikeSeeder implements Seeder {
   async run(dataSource: DataSource, factoryManager: SeederFactoryManager): Promise<any> {
@@ -13,6 +14,8 @@ export default class LikeSeeder implements Seeder {
     const posts = await postRepository.find();
     const users = await userRepository.find();
 
+    const likes: Like[] = [];
+
     for (const post of posts) {
       // 각 게시물에 대해 랜덤한 수의 사용자가 좋아요를 누릅니다.
       const numberOfLikes = Math.floor(Math.random() * (users.length + 1)); // 0부터 전체 사용자 수까지의 랜덤한 수
@@ -20,17 +23,11 @@ export default class LikeSeeder implements Seeder {
       // 사용자 배열을 섞습니다.
       const shuffledUsers = users.sort(() => 0.5 - Math.random());
 
-      const likes = [];
-      for (let i = 0; i < numberOfLikes; i++) {
-        const like = factoryManager.get(Like).make({
-          user: shuffledUsers[i],
-          post: post,
-        });
-        likes.push(like);
-      }
-
-      // 생성된 좋아요를 벌크 저장합니다.
-      await likeRepository.save(likes);
+      for (let i = 0; i < numberOfLikes; i++)
+        likes.push(new LikeBuilder().setUserId(shuffledUsers[i].id).setPostId(post.id).build());
     }
+
+    // 생성된 좋아요를 벌크 저장합니다.
+    await likeRepository.save(likes);
   }
 }
