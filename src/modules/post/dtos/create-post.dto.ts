@@ -8,7 +8,6 @@ import { CreatePlaceCategoryDto } from '../../place/dto/create-place_category.dt
 
 export class CreatePostDto extends PickType(Post, ['content', 'visitDate', 'rate'] as const) {
   @Expose()
-  @IsOptional()
   @ValidateNested()
   @IsNotEmpty()
   @Type(() => CreatePlaceDto)
@@ -20,6 +19,7 @@ export class CreatePostDto extends PickType(Post, ['content', 'visitDate', 'rate
   @Type(() => CreatePlaceCategoryDto)
   placeCategory: CreatePlaceCategoryDto;
 
+  // 삭제 예정
   @Expose()
   @IsOptional()
   @IsNumber()

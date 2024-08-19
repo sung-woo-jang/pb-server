@@ -8,7 +8,6 @@ import {
   ParseIntPipe,
   Patch,
   Post,
-  Session,
   UploadedFiles,
   UseGuards,
   UseInterceptors,
@@ -27,6 +26,8 @@ import { ImageSharpPipe } from './pipe/imageSharp.pipe';
 import { UploadedFilesDto } from './dtos/uploaded-files.dto';
 import { Serialize } from '@common/interceptors/serialize.interceptor';
 import { NewsfeedResponseDto } from '../newsfeed/dto/response/newsfeed-response.dto';
+import { CurrentUser } from '@common/decorators/current-user.decorator';
+import { User } from '../user/entities';
 
 @ApiTags('post(게시글)')
 @Controller('post')
@@ -43,9 +44,9 @@ export class PostController {
     imageList: UploadedFilesDto,
     @Body()
     body: CreatePostDto,
-    @Session() session: Record<string, any>
+    @CurrentUser() user: User
   ) {
-    return await this.postService.createPost(imageList, body, session.user.id);
+    return await this.postService.createPost(imageList, body, user);
   }
 
   @Get('/:postId')

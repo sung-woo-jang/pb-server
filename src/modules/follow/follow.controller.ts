@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { FollowService } from './follow.service';
 import { CreateFollowDto } from './dto/create-follow.dto';
 import { User } from '../user/entities';
@@ -22,12 +22,26 @@ export class FollowController {
   @Get()
   @Serialize(FollowListResponseDto)
   async getFollowList(@CurrentUser() user: User) {
-    return await this.followService.getFollowList(user);
+    return await this.followService.getFollowList(user.id);
   }
+
   @ApiProperty({ description: '팔로우/팔로잉 숫자만' })
   @Serialize(FollowCountResponseDto)
   @Get('count')
   async getFollowCount(@CurrentUser() user: User) {
-    return await this.followService.getFollowCount(user);
+    return await this.followService.getFollowCount(user.id);
+  }
+
+  @ApiProperty({ description: '특정 유저의 ID로 팔로우/팔로잉 정보 가져오기' })
+  @Get('/:userId')
+  @Serialize(FollowListResponseDto)
+  async getFollowListByUserId(@Param('userId') userId: string) {
+    return await this.followService.getFollowList(userId);
+  }
+  @ApiProperty({ description: '특정 유저의 ID로 팔로우/팔로잉 숫자만 가져오기' })
+  @Serialize(FollowCountResponseDto)
+  @Get('count/:userId')
+  async getFollowCountByUserId(@Param('userId') userId: string) {
+    return await this.followService.getFollowCount(userId);
   }
 }

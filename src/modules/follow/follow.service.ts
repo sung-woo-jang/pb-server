@@ -31,14 +31,14 @@ export class FollowService {
     return { message: '언팔로우 되었습니다.' };
   }
 
-  async getFollowList(user: User) {
-    const followings = await this.followRepository.getFollowingList(user.id);
-    const followers = await this.followRepository.getFollowersList(user.id);
+  async getFollowList(userId: string) {
+    const followings = await this.followRepository.getFollowingList(userId);
+    const followers = await this.followRepository.getFollowersList(userId);
     return { followings, followers };
   }
-  async getFollowCount(user: User) {
-    const followings = await this.followRepository.getFollowingCount(user.id);
-    const followers = await this.followRepository.getFollowersCount(user.id);
+  async getFollowCount(userId: string) {
+    const followings = await this.followRepository.getFollowingCount(userId);
+    const followers = await this.followRepository.getFollowersCount(userId);
     return { followings, followers };
   }
 }

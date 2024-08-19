@@ -19,6 +19,7 @@ export default class UserSeeder implements Seeder {
         mobile: '010-7637-0624',
         nickname: 'seastor****',
         profileImage: 'https://ssl.pstatic.net/static/pwe/address/img_profile.png',
+        name: '장성우',
       });
     }
     await factoryManager.get(User).saveMany(generateRandomInteger(2, 5));

@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { DataSource, EntityManager } from 'typeorm';
 import { KeywordService } from '../keyword/keyword.service';
-import { PostException, UserException } from 'src/exception';
+import { PostException } from 'src/exception';
 import { Post } from './entities';
 import { CreatePostDto, UpdatePostDto } from './dtos';
 import { PostRepository } from './repository/post.repository';
@@ -12,6 +12,7 @@ import { UserRepository } from '../user/user.repository';
 import { PlaceService } from '../place/services/place.service';
 import { Place } from '../place/entities/place.entity';
 import { PlaceCategoryService } from '../place/services/place-category.service';
+import { User } from '../user/entities';
 
 @Injectable()
 export class PostService {
@@ -32,11 +33,8 @@ export class PostService {
     return await this.postRepository.findOne({ where: { id }, relations });
   }
 
-  async createPost(imageList: UploadedFilesDto, createPostDto: CreatePostDto, userId: string) {
+  async createPost(imageList: UploadedFilesDto, createPostDto: CreatePostDto, user: User) {
     return await this.dataSource.transaction(async (manager) => {
-      const user = await this.userRepository.findById(userId);
-      if (!user) throw UserException.notFound();
-
       let place = {} as Place;
 
       if (createPostDto.placeId) {
