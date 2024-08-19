@@ -2,7 +2,10 @@ import {
   Body,
   Controller,
   Delete,
+  Get,
   HttpCode,
+  Param,
+  ParseIntPipe,
   Patch,
   Post,
   Session,
@@ -13,9 +16,7 @@ import {
 import { ApiBody, ApiTags } from '@nestjs/swagger';
 import { EntityManager } from 'typeorm';
 import { SessionAuthGuard } from '@common/guards/session-auth.guard';
-import { Serialize } from '@common/interceptors/serialize.interceptor';
 import { CreatePostDto, DeletePostDto, UpdatePostDto } from './dtos';
-import { Post as PostEntity } from './entities';
 import { PostService } from './post.service';
 import { TransactionInterceptor } from '@common/interceptors/transaction.interceptor';
 import { TransactionManager } from '@common/decorators/transaction-manager.decorator';
@@ -24,10 +25,11 @@ import { FileFieldsInterceptor } from '@nestjs/platform-express';
 import { multerDiskOptions } from '../../config/multer.option';
 import { ImageSharpPipe } from './pipe/imageSharp.pipe';
 import { UploadedFilesDto } from './dtos/uploaded-files.dto';
+import { Serialize } from '@common/interceptors/serialize.interceptor';
+import { NewsfeedResponseDto } from '../newsfeed/dto/response/newsfeed-response.dto';
 
 @ApiTags('post(게시글)')
 @Controller('post')
-@Serialize(PostEntity)
 export class PostController {
   constructor(private postService: PostService) {}
 
@@ -44,6 +46,12 @@ export class PostController {
     @Session() session: Record<string, any>
   ) {
     return await this.postService.createPost(imageList, body, session.user.id);
+  }
+
+  @Get('/:postId')
+  @Serialize(NewsfeedResponseDto)
+  async getPostDetail(@Param('postId', ParseIntPipe) postId: number) {
+    return await this.postService.getPostDetail(postId);
   }
 
   @Patch()

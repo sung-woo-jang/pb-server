@@ -91,4 +91,8 @@ export class PostService {
     // Post 엔티티 삭제 (CASCADE설정으로 Keyword 엔티티도 자동으로 삭제)
     await this.postRepository.remove(post);
   }
+
+  async getPostDetail(postId: number) {
+    return await this.postRepository.getPostDetail(postId);
+  }
 }

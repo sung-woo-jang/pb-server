@@ -5,7 +5,7 @@ import { Image } from '../../../post/entities/image.entity';
 import { Expose, Type } from 'class-transformer';
 import { IsArray, IsOptional, ValidateNested } from 'class-validator';
 
-class ImageDto extends PickType(Image, ['id', 'image_path']) {}
+class ImageDto extends PickType(Image, ['id', 'image_path', 'createdAt']) {}
 
 class PostDto extends PickType(Post, ['id'] as const) {
   @Expose()

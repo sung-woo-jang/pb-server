@@ -42,12 +42,6 @@ export class NewsfeedResponseDto extends PickType(Post, ['createdAt', 'id', 'con
   @Type(() => KeywordDto)
   keywords: KeywordDto[];
 
-  // @Expose()
-  // @IsArray()
-  // @ValidateNested({ each: true })
-  // @Type(() => CommentDto)
-  // comments: CommentDto[];
-
   @Expose()
   @IsObject()
   @ValidateNested()

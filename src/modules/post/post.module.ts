@@ -6,6 +6,7 @@ import { PostRepository } from './repository/post.repository';
 import { KeywordModule } from '../keyword/keyword.module';
 import { PlaceModule } from '../place/place.module';
 
+// TODO: Feed Module로 변경 예정
 @Module({
   imports: [UserModule, KeywordModule, PlaceModule],
   controllers: [PostController],
