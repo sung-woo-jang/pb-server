@@ -12,7 +12,7 @@ export class CommentRepository extends Repository<Comment> {
     return await this.createQueryBuilder('comment')
       .select(['comment.id', 'comment.comment', 'comment.createdAt'])
       .leftJoin('comment.user', 'user')
-      .addSelect(['user.profileImage', 'user.name', 'user.nickname'])
+      .addSelect(['user.profileImage', 'user.name', 'user.nickname', 'user.id'])
       .where('comment.post_id = :postId', { postId })
       .getMany();
   }

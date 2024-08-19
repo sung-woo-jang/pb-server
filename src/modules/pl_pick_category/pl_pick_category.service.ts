@@ -20,8 +20,8 @@ export class PlPickCategoryService {
     return await this.plPickCategoryRepository.save({ ...plPickCategory, user });
   }
 
-  async findUserCategories(user: User) {
-    return await this.plPickCategoryRepository.findUserCategories(user);
+  async findUserCategories(userId: string) {
+    return await this.plPickCategoryRepository.findUserCategories(userId);
   }
 
   async getCategoryWithPlacePicks(id: number) {

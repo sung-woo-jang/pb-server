@@ -2,7 +2,6 @@ import { Injectable } from '@nestjs/common';
 import { DataSource, Repository } from 'typeorm';
 import { PlPickCategory } from './entities/pl_pick_category.entity';
 import { UpdatePlPickCategoryDto } from './dto/request/update-pl_pick_category.dto';
-import { User } from '../user/entities';
 
 @Injectable()
 export class PlPickCategoryRepository extends Repository<PlPickCategory> {
@@ -13,10 +12,8 @@ export class PlPickCategoryRepository extends Repository<PlPickCategory> {
     const { id, ...rest } = updatePlPickCategoryDto;
     return await this.createQueryBuilder().update().set(rest).where('id = :id', { id }).execute();
   }
-  async findUserCategories(user: User) {
-    return await this.createQueryBuilder('plPickCategory')
-      .where('plPickCategory.user = :userId', { userId: user.id })
-      .getMany();
+  async findUserCategories(userId: string) {
+    return await this.createQueryBuilder('plPickCategory').where('plPickCategory.user = :userId', { userId }).getMany();
   }
   async findOneWithDeleted(id: number) {
     return await this.createQueryBuilder().withDeleted().where('id = :id', { id }).getOne();
@@ -30,7 +27,27 @@ export class PlPickCategoryRepository extends Repository<PlPickCategory> {
 
   async getCategoryWithPlacePicks(id: number) {
     return await this.createQueryBuilder('plPickCategory')
-      .leftJoinAndSelect('plPickCategory.placePicks', 'placePick')
+      .select([
+        'plPickCategory.id',
+        'plPickCategory.createdAt',
+        'plPickCategory.title',
+        'plPickCategory.picker_color',
+        'plPickCategory.memo',
+        'plPickCategory.link',
+      ])
+      .leftJoin('plPickCategory.placePicks', 'placePick')
+      .addSelect([
+        'placePick.place_id',
+        'placePick.pl_pick_category_id',
+        'placePick.createdAt',
+        'placePick.memo',
+        'placePick.alias',
+        'placePick.link',
+      ])
+      .leftJoin('placePick.place', 'place')
+      .addSelect(['place.id', 'place.title', 'place.address', 'place.road_address'])
+      .leftJoin('place.placeCategory', 'placeCategory')
+      .addSelect(['placeCategory.id', 'placeCategory.place_category_name', 'placeCategory.place_category_name_detail'])
       .where('plPickCategory.id = :id', { id })
       .getOne();
   }

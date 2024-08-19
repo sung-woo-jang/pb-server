@@ -50,9 +50,11 @@ export class PlPickCategory extends BaseEntityIncrement {
   link: string;
 
   @OneToMany(() => PlacePick, (placePick) => placePick.plPickCategory)
+  @Expose()
   placePicks: PlacePick[];
 
   @ManyToOne(() => User, (user) => user.plPickCategories)
+  @Expose()
   @JoinColumn({ name: 'account' })
   user: User;
 }

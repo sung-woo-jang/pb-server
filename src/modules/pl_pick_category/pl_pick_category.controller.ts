@@ -27,8 +27,15 @@ export class PlPickCategoryController {
   @Get()
   @Serialize(UserCategoriesResponseDto)
   async findUserCategories(@CurrentUser() user: User): Promise<UserCategoriesResponseDto[]> {
-    return await this.plPickCategoryService.findUserCategories(user);
+    return await this.plPickCategoryService.findUserCategories(user.id);
   }
+
+  @Get('user/:userId')
+  @Serialize(UserCategoriesResponseDto)
+  async findCategoriesByUserId(@Param('userId') userId: string): Promise<UserCategoriesResponseDto[]> {
+    return await this.plPickCategoryService.findUserCategories(userId);
+  }
+
   @Get(':id')
   @Serialize(PlPickCategoryWithPlacePickDto)
   getCategoryWithPlacePicks(@Param('id', ParseIntPipe) id: number): Promise<PlPickCategoryWithPlacePickDto> {

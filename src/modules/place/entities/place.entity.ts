@@ -60,11 +60,14 @@ export class Place extends BaseEntityIncrement {
   embedding: number[];
 
   @ManyToOne(() => PlaceCategory, (placeCategory) => placeCategory.places)
+  @Expose()
   placeCategory: PlaceCategory;
 
   @OneToMany(() => PlacePick, (placePick) => placePick.place)
+  @Expose()
   placePicks: PlacePick[];
 
   @OneToMany(() => Post, (post) => post.place)
+  @Expose()
   post: Post[];
 }
