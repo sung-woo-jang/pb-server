@@ -6,36 +6,30 @@ import { PlacePick } from '../../../modules/place_pick/entities/place_pick.entit
 
 export default class PlacePickSeeder implements Seeder {
   async run(dataSource: DataSource, factoryManager: SeederFactoryManager): Promise<any> {
-    const places = await dataSource.getRepository(Place).createQueryBuilder().limit(10).getMany();
-    const plPickCategories = await dataSource.getRepository(PlPickCategory).createQueryBuilder().limit(10).getMany();
+    const placeRepository = dataSource.getRepository(Place);
+    const plPickCategoryRepository = dataSource.getRepository(PlPickCategory);
+    const placePickRepository = dataSource.getRepository(PlacePick);
 
-    // const placePickRepository = dataSource.getRepository(PlacePick);
+    const places = await placeRepository.find();
+    const plPickCategories = await plPickCategoryRepository.find();
+
+    const minPicksPerPlace = 1;
+    const maxPicksPerPlace = Math.min(5, plPickCategories.length);
 
     for (const place of places) {
-      for (const plPickCategory of plPickCategories) {
-        await factoryManager.get(PlacePick).save({ place, plPickCategory });
+      // 각 Place에 대해 랜덤한 수의 PlacePick을 생성
+      const numberOfPicks = Math.floor(Math.random() * (maxPicksPerPlace - minPicksPerPlace + 1)) + minPicksPerPlace;
+
+      // PlPickCategory 배열을 섞어서 랜덤한 순서로 만듦
+      const shuffledCategories = plPickCategories.sort(() => 0.5 - Math.random());
+
+      for (let i = 0; i < numberOfPicks; i++) {
+        const placePick = await factoryManager.get(PlacePick).make({
+          place,
+          plPickCategory: shuffledCategories[i],
+        });
+        await placePickRepository.save(placePick);
       }
     }
-
-    // 기존 엔트리들을 미리 가져와서 맵으로 만듭니다.
-    // const existingEntries = await placePickRepository.find();
-    // const existingEntryMap = new Map<string, boolean>();
-    // existingEntries.forEach((entry) => {
-    //   const key = `${entry.place_id}-${entry.pl_pick_category_id}`;
-    //   existingEntryMap.set(key, true);
-    // });
-    //
-    // for (const place of places) {
-    //   for (const plPickCategory of plPickCategories) {
-    //     const key = `${place.id}-${plPickCategory.id}`;
-    //     if (!existingEntryMap.has(key)) {
-    //       await factoryManager.get(PlacePick).save({
-    //         place,
-    //         plPickCategory,
-    //       });
-    //       existingEntryMap.set(key, true);
-    //     }
-    //   }
-    // }
   }
 }
