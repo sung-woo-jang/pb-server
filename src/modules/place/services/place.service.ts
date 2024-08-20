@@ -11,6 +11,7 @@ import removeHtmlTags from '@common/utils/removeHtmlTags';
 import concatenateValues from '@common/utils/concatenateValues';
 import cosineSimilarity from '@common/utils/cosineSimilarity';
 import { SearchPlaceRequestDto } from '../dto/request/search-place-request.dto';
+import calculateDistance, { Coordinate } from '@common/utils/calculateDistance';
 
 @Injectable()
 export class PlaceService {
@@ -46,28 +47,40 @@ export class PlaceService {
   }
 
   async searchPlaces(searchPlaceRequestDto: SearchPlaceRequestDto) {
-    const { limit, offset, ...rest } = searchPlaceRequestDto;
-    const keyword = concatenateValues(rest);
-    const { data: embeddingData } = await this.createEmbedding(keyword);
+    const { limit, mapx, mapy, keyword } = searchPlaceRequestDto;
+    const input = concatenateValues({ mapx, mapy, keyword });
+    const { data: embeddingData } = await this.createEmbedding(input);
     const searchVector = embeddingData[0].embedding;
 
+    const userLocation: Coordinate = { mapx, mapy };
+
     const places = await this.placeRepository.find();
-    // TODO 1. 가까운 순으로 알려주기 추가
-    // TODO 2. 현재 위치와 거리 알려주기
+
+    // 정확도순
     return places
-      .map((place) => ({ ...place, similarity: cosineSimilarity(place.embedding, searchVector) }))
-      .sort((a, b) => b.similarity - a.similarity);
+      .map((place) => ({
+        ...place,
+        similarity: cosineSimilarity(place.embedding, searchVector),
+        distance: calculateDistance(userLocation, { mapx: place.mapx, mapy: place.mapy }),
+      }))
+      .sort((a, b) => {
+        // 유사도와 거리에 가중치를 부여하여 종합 점수 계산
+        const scoreA = a.similarity * 0.7 - (a.distance / 10) * 0.3; // 거리는 10km를 기준으로 정규화
+        const scoreB = b.similarity * 0.7 - (b.distance / 10) * 0.3;
+        return scoreB - scoreA;
+      })
+      .slice(0, limit);
   }
 
-  async createEmbedding(inputText: string) {
+  async createEmbedding(input: string) {
     // TODO: lastValueFrom 알아보기
-
+    const model = this.model;
     const { data } = await lastValueFrom(
       this.httpService.post<EmbeddingResponse>(
         this.apiUrl,
         {
-          input: inputText,
-          model: this.model,
+          input,
+          model,
         },
         {
           headers: {

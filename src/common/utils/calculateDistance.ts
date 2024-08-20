@@ -1,45 +1,27 @@
-import proj4 from 'proj4';
-import * as turf from '@turf/turf';
-
-// UTMK (Naver Maps) to WGS84 conversion definition
-proj4.defs(
-  'UTMK',
-  '+proj=tmerc +lat_0=38 +lon_0=127.5 +k=0.9996 +x_0=1000000 +y_0=2000000 +ellps=GRS80 +units=m +no_defs'
-);
-
-interface UTMKCoordinate {
+export interface Coordinate {
   mapx: number;
   mapy: number;
 }
 
-interface WGS84Coordinate {
-  lat: number;
-  lon: number;
+export default function calculateDistance(coord1: Coordinate, coord2: Coordinate): number {
+  const R = 6371; // 지구의 반경 (km)
+
+  // 위도와 경도를 라디안으로 변환
+  const lat1 = (coord1.mapy * Math.PI) / 180;
+  const lat2 = (coord2.mapy * Math.PI) / 180;
+  const lon1 = (coord1.mapx * Math.PI) / 180;
+  const lon2 = (coord2.mapx * Math.PI) / 180;
+
+  // 위도와 경도의 차이
+  const dlat = lat2 - lat1;
+  const dlon = lon2 - lon1;
+
+  // Haversine 공식
+  const a = Math.sin(dlat / 2) ** 2 + Math.cos(lat1) * Math.cos(lat2) * Math.sin(dlon / 2) ** 2;
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+  // 거리 계산 (km)
+  return R * c;
 }
 
-function convertUTMKtoWGS84(x: number, y: number): WGS84Coordinate {
-  const [lon, lat] = proj4('UTMK', 'WGS84', [x, y]);
-  return { lat, lon };
-}
-
-function calculateDistance(utmk1: UTMKCoordinate, utmk2: UTMKCoordinate): number {
-  // Convert UTMK coordinates to WGS84
-  const point1 = convertUTMKtoWGS84(utmk1.mapx, utmk1.mapy);
-  const point2 = convertUTMKtoWGS84(utmk2.mapx, utmk2.mapy);
-
-  // Create Turf points
-  const from = turf.point([point1.lon, point1.lat]);
-  const to = turf.point([point2.lon, point2.lat]);
-
-  // Calculate distance
-  return turf.distance(from, to, 'kilometers');
-}
-
-// Example usage
-const point1: UTMKCoordinate = { mapx: 1266540756, mapy: 374665222 };
-const point2: UTMKCoordinate = { mapx: 1266540000, mapy: 374665000 }; // Example second point
-
-const distance = calculateDistance(point1, point2);
-console.log(`The distance between the two points is ${distance.toFixed(2)} km`);
-
-export { calculateDistance, UTMKCoordinate };
+// 사용 예시

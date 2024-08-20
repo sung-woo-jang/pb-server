@@ -17,4 +17,8 @@ export class SearchPlaceResponseDto extends PickType(Place, [
   @Expose()
   @IsNumber()
   similarity: number;
+
+  @Expose()
+  @IsNumber()
+  distance: number;
 }
