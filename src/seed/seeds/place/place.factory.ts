@@ -4,10 +4,6 @@ import { PlaceBuilder } from '../../../builder/place.builder';
 import data from '../dummy_map';
 
 const PlaceFactory = localeKoSetSeederFactory(Place, (faker) => {
-  const generateDummyEmbedding = (dimension: number = 1536): number[] => {
-    return Array.from({ length: dimension }, () => faker.number.float({ min: -1, max: 1 }));
-  };
-
   const randomPlace = faker.helpers.arrayElement(data);
   return (
     new PlaceBuilder()
@@ -19,7 +15,7 @@ const PlaceFactory = localeKoSetSeederFactory(Place, (faker) => {
       .setTelephone(randomPlace.telephone)
       .setMapx(randomPlace.mapx)
       .setMapy(randomPlace.mapy)
-      .setEmbedding(generateDummyEmbedding())
+      .setEmbedding(randomPlace.embedding)
       .build()
   );
 });
