@@ -5,7 +5,7 @@ import { Expose } from 'class-transformer';
 import { IsEmail, IsEnum, IsString, IsUrl } from 'class-validator';
 import { Post } from '../../post/entities';
 import { PlPickCategory } from '../../pl_pick_category/entities/pl_pick_category.entity';
-import { SearchHistory } from '../../search_history/entities/search_history.entity';
+import { SearchHistory } from '../../search/entities/search_history.entity';
 import { Comment } from '../../comment/entities/comment.entity';
 import { Like } from '../../like/entities/like.entity';
 

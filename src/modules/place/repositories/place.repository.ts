@@ -11,5 +11,10 @@ export class PlaceRepository extends Repository<Place> {
     return await transactionManager.save(Place, { ...place });
   }
 
-  // async similarity() {}
+  async searchPlaces() {
+    return await this.createQueryBuilder('place')
+      .leftJoin('place.placeCategory', 'placeCategory')
+      .addSelect(['placeCategory.place_category_name', 'placeCategory.place_category_name_detail'])
+      .getMany();
+  }
 }

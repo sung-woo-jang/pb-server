@@ -1,5 +1,5 @@
 import { PickType } from '@nestjs/swagger';
-import { Place } from '../../entities/place.entity';
+import { Place } from '../../../place/entities/place.entity';
 import { Expose } from 'class-transformer';
 import { IsNumber } from 'class-validator';
 
@@ -13,6 +13,7 @@ export class SearchPlaceResponseDto extends PickType(Place, [
   'mapx',
   'mapy',
   'createdAt',
+  'placeCategory',
 ] as const) {
   @Expose()
   @IsNumber()
@@ -21,4 +22,8 @@ export class SearchPlaceResponseDto extends PickType(Place, [
   @Expose()
   @IsNumber()
   distance: number;
+
+  @Expose()
+  @IsNumber()
+  placePickCount: number;
 }

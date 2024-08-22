@@ -9,5 +9,6 @@ import { PlPickCategoryModule } from '../pl_pick_category/pl_pick_category.modul
   imports: [PlaceModule, PlPickCategoryModule],
   controllers: [PlacePickController],
   providers: [PlacePickService, PlacePickRepository],
+  exports: [PlacePickService, PlacePickRepository],
 })
 export class PlacePickModule {}
