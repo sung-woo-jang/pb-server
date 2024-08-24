@@ -54,4 +54,15 @@ export class SearchService {
       return acc;
     }, {});
   }
+
+  async getSearchPlaceDetail(placeId: number) {
+    const placeData = await this.placeRepository.getPlaceDetail(placeId);
+    const total_posts = await this.placeRepository.getTotalPosts(placeId);
+    const place_average_rate = await this.placeRepository.getPlaceAverageRate(placeId);
+    return {
+      ...placeData,
+      total_posts,
+      place_average_rate,
+    };
+  }
 }
