@@ -5,6 +5,7 @@ import { DataSource } from 'typeorm';
 import { PlacePickRepository } from './place_pick.repository';
 import { PlPickCategoryRepository } from '../pl_pick_category/pl_pick_category.repository';
 import { PlaceService } from '../place/services/place.service';
+import { User } from '../user/entities';
 
 @Injectable()
 export class PlacePickService {
@@ -45,5 +46,13 @@ export class PlacePickService {
 
   async findPlacePickList(id: number) {
     return await this.placePickRepository.findPlacePickList(id);
+  }
+  async getAllMyPlacePick(user: User) {
+    const placePickList = await this.placePickRepository.getAllMyPlacePick(user);
+    const coords = [];
+    placePickList.forEach((placePick) => {
+      coords.push([placePick.place.mapy, placePick.place.mapx]);
+    });
+    return { coords };
   }
 }

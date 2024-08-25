@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { DataSource, EntityManager, Repository } from 'typeorm';
 import { PlacePick } from './entities/place_pick.entity';
+import { User } from '../user/entities';
 
 @Injectable()
 export class PlacePickRepository extends Repository<PlacePick> {
@@ -39,5 +40,17 @@ export class PlacePickRepository extends Repository<PlacePick> {
       .groupBy('placePick.place_id')
       .where('placePick.place_id IN (:...placeIds)', { placeIds })
       .getRawMany();
+  }
+
+  async getAllMyPlacePick(user: User) {
+    return await this.createQueryBuilder('placePick')
+      .distinctOn(['place.id'])
+      .select(['placePick.place_id'])
+      .leftJoin('placePick.plPickCategory', 'plPickCategory')
+      .leftJoin('plPickCategory.user', 'user')
+      .leftJoin('placePick.place', 'place')
+      .addSelect(['place.mapy', 'place.mapx'])
+      .where('user.id = :id', { id: user.id })
+      .getMany();
   }
 }
