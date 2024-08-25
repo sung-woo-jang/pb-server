@@ -1,14 +1,12 @@
-import { Body, Controller, Get, HttpCode, Patch, Post, Query, Res, Session, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, HttpCode, Patch, Post, Query, Res, Session } from '@nestjs/common';
 import { AuthService } from '../auth/auth.service';
 import { Serialize } from '@common/interceptors/serialize.interceptor';
 import { Response } from 'express';
 import { ConfigService } from '@nestjs/config';
 import { randomBytes } from 'crypto';
-import { OAuthStateGuard } from './guards/oauth-state.guard';
 import { ApiBody, ApiOperation, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { UpdateNicknameDto, UserDto } from './dtos';
 import { UserService } from './user.service';
-import { SessionAuthGuard } from '@common/guards/session-auth.guard';
 import { UserDocs } from './user.docs';
 
 @ApiTags('auth(권한, 유저)')
@@ -50,7 +48,6 @@ export class UserController {
   @ApiQuery(UserDocs.codeQuery())
   @ApiQuery(UserDocs.stateQuery())
   @ApiResponse(UserDocs.createUserResponse())
-  @UseGuards(OAuthStateGuard)
   async getLoginNaverCallback(
     @Query('code') code: string,
     @Query('state') state: string,
@@ -93,7 +90,6 @@ export class UserController {
 
   @Patch('/me')
   @HttpCode(200)
-  @UseGuards(SessionAuthGuard)
   @ApiBody({ type: UpdateNicknameDto })
   async updateUserInfo(@Body() body: UpdateNicknameDto, @Session() session: Record<string, any>) {
     return await this.userService.updateUserInfo(body, session.user.id ?? null);

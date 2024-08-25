@@ -9,12 +9,10 @@ import {
   Patch,
   Post,
   UploadedFiles,
-  UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
 import { ApiBody, ApiTags } from '@nestjs/swagger';
 import { EntityManager } from 'typeorm';
-import { SessionAuthGuard } from '@common/guards/session-auth.guard';
 import { CreatePostDto, DeletePostDto, UpdatePostDto } from './dtos';
 import { PostService } from './post.service';
 import { TransactionInterceptor } from '@common/interceptors/transaction.interceptor';
@@ -36,7 +34,6 @@ export class PostController {
 
   @Post()
   @HttpCode(201)
-  @UseGuards(SessionAuthGuard)
   @UseInterceptors(FileFieldsInterceptor([{ name: 'placeImages', maxCount: 10 }], multerDiskOptions))
   @ApiBody(PostDocs.createPostBody())
   async createPost(
@@ -57,7 +54,6 @@ export class PostController {
 
   @Patch()
   @HttpCode(201)
-  @UseGuards(SessionAuthGuard)
   @UseInterceptors(TransactionInterceptor)
   @ApiBody(PostDocs.patchPostBody())
   async updatePost(
@@ -69,7 +65,6 @@ export class PostController {
 
   @Delete()
   @HttpCode(201)
-  @UseGuards(SessionAuthGuard)
   @ApiBody(PostDocs.deletePostBody())
   async deletePost(@Body() body: DeletePostDto): Promise<void> {
     await this.postService.deletePost(body.id);
