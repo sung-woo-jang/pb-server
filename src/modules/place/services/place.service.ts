@@ -26,7 +26,7 @@ export class PlaceService {
     const place = await this.placeRepository.findOne({ where: { title, road_address } });
     if (place) return place;
 
-    const embedding = await this.createEmbedding(`${removeHtmlTags(title)} ${address} ${road_address}`);
+    const embedding = await this.createEmbedding(removeHtmlTags(title));
 
     return await this.placeRepository.createPlace(
       new PlaceBuilder()

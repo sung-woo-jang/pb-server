@@ -8,21 +8,17 @@ import { PostRepository } from './repository/post.repository';
 import { UploadedFilesDto } from './dtos/uploaded-files.dto';
 import { Image } from './entities/image.entity';
 import { Keyword } from '../keyword/entities';
-import { UserRepository } from '../user/user.repository';
 import { PlaceService } from '../place/services/place.service';
 import { Place } from '../place/entities/place.entity';
-import { PlaceCategoryService } from '../place/services/place-category.service';
 import { User } from '../user/entities';
 
 @Injectable()
 export class PostService {
   constructor(
     private readonly dataSource: DataSource,
-    private userRepository: UserRepository,
     private keywordService: KeywordService,
     private readonly postRepository: PostRepository,
-    private readonly placeService: PlaceService,
-    private readonly placeCategoryService: PlaceCategoryService
+    private readonly placeService: PlaceService
   ) {}
 
   async findById(id: number): Promise<Post> {
@@ -40,12 +36,10 @@ export class PostService {
       if (createPostDto.placeId) {
         place = await this.placeService.findPlaceById(createPostDto.placeId);
       } else {
-        place = await this.placeService.createPlace(createPostDto.place, manager);
-        place.placeCategory = await this.placeCategoryService.createPlaceCategory(createPostDto.placeCategory, manager);
+        throw new Error('안 돼.');
       }
 
       const post = await this.postRepository.createPost(createPostDto, user, place, manager);
-
       for await (const placeImage of imageList.placeImages)
         await manager.save(Image, { image_path: placeImage.filename, post });
 

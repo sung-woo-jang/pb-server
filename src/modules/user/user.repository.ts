@@ -17,14 +17,7 @@ export class UserRepository extends Repository<User> {
       .leftJoin('post.images', 'image')
       .addSelect(['image.id', 'image.image_path', 'image.createdAt'])
       .where('user.id = :userId', { userId })
+      .orderBy('post.createdAt', 'DESC')
       .getOne();
-  }
-
-  async findById(id: string): Promise<User> {
-    return await this.findOneBy({ id });
-  }
-
-  async newsFeed() {
-    return await this.createQueryBuilder('user').leftJoinAndSelect('user.post', 'post').getMany();
   }
 }

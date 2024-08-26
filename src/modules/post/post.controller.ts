@@ -26,6 +26,7 @@ import { Serialize } from '@common/interceptors/serialize.interceptor';
 import { NewsfeedResponseDto } from '../newsfeed/dto/response/newsfeed-response.dto';
 import { CurrentUser } from '@common/decorators/current-user.decorator';
 import { User } from '../user/entities';
+import { CreatePostResponseDto } from './dtos/response/create-post-response.dto';
 
 @ApiTags('post(게시글)')
 @Controller('post')
@@ -35,6 +36,7 @@ export class PostController {
   @Post()
   @HttpCode(201)
   @UseInterceptors(FileFieldsInterceptor([{ name: 'placeImages', maxCount: 10 }], multerDiskOptions))
+  @Serialize(CreatePostResponseDto)
   @ApiBody(PostDocs.createPostBody())
   async createPost(
     @UploadedFiles(ImageSharpPipe)
