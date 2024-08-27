@@ -1,6 +1,6 @@
 import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { FollowService } from './follow.service';
-import { CreateFollowDto } from './dto/create-follow.dto';
+import { CreateFollowRequestDto } from './dto/request/create-follow-request.dto';
 import { User } from '../user/entities';
 import { ApiProperty, ApiTags } from '@nestjs/swagger';
 import { Serialize } from '@common/interceptors/serialize.interceptor';
@@ -14,7 +14,7 @@ export class FollowController {
   constructor(private readonly followService: FollowService) {}
 
   @Post()
-  following(@Body() createFollowDto: CreateFollowDto, @CurrentUser() user: User) {
+  following(@Body() createFollowDto: CreateFollowRequestDto, @CurrentUser() user: User) {
     return this.followService.following(createFollowDto, user);
   }
 

@@ -1,5 +1,5 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
-import { CreateFollowDto } from './dto/create-follow.dto';
+import { CreateFollowRequestDto } from './dto/request/create-follow-request.dto';
 import { User } from '../user/entities';
 import * as _ from 'lodash';
 import { FollowRepository } from './follow.repository';
@@ -7,7 +7,7 @@ import { FollowRepository } from './follow.repository';
 @Injectable()
 export class FollowService {
   constructor(private followRepository: FollowRepository) {}
-  async following({ following_account }: CreateFollowDto, { id: follower_account }: User) {
+  async following({ following_account }: CreateFollowRequestDto, { id: follower_account }: User) {
     // 자기 자신을 팔로우하려는 경우를 방지
     if (following_account === follower_account) throw new BadRequestException('자기 자신을 팔로우할 수 없습니다.');
 

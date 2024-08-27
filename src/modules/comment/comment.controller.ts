@@ -5,6 +5,8 @@ import { CreateCommentSwaggerDecorator } from './docs/createComment.decorator';
 import { ApiTags } from '@nestjs/swagger';
 import { Serialize } from '@common/interceptors/serialize.interceptor';
 import { GetCommentsResponseDto } from './dto/response/get-comments-response.dto';
+import { CurrentUser } from '@common/decorators/current-user.decorator';
+import { User } from '../user/entities';
 
 @ApiTags('comment(댓글)')
 @Controller('comment')
@@ -13,8 +15,8 @@ export class CommentController {
 
   @Post()
   @CreateCommentSwaggerDecorator()
-  async createComment(@Body() createCommentDto: CreateCommentDto) {
-    await this.commentService.createComment(createCommentDto);
+  async createComment(@Body() createCommentDto: CreateCommentDto, @CurrentUser() user: User) {
+    await this.commentService.createComment(createCommentDto, user);
   }
 
   @Get(':postId')
