@@ -29,7 +29,8 @@ export class PostRepository extends Repository<Post> {
       .select(['post.content', 'post.visitDate', 'post.rate', 'post.id', 'post.createdAt'])
       .leftJoinAndSelect('post.user', 'user')
       .leftJoinAndSelect('post.keywords', 'keywords')
-      .leftJoinAndSelect('post.comments', 'comments')
+      .leftJoin('post.likes', 'like')
+      .addSelect(['like.user_id'])
       .leftJoin('post.place', 'place')
       .addSelect([
         'place.id',
@@ -43,6 +44,7 @@ export class PostRepository extends Repository<Post> {
         'place.mapx',
         'place.mapy',
       ])
+
       .leftJoinAndSelect('place.placeCategory', 'placeCategory')
       .leftJoinAndSelect('post.images', 'images');
   }

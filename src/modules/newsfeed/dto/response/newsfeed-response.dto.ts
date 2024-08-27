@@ -11,6 +11,7 @@ import { PlaceCategoryDto } from '../../../place_pick/dto/response/place-pick-li
 class KeywordDto extends PickType(Keyword, ['id', 'keyword'] as const) {}
 
 class PlaceDto extends PickType(Place, [
+  'id',
   'title',
   'address',
   'road_address',
@@ -29,7 +30,14 @@ class PlaceDto extends PickType(Place, [
 
 class ImageDto extends PickType(Image, ['createdAt', 'id', 'image_path'] as const) {}
 
-export class NewsfeedResponseDto extends PickType(Post, ['createdAt', 'id', 'content', 'visitDate', 'rate'] as const) {
+export class NewsfeedResponseDto extends PickType(Post, [
+  'createdAt',
+  'id',
+  'content',
+  'visitDate',
+  'rate',
+  'likes',
+] as const) {
   @Expose()
   @IsObject()
   @ValidateNested()
