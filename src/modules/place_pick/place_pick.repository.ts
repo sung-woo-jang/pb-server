@@ -47,8 +47,9 @@ export class PlacePickRepository extends Repository<PlacePick> {
     return await this.createQueryBuilder('placePick')
       .distinctOn(['place.id'])
       .select(['place.id', 'placePick.place_id', 'place.mapy', 'place.mapx'])
-      .innerJoin('placePick.plPickCategory', 'plPickCategory')
-      .innerJoin('placePick.place', 'place')
+      .leftJoin('placePick.plPickCategory', 'plPickCategory')
+      .addSelect(['plPickCategory.picker_color'])
+      .leftJoin('placePick.place', 'place')
       .where('plPickCategory.account = :id', { id: user.id })
       .getMany();
   }

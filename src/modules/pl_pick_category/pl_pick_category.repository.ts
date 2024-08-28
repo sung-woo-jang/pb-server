@@ -49,6 +49,7 @@ export class PlPickCategoryRepository extends Repository<PlPickCategory> {
       .leftJoin('place.placeCategory', 'placeCategory')
       .addSelect(['placeCategory.id', 'placeCategory.place_category_name', 'placeCategory.place_category_name_detail'])
       .where('plPickCategory.id = :id', { id })
+      .orderBy('placePick.createdAt', 'ASC')
       .getOne();
   }
 }

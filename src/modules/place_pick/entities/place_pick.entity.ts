@@ -48,5 +48,6 @@ export class PlacePick extends TimestampEntity {
   place: Place;
 
   @ManyToOne(() => PlPickCategory, (plPickCategory) => plPickCategory.placePicks)
+  @Expose()
   plPickCategory: PlPickCategory;
 }
