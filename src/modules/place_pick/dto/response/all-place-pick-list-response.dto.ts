@@ -1,8 +1,4 @@
-import { Expose } from 'class-transformer';
-import { IsArray } from 'class-validator';
+import { PickType } from '@nestjs/swagger';
+import { PlacePick } from '../../entities/place_pick.entity';
 
-export class AllPlacePickListResponseDto {
-  @Expose()
-  @IsArray()
-  coords: [number, number][];
-}
+export class AllPlacePickListResponseDto extends PickType(PlacePick, ['place_id', 'place'] as const) {}

@@ -5,14 +5,6 @@ export class PlacePickBuilder extends BuilderCommon<PlacePick> {
   constructor() {
     super(PlacePick);
   }
-  setPlPickCategoryId(id: number): PlacePickBuilder {
-    this.object.pl_pick_category_id = id;
-    return this;
-  }
-  setPlaceId(id: number): PlacePickBuilder {
-    this.object.place_id = id;
-    return this;
-  }
   setMemo(memo: string): PlacePickBuilder {
     this.object.memo = memo;
     return this;

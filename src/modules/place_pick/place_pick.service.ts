@@ -15,23 +15,13 @@ export class PlacePickService {
     private readonly placePickRepository: PlacePickRepository,
     private readonly placeService: PlaceService
   ) {}
-  async createPlacePick({
-    placePick: placePickDto,
-    plPickCategory: plPickCategoryDto,
-    place: placeDto,
-  }: CreatePlacePickDto) {
+  async createPlacePick({ place_id, link, memo, alias, pl_pick_category_id }: CreatePlacePickDto) {
     return await this.dataSource.transaction(async (manager) => {
-      const place = await this.placeService.createPlace(placeDto, manager);
-
-      // pl_pick_category
-      const plPickCategory = await this.plPickCategoryRepository.findOne({ where: { id: plPickCategoryDto.id } });
+      const place = await this.placeService.findPlaceById(place_id);
+      const plPickCategory = await this.plPickCategoryRepository.findOne({ where: { id: pl_pick_category_id } });
 
       // place_pick
-      const placePick = new PlacePickBuilder()
-        .setMemo(placePickDto.memo)
-        .setLink(placePickDto.link)
-        .setAlias(placePickDto.alias)
-        .build();
+      const placePick = new PlacePickBuilder().setMemo(memo).setLink(link).setAlias(alias).build();
 
       return await this.placePickRepository.createPlacePick(
         {
@@ -53,6 +43,7 @@ export class PlacePickService {
     placePickList.forEach((placePick) => {
       coords.push([placePick.place.mapy, placePick.place.mapx]);
     });
-    return { coords };
+    // return { placePickList, coords };
+    return placePickList;
   }
 }

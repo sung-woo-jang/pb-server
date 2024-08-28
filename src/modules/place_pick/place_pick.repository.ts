@@ -26,6 +26,7 @@ export class PlacePickRepository extends Repository<PlacePick> {
       .leftJoinAndSelect('place.placeCategory', 'placeCategory')
       .addSelect(['placeCategory.place_category_name', 'placeCategory.place_category_name_detail'])
       .where('plPickCategory.id = :id', { id })
+      .orderBy('placePick.createdAt', 'ASC')
       .getMany();
   }
 
@@ -45,12 +46,10 @@ export class PlacePickRepository extends Repository<PlacePick> {
   async getAllMyPlacePick(user: User) {
     return await this.createQueryBuilder('placePick')
       .distinctOn(['place.id'])
-      .select(['placePick.place_id'])
-      .leftJoin('placePick.plPickCategory', 'plPickCategory')
-      .leftJoin('plPickCategory.user', 'user')
-      .leftJoin('placePick.place', 'place')
-      .addSelect(['place.mapy', 'place.mapx'])
-      .where('user.id = :id', { id: user.id })
+      .select(['place.id', 'placePick.place_id', 'place.mapy', 'place.mapx'])
+      .innerJoin('placePick.plPickCategory', 'plPickCategory')
+      .innerJoin('placePick.place', 'place')
+      .where('plPickCategory.account = :id', { id: user.id })
       .getMany();
   }
 }
