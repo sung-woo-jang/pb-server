@@ -13,8 +13,6 @@ const SuccessStatusCodeMessage = {
   206: 'Partial Content',
 };
 
-// 클래스를 의미하는 인터페이스
-// any를 대체하고자 정의하였고, 어떤 내용이든 클래스면 만족함
 interface ClassConstructor {
   new (...args: any[]): {};
 }

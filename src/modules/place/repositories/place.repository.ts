@@ -40,7 +40,7 @@ export class PlaceRepository extends Repository<Place> {
       .where('place.id = :placeId', { placeId })
       .getRawOne();
 
-    return Number(place_average_rate);
+    return Number(place_average_rate).toFixed(2);
   }
 
   async getTotalPosts(placeId: number) {

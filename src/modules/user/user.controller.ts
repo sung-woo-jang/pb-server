@@ -25,7 +25,7 @@ export class UserController {
   }
 
   @Get('/login-naver')
-  getloginNaver(@Res() res: Response, @Session() session: Record<string, any>) {
+  getLoginNaver(@Res() res: Response, @Session() session: Record<string, any>) {
     const state = randomBytes(8).toString('hex');
     session.stateCheck = {
       state,
@@ -51,12 +51,14 @@ export class UserController {
   async getLoginNaverCallback(
     @Query('code') code: string,
     @Query('state') state: string,
-    @Session() session: Record<string, any>
+    @Session() session: Record<string, any>,
+    @Res() res: Response
   ) {
-    return await this.authService.loginNaver(code, state).then(({ user, tokenData }) => {
+    try {
+      const { user, tokenData } = await this.authService.loginNaver(code, state);
+
       session.user = {
         id: user.id,
-        // user_id: user.user_id,
         name: user.name,
         nickname: user.nickname,
         email: user.email,
@@ -71,21 +73,55 @@ export class UserController {
         delete session['stateCheck'];
       }
 
-      return user;
-    });
+      res.send(`
+      <html>
+      <body>
+        <script>
+          window.opener.postMessage('login_success', '*');
+          window.close();
+        </script>
+      </body>
+      </html>
+    `);
+    } catch (error) {
+      console.error('Login error:', error);
+      res.status(400).send(`
+      <html>
+      <body>
+        <script>
+          window.opener.postMessage('login_failed', '*');
+          window.close();
+        </script>
+      </body>
+      </html>
+    `);
+    }
   }
 
   @Post('/logout')
   @HttpCode(200)
-  postLogOut(@Session() session: Record<string, any>) {
-    if (session.hasOwnProperty('user')) {
-      delete session['user'];
-    }
-    if (session.hasOwnProperty('oauth')) {
-      delete session['oauth'];
-    }
+  async postLogOut(@Session() session: Record<string, any>, @Res() response: Response) {
+    try {
+      // 세션 전체를 파괴
+      await new Promise<void>((resolve, reject) => {
+        session.destroy((err) => {
+          if (err) reject(err);
+          resolve();
+        });
+      });
 
-    return null;
+      // 세션 ID 쿠키 제거
+      response.clearCookie('connect.sid', {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'strict',
+      });
+
+      return response.json({ message: 'Logout successful' });
+    } catch (error) {
+      console.error('Logout error:', error);
+      return response.status(500).json({ message: 'Logout failed' });
+    }
   }
 
   @Patch('/me')
