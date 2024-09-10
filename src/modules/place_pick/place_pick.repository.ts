@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { DataSource, EntityManager, Repository } from 'typeorm';
 import { PlacePick } from './entities/place_pick.entity';
 import { User } from '../user/entities';
+import { DeletePlacePickRequestDto } from './dto/request/delete-place_pick-request.dto';
 
 @Injectable()
 export class PlacePickRepository extends Repository<PlacePick> {
@@ -52,5 +53,13 @@ export class PlacePickRepository extends Repository<PlacePick> {
       .leftJoin('placePick.place', 'place')
       .where('plPickCategory.account = :id', { id: user.id })
       .getMany();
+  }
+
+  async deletePlacePick({ place_id, pl_pick_category_id }: DeletePlacePickRequestDto) {
+    return await this.createQueryBuilder()
+      .delete()
+      .where('place_id = :place_id', { place_id })
+      .andWhere('pl_pick_category_id = :pl_pick_category_id', { pl_pick_category_id })
+      .execute();
   }
 }

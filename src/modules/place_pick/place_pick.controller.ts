@@ -1,12 +1,13 @@
 import { Body, Controller, Get, Param, ParseIntPipe, Post } from '@nestjs/common';
 import { PlacePickService } from './place_pick.service';
-import { CreatePlacePickDto } from './dto/create-place_pick.dto';
+import { CreatePlacePickDto } from './dto/request/create-place_pick.dto';
 import { ApiTags } from '@nestjs/swagger';
 import { Serialize } from '@common/interceptors/serialize.interceptor';
 import { PlacePickListResponseDto } from './dto/response/place-pick-list-response.dto';
 import { CurrentUser } from '@common/decorators/current-user.decorator';
 import { User } from '../user/entities';
 import { AllPlacePickListResponseDto } from './dto/response/all-place-pick-list-response.dto';
+import { DeletePlacePickRequestDto } from './dto/request/delete-place_pick-request.dto';
 
 @ApiTags('place-pick(플픽)')
 @Controller('place-pick')
@@ -31,4 +32,12 @@ export class PlacePickController {
   getAllMyPlacePick(@CurrentUser() user: User) {
     return this.placePickService.getAllMyPlacePick(user);
   }
+
+  // 플픽 삭제
+  @Post('delete-place-pick')
+  deletePlacePick(@Body() deletePlacePickRequestDto: DeletePlacePickRequestDto) {
+    return this.placePickService.deletePlacePick(deletePlacePickRequestDto);
+  }
+
+  // 플픽 카테고리 변경
 }

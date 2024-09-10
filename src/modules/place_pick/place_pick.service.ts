@@ -1,11 +1,12 @@
 import { Injectable } from '@nestjs/common';
-import { CreatePlacePickDto } from './dto/create-place_pick.dto';
+import { CreatePlacePickDto } from './dto/request/create-place_pick.dto';
 import { PlacePickBuilder } from '../../builder/place_pick.builder';
 import { DataSource } from 'typeorm';
 import { PlacePickRepository } from './place_pick.repository';
 import { PlPickCategoryRepository } from '../pl_pick_category/pl_pick_category.repository';
 import { PlaceService } from '../place/services/place.service';
 import { User } from '../user/entities';
+import { DeletePlacePickRequestDto } from './dto/request/delete-place_pick-request.dto';
 
 @Injectable()
 export class PlacePickService {
@@ -45,5 +46,11 @@ export class PlacePickService {
     });
     // return { placePickList, coords };
     return placePickList;
+  }
+
+  async deletePlacePick(deletePlacePickRequestDto: DeletePlacePickRequestDto) {
+    const result = await this.placePickRepository.deletePlacePick(deletePlacePickRequestDto);
+    console.log(result);
+    return result;
   }
 }
