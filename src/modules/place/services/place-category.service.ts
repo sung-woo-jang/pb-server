@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PlaceCategoryRepository } from '../repositories/place-category.repository';
-import { CreatePlaceCategoryDto } from '../dto/create-place_category.dto';
+import { CreatePlaceCategoryDto } from '../dto/request/create-place_category.dto';
 import { PlaceCategoryBuilder } from '../../../builder/place_category.builder';
 import { EntityManager } from 'typeorm';
 

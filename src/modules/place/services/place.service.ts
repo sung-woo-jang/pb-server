@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { CreatePlaceDto } from '../dto/create-place.dto';
+import { CreatePlaceRequestDto } from '../dto/request/create-place-request.dto';
 import { PlaceRepository } from '../repositories/place.repository';
 import { EntityManager } from 'typeorm';
 import { HttpService } from '@nestjs/axios';
@@ -20,7 +20,7 @@ export class PlaceService {
     private readonly httpService: HttpService,
     private readonly configService: ConfigService
   ) {}
-  async createPlace(createPlaceDto: CreatePlaceDto, transactionManager: EntityManager) {
+  async createPlace(createPlaceDto: CreatePlaceRequestDto, transactionManager: EntityManager) {
     const { title, telephone, address, road_address, mapy, mapx, description } = createPlaceDto;
 
     const place = await this.placeRepository.findOne({ where: { title, road_address } });

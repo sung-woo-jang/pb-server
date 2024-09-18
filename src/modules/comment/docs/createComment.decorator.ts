@@ -10,13 +10,8 @@ import {
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
 import { ApiBodyOptions } from '@nestjs/swagger/dist/decorators/api-body.decorator';
-import { CreateCommentDto } from '../dto/create-comment.dto';
+import { CreateCommentDto } from '../dto/request/create-comment.dto';
 import { ApiResponseOptions } from '@nestjs/swagger/dist/decorators/api-response.decorator';
-
-const apiOperation: ApiOperationOptions = {
-  summary: '댓글 생성',
-  description: '댓글을 생성합니다.',
-};
 
 const apiBody: ApiBodyOptions = {
   type: CreateCommentDto,
@@ -44,7 +39,7 @@ const apiInternalServerErrorResponse: ApiResponseOptions = {
   description: '서버 오류',
 };
 
-export const CreateCommentSwaggerDecorator = () => {
+export const CreateCommentSwaggerDecorator = (apiOperation: ApiOperationOptions) => {
   return applyDecorators(
     ApiOperation(apiOperation),
     ApiBody(apiBody),

@@ -1,10 +1,10 @@
 import { Body, Controller, Post, UseInterceptors } from '@nestjs/common';
 import { PlaceService } from './services/place.service';
-import { CreatePlaceDto } from './dto/create-place.dto';
+import { CreatePlaceRequestDto } from './dto/request/create-place-request.dto';
 import { TransactionManager } from '@common/decorators/transaction-manager.decorator';
 import { EntityManager } from 'typeorm';
 import { PlaceCategoryService } from './services/place-category.service';
-import { CreatePlaceCategoryDto } from './dto/create-place_category.dto';
+import { CreatePlaceCategoryDto } from './dto/request/create-place_category.dto';
 import { TransactionInterceptor } from '@common/interceptors/transaction.interceptor';
 import { ApiTags } from '@nestjs/swagger';
 import { CreateEmbeddingsRequestDto } from './dto/request/create-embeddings-request.dto';
@@ -19,7 +19,7 @@ export class PlaceController {
 
   @Post()
   @UseInterceptors(TransactionInterceptor)
-  createPlace(@Body() createPlaceDto: CreatePlaceDto, @TransactionManager() transactionManager: EntityManager) {
+  createPlace(@Body() createPlaceDto: CreatePlaceRequestDto, @TransactionManager() transactionManager: EntityManager) {
     return this.placeService.createPlace(createPlaceDto, transactionManager);
   }
 

@@ -13,7 +13,19 @@ export class PlPickCategoryRepository extends Repository<PlPickCategory> {
     return await this.createQueryBuilder().update().set(rest).where('id = :id', { id }).execute();
   }
   async findUserCategories(userId: string) {
-    return await this.createQueryBuilder('plPickCategory').where('plPickCategory.user = :userId', { userId }).getMany();
+    return await this.createQueryBuilder('plPickCategory')
+      .select([
+        'plPickCategory.id',
+        'plPickCategory.createdAt',
+        'plPickCategory.title',
+        'plPickCategory.picker_color',
+        'plPickCategory.memo',
+        'plPickCategory.link',
+      ])
+      .leftJoin('plPickCategory.placePicks', 'placePicks')
+      .addSelect(['placePicks.place_id', 'placePicks.memo', 'placePicks.alias', 'placePicks.link'])
+      .where('plPickCategory.user = :userId', { userId })
+      .getMany();
   }
   async findOneWithDeleted(id: number) {
     return await this.createQueryBuilder().withDeleted().where('id = :id', { id }).getOne();

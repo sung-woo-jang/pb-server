@@ -1,7 +1,7 @@
 import { PickType } from '@nestjs/swagger';
-import { Place } from '../entities/place.entity';
+import { Place } from '../../entities/place.entity';
 
-export class CreatePlaceDto extends PickType(Place, [
+export class CreatePlaceRequestDto extends PickType(Place, [
   'title',
   'address',
   'road_address',

@@ -25,6 +25,7 @@ class PlaceDto extends PickType(Place, [
 ] as const) {
   @Expose()
   @IsNotEmpty()
+  x;
   @IsObject()
   @ValidateNested()
   @Type(() => PlaceCategoryDto)

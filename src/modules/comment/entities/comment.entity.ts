@@ -1,10 +1,10 @@
 import { Column, Entity, ManyToOne } from 'typeorm';
 import { BaseEntityIncrement } from '@common/entities/base.entity';
-import { IsString } from 'class-validator';
+import { IsNotEmpty, IsObject, IsString, ValidateNested } from 'class-validator';
 import { Post } from '../../post/entities';
 import { ApiProperty } from '@nestjs/swagger';
 import { User } from '../../user/entities';
-import { Expose } from 'class-transformer';
+import { Expose, Type } from 'class-transformer';
 
 @Entity()
 export class Comment extends BaseEntityIncrement {
@@ -18,9 +18,23 @@ export class Comment extends BaseEntityIncrement {
   })
   comment: string;
 
+  @Expose()
+  @ValidateNested()
+  @ApiProperty({
+    type: () => Post,
+  })
+  @Type(() => Post)
   @ManyToOne(() => Post, (post) => post.comments, { nullable: false, onDelete: 'CASCADE' })
   post: Post;
 
+  @Expose()
+  @IsNotEmpty()
+  @IsObject()
+  @ValidateNested()
+  @ApiProperty({
+    type: () => User,
+  })
+  @Type(() => User)
   @ManyToOne(() => User, (user) => user.comments, { nullable: false, onDelete: 'CASCADE' })
   user: User;
 }

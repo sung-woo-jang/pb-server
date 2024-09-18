@@ -79,18 +79,23 @@ export class User extends BaseEntityVarchar {
   @Expose()
   profileImage: string;
 
+  @Expose()
   @OneToMany(() => Post, (post) => post.user, { cascade: ['soft-remove', 'remove'] })
   posts: Post[];
 
+  @Expose()
   @OneToMany(() => Like, (like) => like.user, { cascade: ['soft-remove', 'remove'] })
   likes: Like[];
 
+  @Expose()
   @OneToMany(() => PlPickCategory, (plPickCategories) => plPickCategories.user, { cascade: ['soft-remove', 'remove'] })
   plPickCategories: PlPickCategory[];
 
+  @Expose()
   @OneToMany(() => SearchHistory, (searchHistory) => searchHistory.user, { cascade: ['soft-remove', 'remove'] })
   searchHistory: SearchHistory[];
 
+  @Expose()
   @OneToMany(() => Comment, (comment) => comment.user, { cascade: ['soft-remove', 'remove'] })
   comments: Comment[];
 }

@@ -4,13 +4,12 @@ import { Place } from '../../../place/entities/place.entity';
 import { Image } from '../../../post/entities/image.entity';
 import { Post } from '../../../post/entities';
 import { IsArray, IsNotEmpty, IsObject, ValidateNested } from 'class-validator';
-import { UserDto } from '../../../user/dtos';
 import { Expose, Type } from 'class-transformer';
 import { PlaceCategoryDto } from '../../../place_pick/dto/response/place-pick-list-response.dto';
 
-class KeywordDto extends PickType(Keyword, ['id', 'keyword'] as const) {}
+class NewsfeedKeywordDto extends PickType(Keyword, ['id', 'keyword'] as const) {}
 
-class PlaceDto extends PickType(Place, [
+class NewsfeedPlaceDto extends PickType(Place, [
   'id',
   'title',
   'address',
@@ -37,24 +36,19 @@ export class NewsfeedResponseDto extends PickType(Post, [
   'visitDate',
   'rate',
   'likes',
+  'user',
 ] as const) {
-  @Expose()
-  @IsObject()
-  @ValidateNested()
-  @Type(() => UserDto)
-  user: UserDto;
-
   @Expose()
   @IsArray()
   @ValidateNested({ each: true })
-  @Type(() => KeywordDto)
-  keywords: KeywordDto[];
+  @Type(() => NewsfeedKeywordDto)
+  keywords: NewsfeedKeywordDto[];
 
   @Expose()
   @IsObject()
   @ValidateNested()
-  @Type(() => PlaceDto)
-  place: PlaceDto;
+  @Type(() => NewsfeedPlaceDto)
+  place: NewsfeedPlaceDto;
 
   @Expose()
   @IsArray()

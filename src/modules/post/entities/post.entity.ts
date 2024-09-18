@@ -2,7 +2,7 @@ import { Column, Entity, ManyToOne, OneToMany } from 'typeorm';
 import { BaseEntityIncrement } from '@common/entities/base.entity';
 import { ApiProperty } from '@nestjs/swagger';
 import { Expose } from 'class-transformer';
-import { IsDate, IsInt, IsPositive, IsString, Max, Min } from 'class-validator';
+import { IsDate, IsInt, IsObject, IsPositive, IsString, Max, Min, ValidateNested } from 'class-validator';
 import { User } from '../../user/entities';
 import { Keyword } from '../../keyword/entities';
 import { Comment } from '../../comment/entities/comment.entity';
@@ -12,7 +12,11 @@ import { Like } from '../../like/entities/like.entity';
 
 @Entity()
 export class Post extends BaseEntityIncrement {
-  @ApiProperty({ example: '길가다 알게된 집이에요. 정말 맛있게 먹고 갑니다.', description: '게시글 본문' })
+  @ApiProperty({
+    example: '길가다 알게된 집이에요. 정말 맛있게 먹고 갑니다.',
+    description: '게시글 본문',
+    required: true,
+  })
   @Column({ type: 'varchar', length: 1000 })
   @IsString()
   @Expose()
@@ -36,11 +40,13 @@ export class Post extends BaseEntityIncrement {
   @Expose()
   rate: number;
 
+  @Expose()
+  @IsObject()
+  @ValidateNested()
   @ManyToOne(() => User, (user) => user.posts, {
     nullable: false,
     onDelete: 'CASCADE',
   })
-  @Expose()
   user: User;
 
   @OneToMany(() => Like, (like) => like.post, { cascade: ['soft-remove', 'remove'] })
