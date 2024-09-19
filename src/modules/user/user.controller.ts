@@ -1,5 +1,5 @@
 import { Body, Controller, Get, HttpCode, Patch, Post, Query, Res, Session } from '@nestjs/common';
-import { AuthService } from '../auth/auth.service';
+import { AuthService } from '@common/services/auth/auth.service';
 import { Serialize } from '@common/interceptors/serialize.interceptor';
 import { Response } from 'express';
 import { ConfigService } from '@nestjs/config';

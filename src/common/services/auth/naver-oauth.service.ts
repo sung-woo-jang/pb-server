@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { HttpService } from '@nestjs/axios';
 import { ConfigService } from '@nestjs/config';
 import { lastValueFrom, map } from 'rxjs';
-import { AuthException } from '../../exception';
+import { AuthException } from '../../../exception';
 
 @Injectable()
 export class NaverOAuthService {

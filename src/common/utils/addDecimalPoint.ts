@@ -1,4 +1,5 @@
-const addDecimalPoint = (coordinate: string): string => {
+const addDecimalPoint = (coordinate: string | number): string => {
+  if (typeof coordinate === 'number') return coordinate.toString();
   // 문자열에 이미 소수점이 포함되어 있는지 확인
   if (coordinate.includes('.')) {
     return coordinate;

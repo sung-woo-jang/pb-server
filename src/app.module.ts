@@ -15,6 +15,7 @@ import { KeywordModule } from './modules/keyword/keyword.module';
 import { LikeModule } from './modules/like/like.module';
 import { BatchModule } from './modules/batch/batch.module';
 import { NewsfeedModule } from './modules/newsfeed/newsfeed.module';
+import { CommonModule } from '@common/common.module';
 
 @Module({
   imports: [
@@ -34,6 +35,7 @@ import { NewsfeedModule } from './modules/newsfeed/newsfeed.module';
     TimelineModule,
     UserModule,
     BatchModule,
+    CommonModule,
   ],
 })
 export class AppModule {}

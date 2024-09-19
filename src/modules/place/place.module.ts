@@ -2,9 +2,9 @@ import { Module } from '@nestjs/common';
 import { PlaceService } from './services/place.service';
 import { PlaceController } from './place.controller';
 import { PlaceRepository } from './repositories/place.repository';
-import { HttpModule } from '@nestjs/axios';
 import { PlaceCategoryService } from './services/place-category.service';
 import { PlaceCategoryRepository } from './repositories/place-category.repository';
+import { HttpModule } from '@nestjs/axios';
 
 @Module({
   imports: [

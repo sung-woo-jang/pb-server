@@ -10,6 +10,7 @@ import { PlaceBuilder } from '../../../builder/place.builder';
 import concatenateValues from '@common/utils/concatenateValues';
 import { PlacePickInfoRequestDto } from '../dto/request/placePick-info-request.dto';
 import * as _ from 'lodash';
+import { Place } from '../entities/place.entity';
 
 @Injectable()
 export class PlaceService {
@@ -24,21 +25,23 @@ export class PlaceService {
   async createPlace(createPlaceDto: CreatePlaceRequestDto, transactionManager: EntityManager) {
     const { title, telephone, address, road_address, mapy, mapx, description } = createPlaceDto;
 
-    const place = await this.placeRepository.findOne({ where: { title, road_address } });
-    if (place) return place;
+    const newPlace = new PlaceBuilder()
+      .setDescription(description)
+      .setTitle(title)
+      .setChoseong(title)
+      .setDisassembled(title)
+      .setRoadAddress(road_address)
+      .setAddress(address)
+      .setTelephone(telephone)
+      .setMapx(mapx)
+      .setMapy(mapy)
+      .build();
 
-    return await this.placeRepository.createPlace(
-      new PlaceBuilder()
-        .setDescription(description)
-        .setTitle(title)
-        .setRoadAddress(road_address)
-        .setAddress(address)
-        .setTelephone(telephone)
-        .setMapx(mapx)
-        .setMapy(mapy)
-        .build(),
-      transactionManager
-    );
+    const result = await this.placeRepository.createPlace(newPlace, transactionManager);
+
+    const id = result.identifiers[0].id;
+
+    return await transactionManager.findOne(Place, { where: { id } });
   }
 
   async createEmbedding(input: string) {

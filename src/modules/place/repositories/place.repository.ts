@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { DataSource, EntityManager, Repository } from 'typeorm';
 import { Place } from '../entities/place.entity';
 import { PlacePickInfoRequestDto } from '../dto/request/placePick-info-request.dto';
+import { disassemble } from 'es-hangul';
 
 @Injectable()
 export class PlaceRepository extends Repository<Place> {
@@ -9,7 +10,61 @@ export class PlaceRepository extends Repository<Place> {
     super(Place, dataSource.createEntityManager());
   }
   async createPlace(place: Place, transactionManager: EntityManager) {
-    return await transactionManager.save(Place, { ...place });
+    return await transactionManager
+      .createQueryBuilder()
+      .insert()
+      .into(Place)
+      .values(place)
+      .orUpdate(
+        ['description', 'address', 'telephone', 'mapx', 'mapy', 'disassembled', 'choseong'],
+        ['title', 'road_address']
+      )
+      .execute();
+  }
+
+  async searchPlace(keyword: string, transactionManager: EntityManager) {
+    const disassembledKeyword = disassemble(keyword);
+
+    return await transactionManager
+      .createQueryBuilder(Place, 'place')
+      .where('LOWER(place.title) LIKE :keyword', { keyword: `%${keyword}%` })
+      .orWhere('LOWER(place.disassembled) LIKE :disassembledKeyword', {
+        disassembledKeyword: `%${disassembledKeyword}%`,
+      })
+      .select([
+        'place.id',
+        'place.title',
+        'place.address',
+        'place.road_address',
+        'place.description',
+        'place.telephone',
+        'place.mapx',
+        'place.mapy',
+      ])
+      .leftJoin('place.placeCategory', 'placeCategory')
+      .addSelect(['placeCategory.place_category_name', 'placeCategory.place_category_name_detail'])
+      .addSelect(
+        `
+      (CASE 
+        WHEN place.title LIKE :exactKeyword THEN 100
+        WHEN place.title LIKE :startKeyword THEN 90
+        WHEN place.title LIKE :containKeyword THEN 80
+        WHEN place.disassembled LIKE :exactDisassembled THEN 70
+        WHEN place.disassembled LIKE :startDisassembled THEN 60
+        WHEN place.disassembled LIKE :containDisassembled THEN 50
+        ELSE 0
+      END)`,
+        'similarity_score'
+      )
+      .setParameter('exactKeyword', keyword)
+      .setParameter('startKeyword', `${keyword}%`)
+      .setParameter('containKeyword', `%${keyword}%`)
+      .setParameter('exactDisassembled', disassembledKeyword)
+      .setParameter('startDisassembled', `${disassembledKeyword}%`)
+      .setParameter('containDisassembled', `%${disassembledKeyword}%`)
+      .orderBy('similarity_score', 'DESC')
+
+      .getMany();
   }
 
   async getPlaceDetail(placeId: number) {

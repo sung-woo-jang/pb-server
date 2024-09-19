@@ -8,6 +8,20 @@ export class PlaceCategoryRepository extends Repository<PlaceCategory> {
     super(PlaceCategory, dataSource.createEntityManager());
   }
   async createPlaceCategory(place: PlaceCategory, transactionManager: EntityManager) {
-    return await transactionManager.getRepository(PlaceCategory).save(place);
+    return await transactionManager
+      .createQueryBuilder()
+      .insert()
+      .into(PlaceCategory)
+      .values(place)
+      .orUpdate(
+        [
+          'place_category_name_disassembled',
+          'place_category_name_choseong',
+          'place_category_name_detail_disassembled',
+          'place_category_name_detail_choseong',
+        ],
+        ['place_category_name', 'place_category_name_detail']
+      )
+      .execute();
   }
 }
