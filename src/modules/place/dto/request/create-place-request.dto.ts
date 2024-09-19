@@ -9,10 +9,5 @@ export class CreatePlaceRequestDto extends PickType(Place, [
   'telephone',
   'mapx',
   'mapy',
-] as const) {
-  // @Expose()
-  // @ValidateNested()
-  // @IsNotEmpty()
-  // @Type(() => CreatePlaceCategoryDto)
-  // placeCategory: CreatePlaceCategoryDto;
-}
+  'placeCategory',
+] as const) {}

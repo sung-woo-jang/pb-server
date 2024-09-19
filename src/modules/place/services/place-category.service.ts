@@ -3,6 +3,7 @@ import { PlaceCategoryRepository } from '../repositories/place-category.reposito
 import { CreatePlaceCategoryDto } from '../dto/request/create-place_category.dto';
 import { PlaceCategoryBuilder } from '../../../builder/place_category.builder';
 import { EntityManager } from 'typeorm';
+import { PlaceCategory } from '../entities/place_category.entity';
 
 @Injectable()
 export class PlaceCategoryService {
@@ -19,12 +20,14 @@ export class PlaceCategoryService {
     });
     if (placeCategory) return placeCategory;
 
-    return await this.placeCategoryRepository.createPlaceCategory(
+    const newPlaceCategory = await this.placeCategoryRepository.createPlaceCategory(
       new PlaceCategoryBuilder()
         .setPlaceCategoryName(place_category_name)
         .setPlaceCategoryNameDetail(place_category_name_detail)
         .build(),
       transactionManager
     );
+
+    return await transactionManager.findOne(PlaceCategory, { where: { id: newPlaceCategory.identifiers[0].id } });
   }
 }

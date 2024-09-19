@@ -117,4 +117,8 @@ export class PlaceRepository extends Repository<Place> {
       .andWhere('place.mapy = :mapy', { mapy })
       .getOne();
   }
+
+  async getPlaceInfoById(id: number) {
+    return await this.createQueryBuilder('place').select(['place.id', 'place.title']).where('id =:id', { id }).getOne();
+  }
 }

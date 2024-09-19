@@ -1,4 +1,4 @@
-import { Body, Controller, Post, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, Get, Param, ParseIntPipe, Post, UseInterceptors } from '@nestjs/common';
 import { PlaceService } from './services/place.service';
 import { CreatePlaceRequestDto } from './dto/request/create-place-request.dto';
 import { TransactionManager } from '@common/decorators/transaction-manager.decorator';
@@ -9,7 +9,7 @@ import { TransactionInterceptor } from '@common/interceptors/transaction.interce
 import { ApiTags } from '@nestjs/swagger';
 import { CreateEmbeddingsRequestDto } from './dto/request/create-embeddings-request.dto';
 import { PlacePickInfoRequestDto } from './dto/request/placePick-info-request.dto';
-import { PlacePickInfoResponseDto } from './dto/response/placePick-info-response.dto';
+import { PlaceInfoResponseDto } from './dto/response/place-info-response.dto';
 import { Serialize } from '@common/interceptors/serialize.interceptor';
 
 @ApiTags('place(장소)')
@@ -27,9 +27,15 @@ export class PlaceController {
   }
 
   @Post('info')
-  @Serialize(PlacePickInfoResponseDto)
+  @Serialize(PlaceInfoResponseDto)
   placeInfo(@Body() placePickInfoDto: PlacePickInfoRequestDto) {
     return this.placeService.placeInfo(placePickInfoDto);
+  }
+
+  @Get('/:id')
+  @Serialize(PlaceInfoResponseDto)
+  getPlaceInfoById(@Param('id', ParseIntPipe) id: number) {
+    return this.placeService.getPlaceInfoById(id);
   }
 
   @Post('embedding')

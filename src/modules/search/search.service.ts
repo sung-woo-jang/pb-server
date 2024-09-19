@@ -17,7 +17,6 @@ export class SearchService {
     const { mapx, mapy, keyword, offset, limit } = searchPlaceRequestDto;
     const naverLocalItems = await this.naverApiService.searchLocal(keyword, transactionManager);
     const dbLocalItems = await this.placeRepository.searchPlace(keyword, transactionManager);
-
     return this.mergeAndRemoveDuplicates(naverLocalItems, dbLocalItems);
   }
 

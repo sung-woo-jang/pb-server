@@ -108,4 +108,8 @@ export class PlaceService {
     }
     return data;
   }
+
+  async getPlaceInfoById(id: number) {
+    return await this.placeRepository.getPlaceInfoById(id);
+  }
 }

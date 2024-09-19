@@ -28,7 +28,8 @@ import { CurrentUser } from '@common/decorators/current-user.decorator';
 import { User } from '../user/entities';
 import { CreatePostResponseDto } from './dtos/response/create-post-response.dto';
 
-@ApiTags('post(게시글)')
+// TODO: 리뷰로 변경
+@ApiTags('post(리뷰)')
 @Controller('post')
 export class PostController {
   constructor(private postService: PostService) {}

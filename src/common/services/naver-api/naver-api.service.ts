@@ -42,7 +42,7 @@ export class NaverApiService {
 
     for (const item of items) {
       const { title, address, roadAddress, description, mapx, mapy, telephone, category } = item;
-      await this.placeCategoryService.createPlaceCategory({ category }, transactionManager);
+      const placeCategory = await this.placeCategoryService.createPlaceCategory({ category }, transactionManager);
       await this.placeService.createPlace(
         {
           title,
@@ -52,6 +52,7 @@ export class NaverApiService {
           mapy,
           mapx,
           road_address: roadAddress,
+          placeCategory,
         },
         transactionManager
       );

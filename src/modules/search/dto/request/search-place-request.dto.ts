@@ -23,5 +23,6 @@ export class SearchPlaceRequestDto extends IntersectionType(CoordinateDto, Pagin
   @ApiProperty({ description: '검색 키워드', example: 'restaurant' })
   @IsString()
   @Expose()
+  @Transform(({ value }) => decodeURIComponent(value))
   keyword: string;
 }
