@@ -5,7 +5,7 @@ import { PlacePick } from '../../place_pick/entities/place_pick.entity';
 import { PlaceCategory } from './place_category.entity';
 import { Post } from '../../post/entities';
 import { ApiProperty } from '@nestjs/swagger';
-import { Exclude, Expose } from 'class-transformer';
+import { Expose } from 'class-transformer';
 
 @Entity({
   comment: `장소(자동입력)\n장소 검색 했을 때 그 정보를 저장하는 용도`,
@@ -53,11 +53,6 @@ export class Place extends BaseEntityIncrement {
   @IsNumber()
   @Expose()
   mapy: number;
-
-  @Column('float', { array: true })
-  @Expose()
-  @Exclude()
-  embedding: number[];
 
   @ManyToOne(() => PlaceCategory, (placeCategory) => placeCategory.places)
   @Expose()

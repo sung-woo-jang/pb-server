@@ -11,7 +11,6 @@ interface Place {
   telephone: string;
   address: string;
   roadAddress: string;
-  embedding: number[];
   mapx: string;
   mapy: string;
 }

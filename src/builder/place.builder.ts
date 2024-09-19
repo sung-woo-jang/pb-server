@@ -34,9 +34,4 @@ export class PlaceBuilder extends BuilderCommon<Place> {
     this.object.mapy = mapy;
     return this;
   }
-
-  setEmbedding(embedded: number[]): PlaceBuilder {
-    this.object.embedding = embedded;
-    return this;
-  }
 }

@@ -7,7 +7,6 @@ import { ConfigService } from '@nestjs/config';
 import { lastValueFrom } from 'rxjs';
 import { EmbeddingResponse } from '../interfaces/embedding-response.interface';
 import { PlaceBuilder } from '../../../builder/place.builder';
-import removeHtmlTags from '@common/utils/removeHtmlTags';
 import concatenateValues from '@common/utils/concatenateValues';
 import { PlacePickInfoRequestDto } from '../dto/request/placePick-info-request.dto';
 import * as _ from 'lodash';
@@ -28,11 +27,8 @@ export class PlaceService {
     const place = await this.placeRepository.findOne({ where: { title, road_address } });
     if (place) return place;
 
-    const embedding = await this.createEmbedding(removeHtmlTags(title));
-
     return await this.placeRepository.createPlace(
       new PlaceBuilder()
-        .setEmbedding(embedding)
         .setDescription(description)
         .setTitle(title)
         .setRoadAddress(road_address)
@@ -107,7 +103,6 @@ export class PlaceService {
     if (_.isNil(data)) {
       throw new NotFoundException('데이터를 찾을 수 없습니다.');
     }
-    console.log(data);
     return data;
   }
 }

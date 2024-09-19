@@ -35,15 +35,6 @@ export class PlacePickRepository extends Repository<PlacePick> {
     return await transactionManager.getRepository(PlacePick).save(placePick);
   }
 
-  async countPlacePicksByPlaceIds(placeIds: number[]): Promise<{ place_id: number; count: string }[]> {
-    return await this.createQueryBuilder('placePick')
-      .select('placePick.place_id', 'place_id')
-      .addSelect('COUNT(placePick.place_id)', 'count')
-      .groupBy('placePick.place_id')
-      .where('placePick.place_id IN (:...placeIds)', { placeIds })
-      .getRawMany();
-  }
-
   async getAllMyPlacePick(user: User) {
     return await this.createQueryBuilder('placePick')
       .distinctOn(['place.id'])
