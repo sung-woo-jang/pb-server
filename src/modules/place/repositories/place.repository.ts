@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { DataSource, EntityManager, Repository } from 'typeorm';
 import { Place } from '../entities/place.entity';
+import { PlacePickInfoRequestDto } from '../dto/request/placePick-info-request.dto';
 
 @Injectable()
 export class PlaceRepository extends Repository<Place> {
@@ -50,5 +51,22 @@ export class PlaceRepository extends Repository<Place> {
       .where('place.id = :placeId', { placeId })
       .getRawOne();
     return Number(total_posts);
+  }
+
+  async placeInfo({ mapx, mapy }: PlacePickInfoRequestDto) {
+    return await this.createQueryBuilder('place')
+      .select([
+        'place.id',
+        'place.title',
+        'place.address',
+        'place.road_address',
+        'place.description',
+        'place.telephone',
+      ])
+      .leftJoin('place.placeCategory', 'placeCategory')
+      .addSelect(['placeCategory.place_category_name', 'placeCategory.place_category_name_detail'])
+      .where('place.mapx = :mapx', { mapx })
+      .andWhere('place.mapy = :mapy', { mapy })
+      .getOne();
   }
 }

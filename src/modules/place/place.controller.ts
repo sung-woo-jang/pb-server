@@ -8,6 +8,9 @@ import { CreatePlaceCategoryDto } from './dto/request/create-place_category.dto'
 import { TransactionInterceptor } from '@common/interceptors/transaction.interceptor';
 import { ApiTags } from '@nestjs/swagger';
 import { CreateEmbeddingsRequestDto } from './dto/request/create-embeddings-request.dto';
+import { PlacePickInfoRequestDto } from './dto/request/placePick-info-request.dto';
+import { PlacePickInfoResponseDto } from './dto/response/placePick-info-response.dto';
+import { Serialize } from '@common/interceptors/serialize.interceptor';
 
 @ApiTags('place(장소)')
 @Controller('place')
@@ -21,6 +24,12 @@ export class PlaceController {
   @UseInterceptors(TransactionInterceptor)
   createPlace(@Body() createPlaceDto: CreatePlaceRequestDto, @TransactionManager() transactionManager: EntityManager) {
     return this.placeService.createPlace(createPlaceDto, transactionManager);
+  }
+
+  @Post('info')
+  @Serialize(PlacePickInfoResponseDto)
+  placeInfo(@Body() placePickInfoDto: PlacePickInfoRequestDto) {
+    return this.placeService.placeInfo(placePickInfoDto);
   }
 
   @Post('embedding')

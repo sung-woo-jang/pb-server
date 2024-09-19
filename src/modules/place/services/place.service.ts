@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreatePlaceRequestDto } from '../dto/request/create-place-request.dto';
 import { PlaceRepository } from '../repositories/place.repository';
 import { EntityManager } from 'typeorm';
@@ -9,6 +9,8 @@ import { EmbeddingResponse } from '../interfaces/embedding-response.interface';
 import { PlaceBuilder } from '../../../builder/place.builder';
 import removeHtmlTags from '@common/utils/removeHtmlTags';
 import concatenateValues from '@common/utils/concatenateValues';
+import { PlacePickInfoRequestDto } from '../dto/request/placePick-info-request.dto';
+import * as _ from 'lodash';
 
 @Injectable()
 export class PlaceService {
@@ -98,5 +100,14 @@ export class PlaceService {
 
   async findPlaceById(id: number) {
     return await this.placeRepository.findOne({ where: { id } });
+  }
+
+  async placeInfo(placePickInfoDto: PlacePickInfoRequestDto) {
+    const data = await this.placeRepository.placeInfo(placePickInfoDto);
+    if (_.isNil(data)) {
+      throw new NotFoundException('데이터를 찾을 수 없습니다.');
+    }
+    console.log(data);
+    return data;
   }
 }
