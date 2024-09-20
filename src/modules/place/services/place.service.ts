@@ -6,11 +6,11 @@ import { HttpService } from '@nestjs/axios';
 import { ConfigService } from '@nestjs/config';
 import { lastValueFrom } from 'rxjs';
 import { EmbeddingResponse } from '../interfaces/embedding-response.interface';
-import { PlaceBuilder } from '../../../builder/place.builder';
 import concatenateValues from '@common/utils/concatenateValues';
 import { PlacePickInfoRequestDto } from '../dto/request/placePick-info-request.dto';
 import * as _ from 'lodash';
 import { Place } from '../entities/place.entity';
+import removeHtmlTags from '@common/utils/removeHtmlTags';
 
 @Injectable()
 export class PlaceService {
@@ -22,22 +22,16 @@ export class PlaceService {
     private readonly httpService: HttpService,
     private readonly configService: ConfigService
   ) {}
-  async createPlace(createPlaceDto: CreatePlaceRequestDto, transactionManager: EntityManager) {
-    const { title, telephone, address, road_address, mapy, mapx, description } = createPlaceDto;
-
-    const newPlace = new PlaceBuilder()
-      .setDescription(description)
-      .setTitle(title)
-      .setChoseong(title)
-      .setDisassembled(title)
-      .setRoadAddress(road_address)
-      .setAddress(address)
-      .setTelephone(telephone)
-      .setMapx(mapx)
-      .setMapy(mapy)
-      .build();
-
-    const result = await this.placeRepository.createPlace(newPlace, transactionManager);
+  async createPlace({ title, ...createPlaceDto }: CreatePlaceRequestDto, transactionManager: EntityManager) {
+    const result = await this.placeRepository.createPlace(
+      this.placeRepository.create({
+        ...createPlaceDto,
+        title: removeHtmlTags(title),
+        choseong: title,
+        disassembled: title,
+      }),
+      transactionManager
+    );
 
     const id = result.identifiers[0].id;
 

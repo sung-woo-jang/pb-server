@@ -10,6 +10,7 @@ import { User } from '../user/entities';
 import { UpdateCommentRequestDto } from './dto/request/update-comment-request.dto';
 import { GetCommentsSwaggerDecorator } from './docs/getComments.decorator';
 import { DeleteCommentSwaggerDecorator } from './docs/deleteCommentSwaggerDecorator.decorator';
+import { UpdateCommentSwaggerDecorator } from './docs/updateCommentSwaggerDecorator.decorator';
 
 @ApiTags('comment(댓글)')
 @Controller('comment')
@@ -22,11 +23,15 @@ export class CommentController {
     description: '댓글을 생성합니다.',
   })
   async createComment(@Body() createCommentDto: CreateCommentDto, @CurrentUser() user: User) {
-    await this.commentService.createComment(createCommentDto, user);
+    return await this.commentService.createComment(createCommentDto, user);
   }
 
   @Patch()
   @Serialize()
+  @UpdateCommentSwaggerDecorator({
+    summary: '댓글 수정',
+    description: '댓글 수정',
+  })
   async updateComment(@Body() updateCommentRequestDto: UpdateCommentRequestDto) {
     return await this.commentService.updateComment(updateCommentRequestDto);
   }

@@ -1,17 +1,9 @@
 import { ApiOperationOptions } from '@nestjs/swagger/dist/decorators/api-operation.decorator';
-import { applyDecorators } from '@nestjs/common';
-import {
-  ApiBadRequestResponse,
-  ApiBody,
-  ApiConsumes,
-  ApiCreatedResponse,
-  ApiInternalServerErrorResponse,
-  ApiOperation,
-  ApiUnauthorizedResponse,
-} from '@nestjs/swagger';
+import { ApiBadRequestResponse, ApiBody, ApiConsumes, ApiCreatedResponse, ApiOperation } from '@nestjs/swagger';
 import { ApiBodyOptions } from '@nestjs/swagger/dist/decorators/api-body.decorator';
 import { CreateCommentDto } from '../dto/request/create-comment.dto';
 import { ApiResponseOptions } from '@nestjs/swagger/dist/decorators/api-response.decorator';
+import { swaggerBaseApplyDecorator } from '@common/decorators/swaggerBaseApply.decorator';
 
 const apiBody: ApiBodyOptions = {
   type: CreateCommentDto,
@@ -20,13 +12,7 @@ const apiBody: ApiBodyOptions = {
 const apiCreatedResponse: ApiResponseOptions = {
   status: 201,
   description: '댓글 생성 성공',
-  // TODO: Response DTO로 변경
   type: CreateCommentDto,
-};
-
-const apiUnauthorizedResponse: ApiResponseOptions = {
-  status: 401,
-  description: '권한이 없음',
 };
 
 const apiBadRequestResponse: ApiResponseOptions = {
@@ -34,19 +20,12 @@ const apiBadRequestResponse: ApiResponseOptions = {
   description: '잘못된 요청으로 게시글 생성 실패',
 };
 
-const apiInternalServerErrorResponse: ApiResponseOptions = {
-  status: 500,
-  description: '서버 오류',
-};
-
 export const CreateCommentSwaggerDecorator = (apiOperation: ApiOperationOptions) => {
-  return applyDecorators(
+  return swaggerBaseApplyDecorator(
     ApiOperation(apiOperation),
     ApiBody(apiBody),
     ApiConsumes('application/json'),
     ApiCreatedResponse(apiCreatedResponse),
-    ApiBadRequestResponse(apiBadRequestResponse),
-    ApiUnauthorizedResponse(apiUnauthorizedResponse),
-    ApiInternalServerErrorResponse(apiInternalServerErrorResponse)
+    ApiBadRequestResponse(apiBadRequestResponse)
   );
 };

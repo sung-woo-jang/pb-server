@@ -1,49 +1,38 @@
-import { applyDecorators } from '@nestjs/common';
-import { ApiBody, ApiOperation, ApiResponse, ApiUnauthorizedResponse } from '@nestjs/swagger';
+import { ApiBadRequestResponse, ApiBody, ApiOkResponse, ApiOperation, getSchemaPath } from '@nestjs/swagger';
 import { ApiOperationOptions } from '@nestjs/swagger/dist/decorators/api-operation.decorator';
 import { UpdateCommentRequestDto } from '../dto/request/update-comment-request.dto';
+import { ApiResponseOptions } from '@nestjs/swagger/dist/decorators/api-response.decorator';
+import { swaggerBaseApplyDecorator } from '@common/decorators/swaggerBaseApply.decorator';
+import { SuccessBaseResponseSchema } from '@common/dto/response/success-base-response.dto';
+import { ErrorBaseResponseSchema } from '@common/dto/response/error-response.dto';
 
-const successResponseSchema = {
-  type: 'object',
-  properties: {
-    message: {
-      type: 'string',
-      example: '댓글이 성공적으로 수정되었습니다.',
-    },
+const apiOkResponseSchema: ApiResponseOptions = {
+  status: 200,
+  schema: {
+    allOf: [
+      { $ref: getSchemaPath(SuccessBaseResponseSchema) },
+      {
+        properties: {
+          data: { type: 'object', example: { message: '댓글이 성공적으로 수정되었습니다.' } },
+        },
+      },
+    ],
   },
 };
 
-const errorResponseSchema = {
-  type: 'object',
-  properties: {
-    status: { type: 'number', example: 404 },
-    message: { type: 'string', example: 'Not Found' },
-    isLogin: { type: 'boolean', example: true },
-    error: {
-      type: 'object',
-      properties: {
-        message: { type: 'string', example: '댓글을 찾을 수 없습니다.' },
-        error: { type: 'string', example: 'Not Found' },
-        statusCode: { type: 'number', example: 404 },
-      },
-    },
+const errorResponseSchema: ApiResponseOptions = {
+  status: 404,
+  description: '댓글을 찾을 수 없음',
+  schema: {
+    $ref: getSchemaPath(ErrorBaseResponseSchema),
   },
 };
 
 export const UpdateCommentSwaggerDecorator = (apiOperation: ApiOperationOptions) => {
-  return applyDecorators(
+  return swaggerBaseApplyDecorator(
     ApiOperation(apiOperation),
     ApiBody({ type: UpdateCommentRequestDto }),
-    ApiResponse({
-      status: 200,
-      description: '댓글 수정 성공',
-      schema: successResponseSchema,
-    }),
-    ApiUnauthorizedResponse({ description: '인증 실패' }),
-    ApiResponse({
-      status: 404,
-      description: '댓글을 찾을 수 없음',
-      schema: errorResponseSchema,
-    })
+    ApiOkResponse(apiOkResponseSchema),
+    ApiBadRequestResponse(errorResponseSchema)
   );
 };

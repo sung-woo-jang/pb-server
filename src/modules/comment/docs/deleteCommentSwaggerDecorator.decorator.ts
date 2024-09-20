@@ -1,8 +1,8 @@
-import { applyDecorators } from '@nestjs/common';
-import { ApiOperation, ApiParam, ApiResponse, ApiUnauthorizedResponse } from '@nestjs/swagger';
+import { ApiOperation, ApiParam, ApiResponse, getSchemaPath } from '@nestjs/swagger';
 import { ApiOperationOptions } from '@nestjs/swagger/dist/decorators/api-operation.decorator';
 import { ApiResponseOptions } from '@nestjs/swagger/dist/decorators/api-response.decorator';
-import { ReferenceObject, SchemaObject } from '@nestjs/swagger/dist/interfaces/open-api-spec.interface';
+import { swaggerBaseApplyDecorator } from '@common/decorators/swaggerBaseApply.decorator';
+import { ErrorBaseResponseSchema } from '@common/dto/response/error-response.dto';
 
 const successResponseOptions: ApiResponseOptions = {
   status: 200,
@@ -18,30 +18,29 @@ const successResponseOptions: ApiResponseOptions = {
   },
 };
 
-const errorResponseSchema: SchemaObject & Partial<ReferenceObject> = {
-  type: 'object',
-  properties: {
-    status: { type: 'number', example: 404 },
-    message: { type: 'string', example: 'Not Found' },
-    isLogin: { type: 'boolean', example: true },
-    error: {
-      type: 'object',
-      properties: {
-        message: { type: 'string', example: '알 수 없는 오류.' },
-        error: { type: 'string', example: 'Not Found' },
-        statusCode: { type: 'number', example: 404 },
-      },
-    },
-  },
-};
 const errorResponseOptions: ApiResponseOptions = {
   status: 404,
   description: '알 수 없는 오류',
-  schema: errorResponseSchema,
+  schema: {
+    allOf: [
+      {
+        $ref: getSchemaPath(ErrorBaseResponseSchema),
+      },
+      {
+        properties: {
+          error: {
+            properties: {
+              message: { type: 'string', example: '알 수 없는 오류.' },
+            },
+          },
+        },
+      },
+    ],
+  },
 };
 
 export const DeleteCommentSwaggerDecorator = (apiOperation: ApiOperationOptions) => {
-  return applyDecorators(
+  return swaggerBaseApplyDecorator(
     ApiOperation(apiOperation),
     ApiParam({
       name: 'commentId',
@@ -50,7 +49,6 @@ export const DeleteCommentSwaggerDecorator = (apiOperation: ApiOperationOptions)
       type: 'number',
     }),
     ApiResponse(successResponseOptions),
-    ApiResponse(errorResponseOptions),
-    ApiUnauthorizedResponse({ description: '인증 실패' })
+    ApiResponse(errorResponseOptions)
   );
 };

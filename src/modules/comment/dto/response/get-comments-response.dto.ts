@@ -1,19 +1,12 @@
 import { ApiProperty, PickType } from '@nestjs/swagger';
 import { Comment } from '../../entities/comment.entity';
 import { User } from '../../../user/entities';
-import { Expose, Type } from 'class-transformer';
-import { IsNotEmpty, IsObject, ValidateNested } from 'class-validator';
-
-export class CommentUserDto extends PickType(User, ['id', 'name', 'nickname', 'profileImage']) {}
+import { Expose } from 'class-transformer';
 
 export class GetCommentsResponseDto extends PickType(Comment, ['id', 'comment', 'createdAt'] as const) {
   @Expose()
-  @IsNotEmpty()
-  @IsObject()
-  @ValidateNested()
   @ApiProperty({
-    type: () => CommentUserDto,
+    type: PickType(User, ['id', 'name', 'nickname', 'profileImage']),
   })
-  @Type(() => CommentUserDto)
-  user: CommentUserDto;
+  user: Pick<User, 'id' | 'name' | 'nickname' | 'profileImage'>;
 }
