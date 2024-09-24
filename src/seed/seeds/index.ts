@@ -1,5 +1,8 @@
 import { SeederConstructor } from 'typeorm-extension/dist/seeder/type';
 import type { SeederFactoryItem } from 'typeorm-extension/dist/seeder/factory';
+import CodeCategorySeeder from './code_category/code-category.seeder';
+import CodeTypeSeeder from './code_type/code-type.seeder';
+import CodeSeeder from './code/code.seeder';
 import UserSeeder from './user/user.seeder';
 import FollowSeeder from './follow/follow.seeder';
 import PostSeeder from './post/post.seeder';
@@ -23,8 +26,14 @@ import ImageFactory from './image/image.factory';
 import PlaceCategoryFactory from './place_category/place_category.factory';
 import UserFactory from './user/user.factory';
 import LikeFactory from './like/like.factory';
+import CodeTypeFactory from './code_category/code-category.factory';
+import CodeCategoryFactory from './code_type/code-type.factory';
+import CodeFactory from './code/code.factory';
 
 export const seeds: SeederConstructor[] | string[] = [
+  CodeCategorySeeder,
+  CodeTypeSeeder,
+  CodeSeeder,
   UserSeeder,
   FollowSeeder,
   PlaceCategorySeeder,
@@ -38,6 +47,9 @@ export const seeds: SeederConstructor[] | string[] = [
   LikeSeeder,
 ];
 export const factories: SeederFactoryItem[] | string[] = [
+  CodeTypeFactory,
+  CodeCategoryFactory,
+  CodeFactory,
   UserFactory,
   FollowFactory,
   PlaceCategoryFactory,
