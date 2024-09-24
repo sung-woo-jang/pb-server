@@ -46,11 +46,13 @@ export class PlacePickRepository extends Repository<PlacePick> {
       .getMany();
   }
 
-  async deletePlacePick({ place_id, pl_pick_category_id }: DeletePlacePickRequestDto) {
-    return await this.createQueryBuilder()
-      .delete()
-      .where('place_id = :place_id', { place_id })
-      .andWhere('pl_pick_category_id = :pl_pick_category_id', { pl_pick_category_id })
-      .execute();
+  async deletePlacePick({ place_id }: DeletePlacePickRequestDto, user: User) {
+    const placePick = await this.find({
+      where: {
+        place_id,
+        plPickCategory: { user },
+      },
+    });
+    return await this.remove(placePick);
   }
 }

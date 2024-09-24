@@ -35,8 +35,8 @@ export class PlacePickController {
 
   // 플픽 삭제
   @Post('delete-place-pick')
-  deletePlacePick(@Body() deletePlacePickRequestDto: DeletePlacePickRequestDto) {
-    return this.placePickService.deletePlacePick(deletePlacePickRequestDto);
+  deletePlacePick(@Body() deletePlacePickRequestDto: DeletePlacePickRequestDto, @CurrentUser() user: User) {
+    return this.placePickService.deletePlacePick(deletePlacePickRequestDto, user);
   }
 
   // 플픽 카테고리 변경

@@ -68,7 +68,7 @@ export class PlacePickService {
     return placePickList;
   }
 
-  async deletePlacePick(deletePlacePickRequestDto: DeletePlacePickRequestDto) {
-    return await this.placePickRepository.deletePlacePick(deletePlacePickRequestDto);
+  async deletePlacePick(deletePlacePickRequestDto: DeletePlacePickRequestDto, user: User) {
+    return await this.placePickRepository.deletePlacePick(deletePlacePickRequestDto, user);
   }
 }

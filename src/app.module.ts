@@ -16,6 +16,7 @@ import { LikeModule } from './modules/like/like.module';
 import { BatchModule } from './modules/batch/batch.module';
 import { NewsfeedModule } from './modules/newsfeed/newsfeed.module';
 import { CommonModule } from '@common/common.module';
+import { CodeModule } from './modules/code/code.module';
 
 @Module({
   imports: [
@@ -36,6 +37,7 @@ import { CommonModule } from '@common/common.module';
     UserModule,
     BatchModule,
     CommonModule,
+    CodeModule,
   ],
 })
 export class AppModule {}
