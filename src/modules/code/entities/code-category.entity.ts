@@ -1,14 +1,21 @@
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, OneToMany, PrimaryColumn } from 'typeorm';
 import { CodeType } from './code-type.entity';
 import { UseYn } from '@common/enums';
 import { ApiProperty } from '@nestjs/swagger';
 import { TimestampEntity } from '@common/entities/timestamp.entity';
 import { Expose } from 'class-transformer';
+import { IsNotEmpty, IsString, MaxLength } from 'class-validator';
 
 @Entity()
 export class CodeCategory extends TimestampEntity {
-  @ApiProperty({ description: 'Common Type Code (CTC) - 공통 유형 코드의 고유 식별자', example: 'uuid' })
-  @PrimaryGeneratedColumn('uuid')
+  @ApiProperty({
+    description: 'Common Type Code (CTC) - 공통 유형 코드의 고유 식별자',
+    example: 'KEYWORD',
+  })
+  @PrimaryColumn('varchar', { length: 20 })
+  @IsNotEmpty({ message: 'CTC 코드는 필수입니다.' })
+  @IsString({ message: 'CTC 코드는 문자열이어야 합니다.' })
+  @MaxLength(20, { message: 'CTC 코드는 20자를 초과할 수 없습니다.' })
   @Expose()
   ctcCd: string;
 

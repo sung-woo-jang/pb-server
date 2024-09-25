@@ -7,19 +7,21 @@ export default class CodeTypeSeeder implements Seeder {
   async run(dataSource: DataSource, factoryManager: SeederFactoryManager): Promise<any> {
     const codeTypeRepository = dataSource.getRepository(CodeType);
     const codeCategoryRepository = dataSource.getRepository(CodeCategory);
+    const codeTypeFactory = factoryManager.get(CodeType);
 
-    const codeCategory = await codeCategoryRepository.findOne({ where: { ctcName: '리뷰 키워드' } });
-    if (!codeCategory) {
-      console.log('CodeCategory "리뷰 키워드" not found. Please run CodeCategorySeeder first.');
+    const category = await codeCategoryRepository.findOne({ where: { ctcCd: 'KEYWORD' } });
+    if (!category) {
+      console.log('CodeCategory not found. Please run CodeCategorySeeder first.');
       return;
     }
 
-    const codeTypes = ['스타일', '시설/서비스', '가격/기타'];
-    for (const typeName of codeTypes) {
-      const existingType = await codeTypeRepository.findOne({ where: { typeName } });
+    const codeTypes = ['AMBIENCE', 'PRICE', 'SERVICE', 'FOOD_QUALITY', 'CLEANLINESS'];
+
+    for (const typeId of codeTypes) {
+      const existingType = await codeTypeRepository.findOne({ where: { typeId } });
       if (!existingType) {
-        const codeType = await factoryManager.get(CodeType).make({ typeName });
-        codeType.codeCategory = codeCategory;
+        const codeType = await codeTypeFactory.make();
+        codeType.codeCategory = category;
         await codeTypeRepository.save(codeType);
       }
     }

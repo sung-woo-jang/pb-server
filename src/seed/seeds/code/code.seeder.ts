@@ -3,44 +3,33 @@ import { DataSource } from 'typeorm';
 import { Code } from '../../../modules/code/entities/code.entity';
 import { CodeType } from '../../../modules/code/entities/code-type.entity';
 
-const codeData = {
-  스타일: [
-    { code: 'STYLE_TRENDY', label: '트렌디해요' },
-    { code: 'STYLE_COZY', label: '아늑해요' },
-    { code: 'STYLE_ROMANTIC', label: '로맨틱해요' },
-    { code: 'STYLE_MODERN', label: '모던해요' },
-  ],
-  '시설/서비스': [
-    { code: 'SERVICE_KIND', label: '친절해요' },
-    { code: 'SERVICE_FAST', label: '서비스가 빨라요' },
-    { code: 'FACILITY_CLEAN', label: '깨끗해요' },
-    { code: 'FACILITY_COMFORTABLE', label: '편안해요' },
-  ],
-  '가격/기타': [
-    { code: 'PRICE_REASONABLE', label: '가격이 합리적이에요' },
-    { code: 'PRICE_WORTHY', label: '가성비가 좋아요' },
-    { code: 'ETC_TASTY', label: '맛있어요' },
-    { code: 'ETC_PHOTOGENIC', label: '사진이 잘 나와요' },
-  ],
+const codeValues = {
+  AMBIENCE: ['로맨틱한', '조용한', '활기찬', '고급스러운', '편안한'],
+  PRICE: ['저렴한', '적당한', '비싼', '가성비 좋은', '고급'],
+  SERVICE: ['친절한', '빠른', '전문적인', '불친절한', '느린'],
+  FOOD_QUALITY: ['맛있는', '신선한', '창의적인', '평범한', '맛없는'],
+  CLEANLINESS: ['깨끗한', '정돈된', '지저분한', '청결한', '개선 필요한'],
 };
 
 export default class CodeSeeder implements Seeder {
   async run(dataSource: DataSource, factoryManager: SeederFactoryManager): Promise<any> {
     const codeRepository = dataSource.getRepository(Code);
     const codeTypeRepository = dataSource.getRepository(CodeType);
+    const codeFactory = factoryManager.get(Code);
 
-    for (const [typeName, codes] of Object.entries(codeData)) {
-      const codeType = await codeTypeRepository.findOne({ where: { typeName } });
+    for (const [typeId, values] of Object.entries(codeValues)) {
+      const codeType = await codeTypeRepository.findOne({ where: { typeId } });
       if (!codeType) {
-        console.log(`CodeType "${typeName}" not found. Please run CodeTypeSeeder first.`);
+        console.log(`CodeType ${typeId} not found. Please run CodeTypeSeeder first.`);
         continue;
       }
 
-      for (const { code, label } of codes) {
+      for (const label of values) {
+        const code = label.toUpperCase().replace(/\s+/g, '_');
         const existingCode = await codeRepository.findOne({ where: { code } });
         if (!existingCode) {
-          const newCode = await factoryManager.get(Code).make({ code, label });
-          newCode.codeType = codeType;
+          const newCode = await codeFactory.make({ code, label, codeType });
+
           await codeRepository.save(newCode);
         }
       }

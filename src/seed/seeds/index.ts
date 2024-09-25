@@ -47,8 +47,8 @@ export const seeds: SeederConstructor[] | string[] = [
   LikeSeeder,
 ];
 export const factories: SeederFactoryItem[] | string[] = [
-  CodeTypeFactory,
   CodeCategoryFactory,
+  CodeTypeFactory,
   CodeFactory,
   UserFactory,
   FollowFactory,

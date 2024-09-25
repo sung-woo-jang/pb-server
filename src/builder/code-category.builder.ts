@@ -7,6 +7,11 @@ export class CodeCategoryBuilder extends BuilderCommon<CodeCategory> {
     super(CodeCategory);
   }
 
+  setCtcCd(ctcCd: string): CodeCategoryBuilder {
+    this.object.ctcCd = ctcCd;
+    return this;
+  }
+
   setCtcName(ctcName: string): CodeCategoryBuilder {
     this.object.ctcName = ctcName;
     return this;

@@ -6,6 +6,12 @@ export class CodeTypeBuilder extends BuilderCommon<CodeType> {
   constructor() {
     super(CodeType);
   }
+
+  setTypeId(typeId: string): CodeTypeBuilder {
+    this.object.typeId = typeId;
+    return this;
+  }
+
   setTypeName(typeName: string): CodeTypeBuilder {
     this.object.typeName = typeName;
     return this;

@@ -1,15 +1,22 @@
-import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryColumn } from 'typeorm';
 import { CodeCategory } from './code-category.entity';
 import { Code } from './code.entity';
 import { UseYn } from '@common/enums';
 import { ApiProperty } from '@nestjs/swagger';
 import { TimestampEntity } from '@common/entities/timestamp.entity';
 import { Expose } from 'class-transformer';
+import { IsNotEmpty, IsString, MaxLength } from 'class-validator';
 
 @Entity()
 export class CodeType extends TimestampEntity {
-  @ApiProperty({ description: '코드 유형의 고유 식별자', example: 'uuid' })
-  @PrimaryGeneratedColumn('uuid')
+  @ApiProperty({
+    description: '코드 유형의 고유 식별자',
+    example: 'USER_ROLE',
+  })
+  @PrimaryColumn('varchar', { length: 30 })
+  @IsNotEmpty({ message: '코드 유형 ID는 필수입니다.' })
+  @IsString({ message: '코드 유형 ID는 문자열이어야 합니다.' })
+  @MaxLength(30, { message: '코드 유형 ID는 30자를 초과할 수 없습니다.' })
   @Expose()
   typeId: string;
 

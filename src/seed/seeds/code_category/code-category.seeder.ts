@@ -4,12 +4,13 @@ import { CodeCategory } from '../../../modules/code/entities/code-category.entit
 
 export default class CodeCategorySeeder implements Seeder {
   async run(dataSource: DataSource, factoryManager: SeederFactoryManager): Promise<any> {
-    const codeCategoryRepository = dataSource.getRepository(CodeCategory);
+    const codeRepository = dataSource.getRepository(CodeCategory);
+    const codeFactory = factoryManager.get(CodeCategory);
 
-    const existingCategory = await codeCategoryRepository.findOne({ where: { ctcName: '리뷰 키워드' } });
+    const existingCategory = await codeRepository.findOne({ where: { ctcCd: 'KEYWORD' } });
     if (!existingCategory) {
-      const codeCategory = await factoryManager.get(CodeCategory).make();
-      await codeCategoryRepository.save(codeCategory);
+      const category = await codeFactory.make();
+      await codeRepository.save(category);
     }
   }
 }

@@ -1,17 +1,10 @@
 import { localeKoSetSeederFactory } from '../utils/localeKoSetSedderFactory';
-import { CodeType } from '../../../modules/code/entities/code-type.entity';
-import { CodeTypeBuilder } from '../../../builder/code-type.builder';
 import { UseYn } from '@common/enums';
+import { CodeCategoryBuilder } from '../../../builder/code-category.builder';
+import { CodeCategory } from '../../../modules/code/entities/code-category.entity';
 
-const codeTypes = [
-  { typeName: '스타일', sortOrder: 1 },
-  { typeName: '시설/서비스', sortOrder: 2 },
-  { typeName: '가격/기타', sortOrder: 3 },
-];
-
-const CodeTypeFactory = localeKoSetSeederFactory(CodeType, (faker) => {
-  const { typeName, sortOrder } = faker.helpers.arrayElement(codeTypes);
-  return new CodeTypeBuilder().setTypeName(typeName).setSortOrder(sortOrder).setUseYn(UseYn.YES).build();
+const CodeCategoryFactory = localeKoSetSeederFactory(CodeCategory, () => {
+  return new CodeCategoryBuilder().setCtcCd('KEYWORD').setCtcName('키워드').setSortOrder(1).setUseYn(UseYn.YES).build();
 });
 
-export default CodeTypeFactory;
+export default CodeCategoryFactory;
