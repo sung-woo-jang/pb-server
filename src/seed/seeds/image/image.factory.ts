@@ -4,7 +4,10 @@ import { localeKoSetSeederFactory } from '../utils/localeKoSetSedderFactory';
 import * as fs from 'fs';
 import { join } from 'path';
 
-const fileNames = fs.readdirSync(join(__dirname, '..', '..', '..', '..', 'dummy'));
+const fileNames = fs
+  .readdirSync(join(__dirname, '..', '..', '..', '..', 'dummy'))
+  .filter((fileName) => !fileName.includes('profile_Image'));
+
 const ImageFactory = localeKoSetSeederFactory(Image, (faker) =>
   new ImageBuilder().setImagePath(faker.helpers.arrayElement(fileNames)).build()
 );

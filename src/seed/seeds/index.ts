@@ -1,5 +1,6 @@
 import { SeederConstructor } from 'typeorm-extension/dist/seeder/type';
 import type { SeederFactoryItem } from 'typeorm-extension/dist/seeder/factory';
+
 import CodeCategorySeeder from './code_category/code-category.seeder';
 import CodeTypeSeeder from './code_type/code-type.seeder';
 import CodeSeeder from './code/code.seeder';
