@@ -7,9 +7,9 @@
 env_files/*
 
 uploads/*
-*.jpg
-*.jpeg
-*.png
+#*.jpg
+#*.jpeg
+#*.png
 
 
 # compiled output
