@@ -21,7 +21,7 @@ export class CodeCategoryRepository extends Repository<CodeCategory> {
 
     const withCodeQuery = withCodeTypeQuery
       .leftJoin('codeType.codes', 'code')
-      .addSelect(['code.codeId', 'code.code', 'code.upperCode', 'code.label', 'code.sortOrder']);
+      .addSelect(['code.codeId', 'code.code', 'code.label', 'code.sortOrder']);
 
     const orderedQuery = withCodeQuery
       .orderBy('codeCategory.sortOrder', 'ASC')

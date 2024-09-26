@@ -1,4 +1,16 @@
-import { Body, Controller, Get, HttpCode, Patch, Post, Query, Res, Session } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  HttpCode,
+  InternalServerErrorException,
+  Patch,
+  Post,
+  Query,
+  Res,
+  Session,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { AuthService } from '@common/services/auth/auth.service';
 import { Serialize } from '@common/interceptors/serialize.interceptor';
 import { Response } from 'express';
@@ -8,6 +20,7 @@ import { ApiBody, ApiOperation, ApiQuery, ApiResponse, ApiTags } from '@nestjs/s
 import { UpdateNicknameDto, UserDto } from './dtos';
 import { UserService } from './user.service';
 import { UserDocs } from './user.docs';
+import { User } from './entities';
 
 @ApiTags('auth(권한, 유저)')
 @Controller('auth')
@@ -20,8 +33,17 @@ export class UserController {
   ) {}
 
   @Get('my-info')
-  async getMyInfo(@Session() session: Record<string, any>) {
-    return await session.user;
+  async getMyInfo(@Session() session: Record<string, User>) {
+    if (!session.user) {
+      throw new UnauthorizedException('세션에서 사용자 정보를 찾을 수 없습니다.');
+    }
+    try {
+      return session.user;
+    } catch (error) {
+      if (error instanceof UnauthorizedException) throw new UnauthorizedException('사용자 정보 조회 중 오류 발생');
+
+      throw new InternalServerErrorException('사용자 정보를 가져오는 중 오류가 발생했습니다.');
+    }
   }
 
   @Get('/login-naver')

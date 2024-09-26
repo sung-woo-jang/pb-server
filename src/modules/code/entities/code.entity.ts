@@ -17,11 +17,6 @@ export class Code extends TimestampEntity {
   @Expose()
   code: string;
 
-  @ApiProperty({ description: '상위 코드 값 (계층 구조인 경우)', example: 'USER_TYPE', nullable: true })
-  @Column({ length: 100, nullable: true })
-  @Expose()
-  upperCode: string | null;
-
   @ApiProperty({ description: '정렬 순서', example: 1, default: 1 })
   @Column({ default: 1 })
   @Expose()
@@ -42,15 +37,4 @@ export class Code extends TimestampEntity {
   @JoinColumn({ name: 'typeId' })
   @Expose()
   codeType: CodeType;
-
-  @ApiProperty({ type: () => Code, description: '상위 코드 (계층 구조인 경우)' })
-  @ManyToOne(() => Code, (code) => code.childCodes)
-  @JoinColumn({ name: 'upperCodeId' })
-  @Expose()
-  parentCode: Code | null;
-
-  @ApiProperty({ type: () => [Code], description: '하위 코드 목록 (계층 구조인 경우)' })
-  @OneToMany(() => Code, (code) => code.parentCode)
-  @Expose()
-  childCodes: Code[];
 }

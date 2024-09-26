@@ -12,11 +12,6 @@ export class CodeBuilder extends BuilderCommon<Code> {
     return this;
   }
 
-  setUpperCode(upperCode: string | null): CodeBuilder {
-    this.object.upperCode = upperCode;
-    return this;
-  }
-
   setSortOrder(sortOrder: number): CodeBuilder {
     this.object.sortOrder = sortOrder;
     return this;

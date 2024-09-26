@@ -20,8 +20,8 @@ export class Place extends BaseEntityIncrement {
   @Expose()
   title: string;
 
-  @ApiProperty({ description: '가게이름 분해형 (예: ㅅㅡㅌㅏㅂㅓㄱㅅㅡ ㅈㅔㅁㅜㄹㅍㅗㅇㅕㄱ DT점)' })
-  @Column({ comment: '가게이름 분해형 (예: ㅅㅡㅌㅏㅂㅓㄱㅅㅡ ㅈㅔㅁㅜㄹㅍㅗㅇㅕㄱ DT점)' })
+  @ApiProperty({ description: '가게이름 분해형 (예: ㅅㅡㅌㅏㅂㅓㄱㅅㅡ ㅈㅔㅁㅜㄹㅍㅗㅇㅕㄱ DTㅈㅓㅁ)' })
+  @Column({ comment: '가게이름 분해형 (예: ㅅㅡㅌㅏㅂㅓㄱㅅㅡ ㅈㅔㅁㅜㄹㅍㅗㅇㅕㄱ DTㅈ)' })
   @IsString()
   @Expose()
   disassembled: string;
